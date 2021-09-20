@@ -76,6 +76,9 @@ dependencies {
 
 
     implementation "androidx.fragment:fragment:1.2.5"
+
+    //Time
+    implementation 'joda-time:joda-time:2.9.4'
 }
 
 kapt {

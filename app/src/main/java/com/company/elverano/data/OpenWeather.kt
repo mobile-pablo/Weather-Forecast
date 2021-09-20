@@ -1,59 +1,60 @@
 package com.company.elverano.data
 
-import android.os.Build
 import android.os.Parcelable
-import androidx.annotation.RequiresApi
-import com.google.gson.annotations.SerializedName
 import kotlinx.android.parcel.Parcelize
+import org.joda.time.DateTime
+import org.joda.time.DateTimeZone
 import java.text.SimpleDateFormat
-import java.time.Instant
-import java.time.OffsetDateTime
+import java.time.format.DateTimeFormatter
 import java.util.*
 
 @Parcelize
 data class OpenWeather(
     val coord: OpenWeatherCoord,
-    val sys: OpenWeatherSunData,
-    val name: String ="",
-    val main: OpenWeatherMain,
-    var cod:String="",
     val weather: List<OpenWeatherResult>,
-    val timezone: Int
-): Parcelable {
+    val main: OpenWeatherMain,
+    val dt: Int,
+    val sys: OpenWeatherSunData,
+    val timezone: Int,
+    val name: String = "",
 
- var date = object: Date() {
-        val d =  Date()
-        val localTime = d.time
-        val localOffset = d.timezoneOffset * 60000
-        val  utc = localTime + localOffset
-        var city = utc + (1000 * timezone)
-        val  nd =  Date(city)
-    }
+): Parcelable {
 
 // Give it to me in GMT time.
 
-    val isNight =""
+    fun getNight(): Boolean? {
+        var icon= weather[0].icon
+        println("Icon: "+icon)
+       if(weather[0].icon.contains("n",true)){
+           return true
+       }else if(weather[0].icon.contains("d",true)){
+           return  false
+       }
+
+        return null
+    }
+
 
     @Parcelize
     data class OpenWeatherCoord(
-        val lon: Double =0.0,
-        val lat: Double =0.0
+        val lon: Double = 0.0,
+        val lat: Double = 0.0
     ): Parcelable
 
     @Parcelize
     data class OpenWeatherMain(
-        val temp: Double =0.0,
-        val temp_min: Double =0.0,
-        val temp_max: Double =0.0,
-        val pressure: Double =0.0
+        val temp: Double = 0.0,
+        val temp_min: Double = 0.0,
+        val temp_max: Double = 0.0,
+        val pressure: Double = 0.0
     ): Parcelable
 
 
     @Parcelize
     data class OpenWeatherSunData(
-        val country: String="",
-        val sunrise: Long=0,
-        val sunset: Long=0
+        val country: String = "",
+        val sunrise: Long = 0,
+        val sunset: Long = 0
     ): Parcelable
 
     @Parcelize

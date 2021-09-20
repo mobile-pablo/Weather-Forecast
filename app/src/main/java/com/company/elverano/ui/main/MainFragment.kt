@@ -60,25 +60,18 @@ class MainFragment : Fragment(R.layout.fragment_main) {
             mainCityTemperature.text =
                 "${openWeather.main.temp}${resources.getString(R.string.wi_celsius)}"
 
-            val date =openWeather.date
-            val isNight =getIsNight(date)
-            //Naprawic pobieranie daty
-            mainCityFontImg.text = setWeatherIcon(openWeather,false )
+
+            val isNight =openWeather.getNight()
+            mainCityFontImg.text = isNight?.let { setWeatherIcon(openWeather, it) }
 
             mainCityLat.text = openWeather.coord.lat.toString()
             mainCityLong.text = openWeather.coord.lon.toString()
         }
     }
 
-    private fun getIsNight(date: Date) : Boolean {
-        val calendar = Calendar.getInstance()
-        calendar.time = date
-        val hours = calendar[Calendar.HOUR_OF_DAY]
-        return hours>12
-    }
-
     private fun setWeatherIcon(openWeather: OpenWeather, isNight: Boolean): String {
         val id = openWeather.weather[0].id
+        println("Id : $id")
         resources.apply {
             val thunderstormId: IntRange = 200.rangeTo(232)
             val drizzleId: IntRange = 300.rangeTo(321)
