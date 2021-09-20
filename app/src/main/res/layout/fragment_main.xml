@@ -1,0 +1,83 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@drawable/main_bg"
+    android:gravity="center"
+    tools:context=".ui.main.MainFragment">
+        <LinearLayout
+            android:id="@+id/city_box"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:gravity="center"
+            android:orientation="vertical">
+            <TextView
+                android:id="@+id/main_city_font_img"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:fontFamily="@font/weather_font"
+                android:text="@string/wi_snow"
+                android:textSize="50sp"
+                android:textColor="@color/white"/>
+            <TextView
+                android:id="@+id/main_city_temperature"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:gravity="center"
+                android:maxLines="1"
+                android:fontFamily="@font/weather_font"
+                android:textColor="#FFFFFF"
+                android:textSize="60sp"
+                tools:text="16 C" />
+
+
+            <TextView
+                android:id="@+id/main_city_name"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:gravity="center"
+                android:textColor="#FFFFFF"
+                android:textSize="30sp"
+                tools:text="Warsaw" />
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="50dp">
+
+                <TextView
+                    android:id="@+id/main_city_lat"
+                    android:layout_width="0dp"
+                    android:layout_height="match_parent"
+                    android:layout_weight="1"
+                    android:fontFamily="sans-serif-medium"
+                    android:gravity="center"
+                    android:textColor="#FFFDFD"
+                    android:textSize="30sp"
+                    tools:text="50.4342" />
+
+                <TextView
+                    android:id="@+id/main_city_long"
+                    android:layout_width="0dp"
+                    android:layout_height="match_parent"
+                    android:layout_weight="1"
+                    android:fontFamily="sans-serif-medium"
+                    android:gravity="center"
+                    android:textColor="#FFFFFF"
+                    android:textSize="30sp"
+                    tools:text="-3.8434" />
+            </LinearLayout>
+        </LinearLayout>
+    <TextView
+        android:id="@+id/text_view_query_error"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        tools:text="Weather not found!"
+        android:textColor="@color/white"
+        android:fontFamily="sans-serif-medium"
+        android:textStyle="bold"
+        android:layout_centerInParent="true"
+        android:visibility="invisible"
+        tools:visibility="visible"
+        android:textSize="30sp"/>
+</RelativeLayout>

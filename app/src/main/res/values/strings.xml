@@ -1,0 +1,14 @@
+<resources>
+        <string name="app_name">Weather Forecast</string>
+        <string name="api_error_text">"Imag</string>
+
+        <string name="openWeather_1">clear sky</string>
+        <string name="openWeather_2">few clouds</string>
+        <string name="openWeather_3">scattered clouds</string>
+        <string name="openWeather_4">broken clouds</string>
+        <string name="openWeather_9">shower rain</string>
+        <string name="openWeather_10">rain</string>
+        <string name="openWeather_11">thunderstorm</string>
+        <string name="openWeather_13">snow</string>
+        <string name="openWeather_50">mist</string>
+</resources>
