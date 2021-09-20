@@ -13,8 +13,7 @@ import retrofit2.http.Query
 interface OpenWeatherApi {
 
     companion object{
-        const val BASE_URL="http://api.openweathermap.org/data/2.5/"
-        const val IMG_BASE_URL ="http://openweathermap.org/img/w/"
+        const val BASE_URL="https://api.openweathermap.org/data/2.5/"
         const val CLIENT_ID= BuildConfig.OPEN_WEATHER_ACCESS_KEY
         const val CurrentWeather = "find"
         const val ListWeather = "forecast?"

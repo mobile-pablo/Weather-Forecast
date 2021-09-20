@@ -15,7 +15,6 @@ import com.company.elverano.data.OpenWeather
 import com.company.elverano.databinding.FragmentMainBinding
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.flow.collect
-import java.util.*
 
 @AndroidEntryPoint
 class MainFragment : Fragment(R.layout.fragment_main) {
@@ -61,8 +60,11 @@ class MainFragment : Fragment(R.layout.fragment_main) {
                 "${openWeather.main.temp}${resources.getString(R.string.wi_celsius)}"
 
 
-            val isNight =openWeather.getNight()
-            mainCityFontImg.text = isNight?.let { setWeatherIcon(openWeather, it) }
+            val isNight = openWeather.getNight()
+            mainCityFontImg.text =
+                isNight?.let {
+                    setWeatherIcon(openWeather, it)
+                }
 
             mainCityLat.text = openWeather.coord.lat.toString()
             mainCityLong.text = openWeather.coord.lon.toString()
