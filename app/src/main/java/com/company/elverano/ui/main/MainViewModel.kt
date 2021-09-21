@@ -1,27 +1,32 @@
 package com.company.elverano.ui.main
 
-import android.util.Log
-import androidx.hilt.Assisted
-import androidx.hilt.lifecycle.ViewModelInject
+
 import androidx.lifecycle.*
 import com.company.elverano.data.OpenWeather
 import com.company.elverano.data.OpenWeatherRepository
+import dagger.Module
+import dagger.assisted.Assisted
+import dagger.assisted.AssistedFactory
+import dagger.assisted.AssistedInject
+import dagger.hilt.InstallIn
+import dagger.hilt.android.components.ActivityRetainedComponent
+import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.channels.Channel
-import kotlinx.coroutines.flow.consumeAsFlow
-
-
+import kotlinx.coroutines.flow.receiveAsFlow
 import kotlinx.coroutines.launch
+import javax.inject.Inject
 
 
-class MainViewModel @ViewModelInject constructor(
+@HiltViewModel
+class MainViewModel @Inject  constructor(
     private val repository: OpenWeatherRepository,
-    @Assisted state: SavedStateHandle
+    private val state: SavedStateHandle
     ): ViewModel() {
 
      var currentWeather = MutableLiveData<OpenWeather>()
     private val currentQuery  = state.getLiveData(CURRENT_QUERY, DEFAULT_QUERY)
     private val resultChannel = Channel<ResultEvent>()
-    val resultEvent = resultChannel.consumeAsFlow()
+    val resultEvent = resultChannel.receiveAsFlow()
 
 
 

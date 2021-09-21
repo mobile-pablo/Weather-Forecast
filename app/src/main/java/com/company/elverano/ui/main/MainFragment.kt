@@ -1,6 +1,7 @@
 package com.company.elverano.ui.main
 
 import android.os.Bundle
+import android.util.Log
 import android.view.Menu
 import android.view.MenuInflater
 import android.view.View
@@ -29,16 +30,19 @@ class MainFragment : Fragment(R.layout.fragment_main) {
 
         setHasOptionsMenu(true)
 
-        lifecycleScope.launchWhenCreated {
-            viewModel.searchWeather(MainViewModel.DEFAULT_QUERY)
+        viewModel.currentWeather.observe(viewLifecycleOwner) {
+            updateUI(it)
+        }
+
+        viewLifecycleOwner.lifecycleScope.launchWhenCreated {
+           // viewModel.searchWeather(MainViewModel.DEFAULT_QUERY)
         }
 
         viewLifecycleOwner.lifecycleScope.launchWhenStarted {
+
             viewModel.resultEvent.collect { event ->
                 when (event) {
-                    is MainViewModel.ResultEvent.Success -> {
-                        event.data?.let { updateUI(it) }
-                    }
+                    is MainViewModel.ResultEvent.Success -> { Log.d("ResultEvent", "Success")}
                     is MainViewModel.ResultEvent.Error -> {
                         binding.cityBox.visibility = INVISIBLE
                         binding.textViewQueryError.visibility = VISIBLE
@@ -73,7 +77,6 @@ class MainFragment : Fragment(R.layout.fragment_main) {
 
     private fun setWeatherIcon(openWeather: OpenWeather, isNight: Boolean): String {
         val id = openWeather.weather[0].id
-        println("Id : $id")
         resources.apply {
             val thunderstormId: IntRange = 200.rangeTo(232)
             val drizzleId: IntRange = 300.rangeTo(321)

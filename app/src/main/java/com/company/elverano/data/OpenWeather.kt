@@ -24,7 +24,6 @@ data class OpenWeather(
 
     fun getNight(): Boolean? {
         var icon= weather[0].icon
-        println("Icon: "+icon)
        if(weather[0].icon.contains("n",true)){
            return true
        }else if(weather[0].icon.contains("d",true)){
