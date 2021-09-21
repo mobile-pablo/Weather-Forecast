@@ -1,4 +1,4 @@
-package com.company.elverano.ui.main
+package com.company.elverano.ui.currentWeather
 
 import android.os.Bundle
 import android.util.Log
@@ -12,21 +12,22 @@ import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.lifecycleScope
 import com.company.elverano.R
-import com.company.elverano.data.OpenWeather
-import com.company.elverano.databinding.FragmentMainBinding
+import com.company.elverano.data.openWeather.OpenWeatherCurrent
+import com.company.elverano.data.openWeather.OpenWeatherResponse
+import com.company.elverano.databinding.FragmentCurrentBinding
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.flow.collect
 
 @AndroidEntryPoint
-class MainFragment : Fragment(R.layout.fragment_main) {
+class CurrentWeatherFragment : Fragment(R.layout.fragment_current) {
 
-    private val viewModel by viewModels<MainViewModel>()
-    private var _binding: FragmentMainBinding? = null
+    private val viewModel by viewModels<CurrentWeatherViewModel>()
+    private var _binding: FragmentCurrentBinding? = null
     private val binding get() = _binding!!
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        _binding = FragmentMainBinding.bind(view)
+        _binding = FragmentCurrentBinding.bind(view)
 
 
 
@@ -40,11 +41,11 @@ class MainFragment : Fragment(R.layout.fragment_main) {
 
             viewModel.resultEvent.collect { event ->
                 when (event) {
-                    is MainViewModel.ResultEvent.Success -> { Log.d("ResultEvent", "Success")}
-                    is MainViewModel.ResultEvent.Error -> {
-                        binding.cityBox.visibility = INVISIBLE
-                        binding.textViewQueryError.visibility = VISIBLE
-                        binding.textViewQueryError.text = event.message
+                    is CurrentWeatherViewModel.ResultEvent.Success -> { Log.d("ResultEvent", "Success")}
+                    is CurrentWeatherViewModel.ResultEvent.Error -> {
+                        binding.currentCityBox.visibility = INVISIBLE
+                        binding.currentQueryError.visibility = VISIBLE
+                        binding.currentQueryError.text = event.message
                     }
                 }
             }
@@ -53,30 +54,30 @@ class MainFragment : Fragment(R.layout.fragment_main) {
         setHasOptionsMenu(true)
     }
 
-    private fun updateUI(openWeather: OpenWeather) {
+    private fun updateUI(openWeather: OpenWeatherResponse) {
         binding.apply {
 
-            cityBox.visibility = VISIBLE
-            textViewQueryError.visibility = INVISIBLE
+            currentCityBox.visibility = VISIBLE
+            currentQueryError.visibility = INVISIBLE
 
-            mainCityName.text = openWeather.name
-            mainCityTemperature.text =
-                "${openWeather.main.temp}${resources.getString(R.string.wi_celsius)}"
+            currentCityName.text = openWeather.name
+            currentCityTemperature.text =
+                "${openWeather.current.temp}${resources.getString(R.string.wi_celsius)}"
 
 
-            val isNight = openWeather.getNight()
-            mainCityFontImg.text =
+            val isNight = openWeather.current.getNight()
+            currentCityFontImg.text =
                 isNight?.let {
                     setWeatherIcon(openWeather, it)
                 }
 
-            mainCityLat.text = openWeather.coord.lat.toString()
-            mainCityLong.text = openWeather.coord.lon.toString()
+            currentCityLat.text = openWeather.lat.toString()
+            currentCityLong.text = openWeather.lon.toString()
         }
     }
 
-    private fun setWeatherIcon(openWeather: OpenWeather, isNight: Boolean): String {
-        val id = openWeather.weather[0].id
+    private fun setWeatherIcon(openWeather: OpenWeatherResponse, isNight: Boolean): String {
+        val id = openWeather.current.weather[0].id
         resources.apply {
             val thunderstormId: IntRange = 200.rangeTo(232)
             val drizzleId: IntRange = 300.rangeTo(321)
@@ -147,7 +148,8 @@ class MainFragment : Fragment(R.layout.fragment_main) {
             override fun onQueryTextSubmit(query: String?): Boolean {
 
                 if (query != null) {
-                    viewModel.searchWeather(query)
+                 //   viewModel.searchWeather(query)
+                     viewModel.searchLocation(query)
                     searchView.setQuery("", false)
                     searchView.clearFocus()
                     searchItem.collapseActionView()

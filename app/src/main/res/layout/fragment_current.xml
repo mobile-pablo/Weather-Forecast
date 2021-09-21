@@ -5,15 +5,22 @@
     android:layout_height="match_parent"
     android:background="@drawable/main_bg"
     android:gravity="center"
-    tools:context=".ui.main.MainFragment">
+    tools:context=".ui.currentWeather.CurrentWeatherFragment">
+    <ProgressBar
+        android:id="@+id/current_progress_bar"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_centerInParent="true"
+        android:visibility="invisible"
+        tools:visibility="visible"/>
         <LinearLayout
-            android:id="@+id/city_box"
+            android:id="@+id/current_city_box"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:gravity="center"
             android:orientation="vertical">
             <TextView
-                android:id="@+id/main_city_font_img"
+                android:id="@+id/current_city_font_img"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:fontFamily="@font/weather_font"
@@ -21,7 +28,7 @@
                 android:textSize="50sp"
                 android:textColor="@color/white"/>
             <TextView
-                android:id="@+id/main_city_temperature"
+                android:id="@+id/current_city_temperature"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:gravity="center"
@@ -33,7 +40,7 @@
 
 
             <TextView
-                android:id="@+id/main_city_name"
+                android:id="@+id/current_city_name"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:gravity="center"
@@ -46,7 +53,7 @@
                 android:layout_height="50dp">
 
                 <TextView
-                    android:id="@+id/main_city_lat"
+                    android:id="@+id/current_city_lat"
                     android:layout_width="0dp"
                     android:layout_height="match_parent"
                     android:layout_weight="1"
@@ -57,7 +64,7 @@
                     tools:text="50.4342" />
 
                 <TextView
-                    android:id="@+id/main_city_long"
+                    android:id="@+id/current_city_long"
                     android:layout_width="0dp"
                     android:layout_height="match_parent"
                     android:layout_weight="1"
@@ -69,7 +76,7 @@
             </LinearLayout>
         </LinearLayout>
     <TextView
-        android:id="@+id/text_view_query_error"
+        android:id="@+id/current_query_error"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         tools:text="Weather not found!"

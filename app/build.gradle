@@ -23,6 +23,7 @@ android {
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
 
         buildConfigField("String", "OPEN_WEATHER_ACCESS_KEY", open_weather_access_key)
+        buildConfigField("String", "POSITION_STACK_ACCESS_KEY", position_stack_access_key)
     }
 
     buildTypes {
