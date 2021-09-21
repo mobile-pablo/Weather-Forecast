@@ -28,7 +28,9 @@ class MainViewModel @Inject  constructor(
     private val resultChannel = Channel<ResultEvent>()
     val resultEvent = resultChannel.receiveAsFlow()
 
-
+    init {
+        searchWeather(DEFAULT_QUERY)
+    }
 
     fun searchWeather(query: String) = viewModelScope.launch {
         currentQuery.value =query

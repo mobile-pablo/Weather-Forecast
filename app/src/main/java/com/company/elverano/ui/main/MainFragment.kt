@@ -28,15 +28,13 @@ class MainFragment : Fragment(R.layout.fragment_main) {
 
         _binding = FragmentMainBinding.bind(view)
 
-        setHasOptionsMenu(true)
+
 
         viewModel.currentWeather.observe(viewLifecycleOwner) {
             updateUI(it)
         }
 
-        viewLifecycleOwner.lifecycleScope.launchWhenCreated {
-           // viewModel.searchWeather(MainViewModel.DEFAULT_QUERY)
-        }
+
 
         viewLifecycleOwner.lifecycleScope.launchWhenStarted {
 
@@ -51,6 +49,8 @@ class MainFragment : Fragment(R.layout.fragment_main) {
                 }
             }
         }
+
+        setHasOptionsMenu(true)
     }
 
     private fun updateUI(openWeather: OpenWeather) {
