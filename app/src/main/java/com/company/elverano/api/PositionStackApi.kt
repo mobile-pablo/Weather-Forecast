@@ -3,6 +3,8 @@ package com.company.elverano.api
 import com.company.elverano.BuildConfig
 import com.company.elverano.data.positionStack.PositionStack
 import com.company.elverano.data.positionStack.PositionStackResponse
+import com.skydoves.sandwich.ApiResponse
+import retrofit2.Call
 import retrofit2.Response
 import retrofit2.http.GET
 import retrofit2.http.Query
@@ -16,5 +18,5 @@ interface PositionStackApi {
     }
 
     @GET("forward?access_key=$ClientID&limit=1")
-    suspend fun getLocation(@Query("query") query: String): Response<PositionStackResponse>
+     fun getLocation(@Query("query") query: String): Call<PositionStackResponse>
 }

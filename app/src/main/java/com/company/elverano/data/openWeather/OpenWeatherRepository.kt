@@ -6,7 +6,7 @@ import javax.inject.Singleton
 
 @Singleton
 class OpenWeatherRepository @Inject constructor(private val openWeatherApi: OpenWeatherApi) {
-    suspend fun getWeatherResponse(lat: Double,lon:Double) = openWeatherApi.getWeather(latitude = lat, longitude = lon)
+     fun getWeatherResponse(lat: Double,lon:Double) = openWeatherApi.getWeather(latitude = lat, longitude = lon)
 
 
 }

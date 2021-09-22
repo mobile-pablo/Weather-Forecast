@@ -6,6 +6,5 @@ import javax.inject.Singleton
 
 @Singleton
 class PositionStackRepository @Inject constructor(private val positionStackApi: PositionStackApi) {
-
-    suspend fun getLocation(query: String) =  positionStackApi.getLocation(query= query)
+    fun getLocation(query: String) =  positionStackApi.getLocation(query= query)
 }

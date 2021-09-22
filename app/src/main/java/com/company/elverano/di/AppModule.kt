@@ -17,21 +17,29 @@ object AppModule {
 
     @Provides
     @Singleton
-
-    fun provideRetrofit(): Retrofit = Retrofit.Builder()
+    @Named("positionStackRetrofit")
+    fun providerPositionStackRetrofit(): Retrofit = Retrofit.Builder()
         .baseUrl(PositionStackApi.BASE_URL)
+        .addConverterFactory(GsonConverterFactory.create())
+        .build()
+
+
+
+    @Provides
+    @Singleton
+    @Named("openWeatherRetrofit")
+    fun provideOpenWeatherRetrofit(): Retrofit = Retrofit.Builder()
+        .baseUrl(OpenWeatherApi.BASE_URL)
         .addConverterFactory(GsonConverterFactory.create())
         .build()
 
 
     @Provides
     @Singleton
-    fun provideOpenWeatherApi(retrofit: Retrofit): OpenWeatherApi = retrofit.create(OpenWeatherApi::class.java)
-
-
+    fun provideOpenWeatherApi  ( @Named("openWeatherRetrofit") openWeatherRetrofit: Retrofit): OpenWeatherApi = openWeatherRetrofit.create(OpenWeatherApi::class.java)
 
 
     @Provides
     @Singleton
-    fun providePositionStackApi(retrofit: Retrofit): PositionStackApi = retrofit.create(PositionStackApi::class.java)
+    fun providePositionStackApi( @Named("positionStackRetrofit") positionStackRetrofit: Retrofit): PositionStackApi = positionStackRetrofit.create(PositionStackApi::class.java)
 }
