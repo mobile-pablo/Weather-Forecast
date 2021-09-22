@@ -16,6 +16,8 @@ import com.company.elverano.data.openWeather.OpenWeatherResponse
 import com.company.elverano.databinding.FragmentCurrentBinding
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.flow.collect
+import kotlinx.coroutines.flow.collectLatest
+import kotlinx.coroutines.launch
 
 @AndroidEntryPoint
 class CurrentWeatherFragment : Fragment(R.layout.fragment_current) {
@@ -33,8 +35,18 @@ class CurrentWeatherFragment : Fragment(R.layout.fragment_current) {
         viewModel.currentWeather.observe(viewLifecycleOwner) {
             updateUI(it)
         }
-        viewModel.currentName.observe(viewLifecycleOwner){
-            binding.currentCityName.text =   viewModel.currentName.value
+        viewModel.currentName.observe(viewLifecycleOwner) {
+            binding.currentCityName.text = viewModel.currentName.value
+        }
+
+        viewModel.currentError.observe(viewLifecycleOwner){
+            if(it!=null && viewModel.currentWeather.value==null){
+                binding.apply {
+                    currentCityBox.visibility = INVISIBLE
+                    currentQueryError.visibility = VISIBLE
+                    currentQueryError.text = it
+                }
+            }
         }
 
 
@@ -47,9 +59,13 @@ class CurrentWeatherFragment : Fragment(R.layout.fragment_current) {
                         Log.d("ResultEvent", "Success")
                     }
                     is CurrentWeatherViewModel.ResultEvent.Error -> {
-                        binding.currentCityBox.visibility = INVISIBLE
-                        binding.currentQueryError.visibility = VISIBLE
-                        binding.currentQueryError.text = event.message
+                        binding.apply {
+                            currentCityBox.visibility = INVISIBLE
+                            currentQueryError.visibility = VISIBLE
+                            currentQueryError.text = event.message
+                            viewModel.currentWeather.value = null
+                            viewModel.currentName.value = null
+                        }
                         Log.d("ResultEvent", "Error")
                     }
                 }
@@ -59,25 +75,38 @@ class CurrentWeatherFragment : Fragment(R.layout.fragment_current) {
         setHasOptionsMenu(true)
     }
 
-    private fun updateUI(response: OpenWeatherResponse) {
+    private fun updateUI(response: OpenWeatherResponse?) {
+
         binding.apply {
+            if(response!=null) {
+                currentCityBox.visibility = VISIBLE
+                currentQueryError.visibility = INVISIBLE
+                viewModel.currentError.value=null
 
-            currentCityBox.visibility = VISIBLE
-            currentQueryError.visibility = INVISIBLE
+                currentCityTemperature.text =
+                    "${response.current.temp}${resources.getString(R.string.wi_celsius)}"
 
 
-            currentCityTemperature.text =
-                "${response.current.temp}${resources.getString(R.string.wi_celsius)}"
+                val isNight = response.current.getNight()
+                currentCityFontImg.text =
+                    isNight?.let {
+                        setWeatherIcon(response, it)
+                    }
 
-
-            val isNight = response.current.getNight()
-            currentCityFontImg.text =
-                isNight?.let {
-                    setWeatherIcon(response, it)
+                currentCityLat.text = response.lat.toString()
+                currentCityLong.text = response.lon.toString()
+            }else{
+                currentCityBox.visibility = INVISIBLE
+                currentQueryError.visibility = VISIBLE
+                  viewLifecycleOwner.lifecycleScope.launchWhenResumed {
+                     viewModel.resultEvent.collect {
+                         println("Last result event: $it")
+                          if(it is CurrentWeatherViewModel.ResultEvent.Error){
+                              currentQueryError.text = it.message
+                          }
+                      }
                 }
-
-            currentCityLat.text = response.lat.toString()
-            currentCityLong.text = response.lon.toString()
+            }
         }
     }
 
@@ -153,8 +182,8 @@ class CurrentWeatherFragment : Fragment(R.layout.fragment_current) {
             override fun onQueryTextSubmit(query: String?): Boolean {
 
                 if (query != null) {
-             //       viewModel.searchWeather(21.999, 19.005427, "Warszawa")
-                     viewModel.searchLocation(query)
+                    //       viewModel.searchWeather(21.999, 19.005427, "Warszawa")
+                    viewModel.searchLocation(query)
                     searchView.setQuery("", false)
                     searchView.clearFocus()
                     searchItem.collapseActionView()
