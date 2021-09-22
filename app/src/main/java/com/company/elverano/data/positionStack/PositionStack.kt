@@ -13,5 +13,6 @@ data class PositionStack(
     val administrative_area: String,
     val country: String,
     val country_code: String,
-    val continent: String
+    val continent: String,
+    val label : String
 ): Parcelable

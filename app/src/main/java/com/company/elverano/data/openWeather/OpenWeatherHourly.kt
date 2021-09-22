@@ -5,5 +5,5 @@ import kotlinx.android.parcel.Parcelize
 
 @Parcelize
 data class OpenWeatherHourly(
-    val pop: Int
+    val pop: Double=0.0
 ) : OpenWeatherCurrent(), Parcelable

@@ -5,10 +5,10 @@ import kotlinx.android.parcel.Parcelize
 
 @Parcelize
 data class OpenWeatherResponse (
-val lat: Double,
-val lon: Double,
-val name: String,
-val current: OpenWeatherCurrent,
-val hourly: ArrayList<OpenWeatherHourly>,
-val daily: ArrayList<OpenWeatherDaily>
+    val lat: Double,
+    val lon: Double,
+    var name: String,
+    val current: OpenWeatherCurrent,
+    val hourly: ArrayList<OpenWeatherHourly>,
+    val daily: ArrayList<OpenWeatherDaily>
 ): Parcelable

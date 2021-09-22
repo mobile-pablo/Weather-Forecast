@@ -19,7 +19,7 @@ data class OpenWeatherDaily(
     val wind_gust: Double = 0.0,
     val weather: ArrayList<OpenWeatherCurrent.OpenWeatherResult>,
     val clouds: Int = 0,
-    val pop: Int = 0,
+    val pop: Double = 0.0,
     val uvi: Double = 0.0
 ) : Parcelable {
 

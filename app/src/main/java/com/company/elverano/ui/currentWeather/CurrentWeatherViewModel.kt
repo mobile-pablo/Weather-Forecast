@@ -7,7 +7,9 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.company.elverano.data.openWeather.OpenWeatherRepository
 import com.company.elverano.data.openWeather.OpenWeatherResponse
+import com.company.elverano.data.positionStack.PositionStack
 import com.company.elverano.data.positionStack.PositionStackRepository
+import com.company.elverano.data.positionStack.PositionStackResponse
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.channels.Channel
 import kotlinx.coroutines.flow.receiveAsFlow
@@ -23,6 +25,7 @@ class CurrentWeatherViewModel @Inject constructor(
 ) : ViewModel() {
 
     var currentWeather = MutableLiveData<OpenWeatherResponse>()
+    var currentName = MutableLiveData<String>()
     private val currentQuery = state.getLiveData(CURRENT_QUERY, DEFAULT_QUERY)
     private val resultChannel = Channel<ResultEvent>()
     val resultEvent = resultChannel.receiveAsFlow()
@@ -39,8 +42,8 @@ class CurrentWeatherViewModel @Inject constructor(
         if (data != null) {
             if (data.size > 0) {
                 val item = data[0]
-
-                searchWeather(lat = item.latitude, lon = item.longitude)
+                println("Item : ${item.latitude} , ${item.longitude} , ${item.name}")
+                searchWeather(lat = item.latitude, lon = item.longitude,name = item.name)
             } else {
                 resultChannel.send(ResultEvent.Error("No Item's found"))
             }
@@ -51,12 +54,13 @@ class CurrentWeatherViewModel @Inject constructor(
     }
 
 
-    fun searchWeather(lat: Double, lon: Double) = viewModelScope.launch {
+    fun searchWeather(lat: Double, lon: Double, name: String) = viewModelScope.launch {
         val response = openWeatherRepository.getWeatherResponse(lon = lon, lat = lat).body()
 
         response?.let {
             currentWeather.value = it
-            resultChannel.send(ResultEvent.Success(it, response.name))
+            currentName.value =name
+            resultChannel.send(ResultEvent.Success)
         } ?: run {
             resultChannel.send(ResultEvent.Error("No Item's found"))
         }
@@ -69,7 +73,7 @@ class CurrentWeatherViewModel @Inject constructor(
     }
 
     sealed class ResultEvent {
-        data class Success(var data: OpenWeatherResponse?, var name: String) : ResultEvent()
+        object Success: ResultEvent()
         data class Error(var message: String) : ResultEvent()
     }
 }

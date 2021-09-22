@@ -12,7 +12,6 @@ import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.lifecycleScope
 import com.company.elverano.R
-import com.company.elverano.data.openWeather.OpenWeatherCurrent
 import com.company.elverano.data.openWeather.OpenWeatherResponse
 import com.company.elverano.databinding.FragmentCurrentBinding
 import dagger.hilt.android.AndroidEntryPoint
@@ -34,6 +33,9 @@ class CurrentWeatherFragment : Fragment(R.layout.fragment_current) {
         viewModel.currentWeather.observe(viewLifecycleOwner) {
             updateUI(it)
         }
+        viewModel.currentName.observe(viewLifecycleOwner){
+            binding.currentCityName.text =   viewModel.currentName.value
+        }
 
 
 
@@ -41,11 +43,14 @@ class CurrentWeatherFragment : Fragment(R.layout.fragment_current) {
 
             viewModel.resultEvent.collect { event ->
                 when (event) {
-                    is CurrentWeatherViewModel.ResultEvent.Success -> { Log.d("ResultEvent", "Success")}
+                    is CurrentWeatherViewModel.ResultEvent.Success -> {
+                        Log.d("ResultEvent", "Success")
+                    }
                     is CurrentWeatherViewModel.ResultEvent.Error -> {
                         binding.currentCityBox.visibility = INVISIBLE
                         binding.currentQueryError.visibility = VISIBLE
                         binding.currentQueryError.text = event.message
+                        Log.d("ResultEvent", "Error")
                     }
                 }
             }
@@ -54,25 +59,25 @@ class CurrentWeatherFragment : Fragment(R.layout.fragment_current) {
         setHasOptionsMenu(true)
     }
 
-    private fun updateUI(openWeather: OpenWeatherResponse) {
+    private fun updateUI(response: OpenWeatherResponse) {
         binding.apply {
 
             currentCityBox.visibility = VISIBLE
             currentQueryError.visibility = INVISIBLE
 
-            currentCityName.text = openWeather.name
+
             currentCityTemperature.text =
-                "${openWeather.current.temp}${resources.getString(R.string.wi_celsius)}"
+                "${response.current.temp}${resources.getString(R.string.wi_celsius)}"
 
 
-            val isNight = openWeather.current.getNight()
+            val isNight = response.current.getNight()
             currentCityFontImg.text =
                 isNight?.let {
-                    setWeatherIcon(openWeather, it)
+                    setWeatherIcon(response, it)
                 }
 
-            currentCityLat.text = openWeather.lat.toString()
-            currentCityLong.text = openWeather.lon.toString()
+            currentCityLat.text = response.lat.toString()
+            currentCityLong.text = response.lon.toString()
         }
     }
 
@@ -148,7 +153,7 @@ class CurrentWeatherFragment : Fragment(R.layout.fragment_current) {
             override fun onQueryTextSubmit(query: String?): Boolean {
 
                 if (query != null) {
-                 //   viewModel.searchWeather(query)
+             //       viewModel.searchWeather(21.999, 19.005427, "Warszawa")
                      viewModel.searchLocation(query)
                     searchView.setQuery("", false)
                     searchView.clearFocus()
