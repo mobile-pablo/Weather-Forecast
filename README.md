@@ -29,5 +29,5 @@ Author
 
 Work is in progress and I should finish this project till end of this month.
 
-<img src=readme_media/preview_beta.png" width="100%"/>
+<img src="readme_media/preview_beta.png" width="100%"/>
                                                                                                                  
