@@ -161,7 +161,7 @@ class CurrentWeatherFragment : Fragment(R.layout.fragment_current) {
                 }
 
 
-                300, 301,701,711,721,731,741,751,761,762,771,781 -> {
+                300, 301, 701, 711, 721, 731, 741, 751, 761, 762, 771, 781 -> {
                     if (!night)
                         getString(R.string.clouds_drizzle)
                     else
@@ -191,9 +191,7 @@ class CurrentWeatherFragment : Fragment(R.layout.fragment_current) {
                 }
 
 
-
-
-                500, 501,502,503,504,20,521,522,531 -> {
+                500, 501, 502, 503, 504, 20, 521, 522, 531 -> {
                     if (!night)
                         getString(R.string.rain)
                     else
@@ -207,7 +205,7 @@ class CurrentWeatherFragment : Fragment(R.layout.fragment_current) {
                         getString(R.string.night_freezing_rain)
                 }
 
-                600,601 ->{
+                600, 601 -> {
                     if (!night)
                         getString(R.string.snow)
                     else
@@ -215,14 +213,14 @@ class CurrentWeatherFragment : Fragment(R.layout.fragment_current) {
                 }
 
 
-                602 ->{
+                602 -> {
                     if (!night)
                         getString(R.string.big_snow)
                     else
                         getString(R.string.night_big_snow)
                 }
 
-                611,612,613,615,616,616,620,621,622 -> {
+                611, 612, 613, 615, 616, 616, 620, 621, 622 -> {
                     if (!night)
                         getString(R.string.rain_snow)
                     else
@@ -230,7 +228,7 @@ class CurrentWeatherFragment : Fragment(R.layout.fragment_current) {
                 }
 
 
-                800-> {
+                800 -> {
                     if (!night)
                         getString(R.string.clear_sky)
                     else
@@ -238,7 +236,7 @@ class CurrentWeatherFragment : Fragment(R.layout.fragment_current) {
                 }
 
 
-                801,802,803,804 ->{
+                801, 802, 803, 804 -> {
                     if (!night)
                         getString(R.string.clouds)
                     else
@@ -246,7 +244,7 @@ class CurrentWeatherFragment : Fragment(R.layout.fragment_current) {
                 }
 
 
-                else ->{
+                else -> {
                     Log.d("OpenWeather", "Wrong ID : $id")
                     getString(R.string.clouds)
                 }
