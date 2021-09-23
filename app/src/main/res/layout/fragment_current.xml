@@ -132,14 +132,12 @@
                     android:layout_width="150dp"
                     android:layout_height="150dp"
                     android:layout_marginTop="60dp"
-                    android:layout_centerHorizontal="true"
-                    android:src="@drawable/clouds" />
+                    android:layout_centerHorizontal="true" />
 
                 <TextView
                     android:id="@+id/current_city_temperature"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:fontFamily="@font/weather_font"
                     android:gravity="center"
                     android:maxLines="1"
                     android:textColor="#FFFFFF"

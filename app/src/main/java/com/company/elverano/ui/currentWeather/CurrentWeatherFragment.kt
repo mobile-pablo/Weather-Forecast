@@ -14,13 +14,12 @@ import androidx.lifecycle.lifecycleScope
 import com.company.elverano.R
 import com.company.elverano.data.openWeather.OpenWeatherResponse
 import com.company.elverano.databinding.FragmentCurrentBinding
+import com.company.elverano.readAsset
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.flow.collect
-import kotlinx.coroutines.flow.collectLatest
-import kotlinx.coroutines.launch
 import java.text.SimpleDateFormat
-import java.time.Instant
 import java.util.*
+
 
 @AndroidEntryPoint
 class CurrentWeatherFragment : Fragment(R.layout.fragment_current) {
@@ -42,12 +41,12 @@ class CurrentWeatherFragment : Fragment(R.layout.fragment_current) {
             binding.currentCityName.text = it
         }
 
-        viewModel.currentCountry.observe(viewLifecycleOwner){
+        viewModel.currentCountry.observe(viewLifecycleOwner) {
             binding.currentCityCountry.text = ", $it"
         }
 
-        viewModel.currentError.observe(viewLifecycleOwner){
-            if(it!=null && viewModel.currentWeather.value==null){
+        viewModel.currentError.observe(viewLifecycleOwner) {
+            if (it != null && viewModel.currentWeather.value == null) {
                 binding.apply {
                     currentCityBox.visibility = INVISIBLE
                     currentQueryError.visibility = VISIBLE
@@ -85,97 +84,174 @@ class CurrentWeatherFragment : Fragment(R.layout.fragment_current) {
     private fun updateUI(response: OpenWeatherResponse?) {
 
         binding.apply {
-            if(response!=null) {
+            if (response != null) {
                 currentCityBox.visibility = VISIBLE
                 currentQueryError.visibility = INVISIBLE
-                viewModel.currentError.value=null
+                viewModel.currentError.value = null
 
                 val currentDate = Calendar.getInstance().time
                 val sdf = SimpleDateFormat("dd, MMM yyyy")
-                currentCityDate.text =sdf.format(currentDate)
+                currentCityDate.text = sdf.format(currentDate)
 
 
                 currentCityTemperature.text =
-                    "${response.current.temp}${resources.getString(R.string.wi_celsius)}"
+                    "${response.current.temp} C"
 
 
                 val isNight = response.current.getNight()
 
+
+                context?.let { context ->
+                    isNight?.let { isNight ->
+                        val imagePath =
+                            setWeatherIcon(response.current.weather[0].id, isNight) + ".png"
+                        val x = readAsset(context, imagePath)
+                        currentCityImage.setImageBitmap(x)
+                    }
+                }
+
+
                 currentCityLat.text = response.lat.toString()
                 currentCityLong.text = response.lon.toString()
-            }else{
+            } else {
                 currentCityBox.visibility = INVISIBLE
                 currentQueryError.visibility = VISIBLE
-                  viewLifecycleOwner.lifecycleScope.launchWhenResumed {
-                     viewModel.resultEvent.collect {
-                         println("Last result event: $it")
-                          if(it is CurrentWeatherViewModel.ResultEvent.Error){
-                              currentQueryError.text = it.message
-                          }
-                      }
+                viewLifecycleOwner.lifecycleScope.launchWhenResumed {
+                    viewModel.resultEvent.collect {
+                        println("Last result event: $it")
+                        if (it is CurrentWeatherViewModel.ResultEvent.Error) {
+                            currentQueryError.text = it.message
+                        }
+                    }
                 }
             }
         }
     }
 
-    private fun setWeatherIcon(openWeather: OpenWeatherResponse, isNight: Boolean): String {
-        val id = openWeather.current.weather[0].id
+    private fun setWeatherIcon(id: Int, night: Boolean): String {
         resources.apply {
-            val thunderstormId: IntRange = 200.rangeTo(232)
-            val drizzleId: IntRange = 300.rangeTo(321)
-            val rainId: IntRange = 500.rangeTo(531)
-            val snowId: IntRange = 600.rangeTo(622)
-            val atmosphereId: IntRange = 701.rangeTo(781)
-            val clearSky = 800
-            val cloudsId: IntRange = 801.rangeTo(804)
+            return when (id) {
+
+                200, 201, 202 -> {
+                    if (!night)
+                        getString(R.string.clouds_rain_thunder)
+                    else
+                        getString(R.string.night_clouds_rain_thunder)
+                }
+
+                210 -> {
+                    if (!night)
+                        getString(R.string.cloud_thunder)
+                    else
+                        getString(R.string.night_clouds_thunder_sky)
+                }
+
+                211, 212, 221 -> {
+                    if (!night)
+                        getString(R.string.clouds_big_thunder)
+                    else
+                        getString(R.string.night_clouds_big_thunder)
+                }
+
+                230, 231, 231 -> {
+                    if (!night)
+                        getString(R.string.clouds_thunder_drizzle)
+                    else
+                        getString(R.string.night_clouds_thunder_drizzle)
+                }
 
 
-            if (isBetween(id, thunderstormId)) {
-                if (!isNight)
-                    return getString(R.string.wi_day_thunderstorm)
-                else
-                    return getString(R.string.wi_night_thunderstorm)
-            } else if (isBetween(id, drizzleId)) {
-                if (!isNight)
-                    return getString(R.string.wi_day_sleet)
-                else
-                    return getString(R.string.wi_night_sleet)
-            } else if (isBetween(id, rainId)) {
-                if (!isNight)
-                    return getString(R.string.wi_day_rain)
-                else
-                    return getString(R.string.wi_night_rain)
-            } else if (isBetween(id, snowId)) {
-                if (!isNight)
-                    return getString(R.string.wi_day_snow)
-                else
-                    return getString(R.string.wi_night_snow)
-            } else if (isBetween(id, atmosphereId)) {
-                if (!isNight)
-                    return getString(R.string.wi_day_fog)
-                else
-                    return getString(R.string.wi_night_fog)
-            } else if (id == clearSky) {
+                300, 301,701,711,721,731,741,751,761,762,771,781 -> {
+                    if (!night)
+                        getString(R.string.clouds_drizzle)
+                    else
+                        getString(R.string.night_drizzle)
+                }
 
-                if (!isNight)
-                    return getString(R.string.wi_day_sunny)
-                else
-                    return getString(R.string.wi_night_clear)
+                302 -> {
+                    if (!night)
+                        getString(R.string.clouds_big_drizzle)
+                    else
+                        getString(R.string.night_clouds_big_drizzle)
+                }
 
-            } else if (isBetween(id, cloudsId)) {
-                if (!isNight)
-                    return getString(R.string.wi_day_cloudy)
-                else
-                    return getString(R.string.wi_night_cloudy)
-            } else {
-                return "Error"
+
+                310, 311 -> {
+                    if (!night)
+                        getString(R.string.drizzle_rain)
+                    else
+                        getString(R.string.night_drizzle_rain)
+                }
+
+                312, 313, 314, 321 -> {
+                    if (!night)
+                        getString(R.string.drizzle_rain)
+                    else
+                        getString(R.string.night_big_drizzle_rain)
+                }
+
+
+
+
+                500, 501,502,503,504,20,521,522,531 -> {
+                    if (!night)
+                        getString(R.string.rain)
+                    else
+                        getString(R.string.night_rain)
+                }
+
+                511 -> {
+                    if (!night)
+                        getString(R.string.freezing_rain)
+                    else
+                        getString(R.string.night_freezing_rain)
+                }
+
+                600,601 ->{
+                    if (!night)
+                        getString(R.string.snow)
+                    else
+                        getString(R.string.night_snow)
+                }
+
+
+                602 ->{
+                    if (!night)
+                        getString(R.string.big_snow)
+                    else
+                        getString(R.string.night_big_snow)
+                }
+
+                611,612,613,615,616,616,620,621,622 -> {
+                    if (!night)
+                        getString(R.string.rain_snow)
+                    else
+                        getString(R.string.night_rain_snow)
+                }
+
+
+                800-> {
+                    if (!night)
+                        getString(R.string.clear_sky)
+                    else
+                        getString(R.string.night_clear_sky)
+                }
+
+
+                801,802,803,804 ->{
+                    if (!night)
+                        getString(R.string.clouds)
+                    else
+                        getString(R.string.night_clouds)
+                }
+
+
+                else ->{
+                    Log.d("OpenWeather", "Wrong ID : $id")
+                    getString(R.string.clouds)
+                }
             }
-
         }
-    }
-
-    fun isBetween(x: Int, range: IntRange): Boolean {
-        return range.first <= x && x <= range.last
     }
 
 
