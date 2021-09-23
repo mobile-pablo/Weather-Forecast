@@ -28,6 +28,6 @@ Author
 ## Preview
 
 Work is in progress and I should finish this project till end of this month.
-
-<img src="readme_media/preview_beta.png" width="100%"/>
-                                                                                                                 
+<div align="center">
+<img src="readme_media/preview_beta.png"/>
+</div>                                                                                     
