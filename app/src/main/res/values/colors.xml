@@ -8,8 +8,8 @@
     <color name="black">#FF000000</color>
     <color name="white">#FFFFFFFF</color>
 
-    <color name="custom_world_map_bg">#101014</color>
-    <color name="iconSwitchbg">#1B1B1E</color>
-
+    <color name="project_gray">#141414</color>
+    <color name="project_light_gray">#1B1B1E</color>
     <color name="moon_yellow">#eff301</color>
+
 </resources>

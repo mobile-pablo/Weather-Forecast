@@ -5,7 +5,7 @@
     android:layout_height="match_parent"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:background="@android:color/transparent"
-    tools:background="@color/custom_world_map_bg"
+    tools:background="@color/project_gray"
     android:gravity="center"
     tools:context=".ui.currentWeather.CurrentWeatherFragment">
     <ProgressBar
@@ -111,7 +111,7 @@
                     app:isw_inactive_tint_icon_left="@android:color/transparent"
                     app:isw_active_tint_icon_left="@android:color/transparent"
                     app:isw_thumb_color_left="#77B7D9"
-                    app:isw_background_color="@color/iconSwitchbg"
+                    app:isw_background_color="@color/project_light_gray"
                     app:isw_default_selection="right"
                     android:layout_alignParentRight="true"
                     android:layout_centerVertical="true"/>

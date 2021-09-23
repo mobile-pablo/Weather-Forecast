@@ -95,7 +95,7 @@ class CurrentWeatherFragment : Fragment(R.layout.fragment_current) {
 
 
                 currentCityTemperature.text =
-                    "${response.current.temp} C"
+                    "${response.current.temp}°"
 
 
                 val isNight = response.current.getNight()
