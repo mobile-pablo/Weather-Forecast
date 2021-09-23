@@ -84,4 +84,7 @@ dependencies {
 
     //Handle Call response
     implementation "com.github.skydoves:sandwich:1.2.1"
+
+    //Custom Switch
+    implementation 'com.polyak:icon-switch:1.0.0'
 }

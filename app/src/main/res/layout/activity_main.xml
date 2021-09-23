@@ -6,6 +6,11 @@
     android:layout_height="match_parent"
     tools:context=".ui.MainActivity">
 
+    <ImageView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="@color/custom_world_map_bg"
+        android:scaleType="centerCrop"/>
     <androidx.fragment.app.FragmentContainerView
         android:id="@+id/nav_host_fragment_main"
         android:name="androidx.navigation.fragment.NavHostFragment"

@@ -27,6 +27,7 @@ class CurrentWeatherViewModel @Inject constructor(
 
     var currentWeather = MutableLiveData<OpenWeatherResponse>()
     var currentName = MutableLiveData<String>()
+    var currentCountry = MutableLiveData<String>()
     var currentError = MutableLiveData<String>()
     private val currentQuery = state.getLiveData(CURRENT_QUERY, DEFAULT_QUERY)
     private val resultChannel = Channel<ResultEvent>()
@@ -47,7 +48,7 @@ class CurrentWeatherViewModel @Inject constructor(
                     if (data.size > 0) {
                         val item = data[0]
                         println("Item : ${item.latitude} , ${item.longitude} , ${item.name}")
-                        searchWeather(lat = item.latitude, lon = item.longitude, name = item.name)
+                        searchWeather(lat = item.latitude, lon = item.longitude, name = item.name, country = item.country)
                     } else {
                         viewModelScope.launch {
                             val msg = "No Item's found"
@@ -94,7 +95,7 @@ class CurrentWeatherViewModel @Inject constructor(
     }
 
 
-    private fun searchWeather(lat: Double, lon: Double, name: String) = viewModelScope.launch {
+    private fun searchWeather(lat: Double, lon: Double, name: String, country: String) = viewModelScope.launch {
 
         val request =
             openWeatherRepository.getWeatherResponse(lon = lon, lat = lat).request { response ->
@@ -102,7 +103,7 @@ class CurrentWeatherViewModel @Inject constructor(
                     is ApiResponse.Success -> {
                         currentWeather.value = response.data
                         currentName.value = name
-
+                        currentCountry.value=country
                         viewModelScope.launch {
                             resultChannel.send(ResultEvent.Success)
                         }

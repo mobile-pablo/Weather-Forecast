@@ -18,6 +18,9 @@ import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch
+import java.text.SimpleDateFormat
+import java.time.Instant
+import java.util.*
 
 @AndroidEntryPoint
 class CurrentWeatherFragment : Fragment(R.layout.fragment_current) {
@@ -36,7 +39,11 @@ class CurrentWeatherFragment : Fragment(R.layout.fragment_current) {
             updateUI(it)
         }
         viewModel.currentName.observe(viewLifecycleOwner) {
-            binding.currentCityName.text = viewModel.currentName.value
+            binding.currentCityName.text = it
+        }
+
+        viewModel.currentCountry.observe(viewLifecycleOwner){
+            binding.currentCityCountry.text = ", $it"
         }
 
         viewModel.currentError.observe(viewLifecycleOwner){
@@ -83,15 +90,16 @@ class CurrentWeatherFragment : Fragment(R.layout.fragment_current) {
                 currentQueryError.visibility = INVISIBLE
                 viewModel.currentError.value=null
 
+                val currentDate = Calendar.getInstance().time
+                val sdf = SimpleDateFormat("dd, MMM yyyy")
+                currentCityDate.text =sdf.format(currentDate)
+
+
                 currentCityTemperature.text =
                     "${response.current.temp}${resources.getString(R.string.wi_celsius)}"
 
 
                 val isNight = response.current.getNight()
-                currentCityFontImg.text =
-                    isNight?.let {
-                        setWeatherIcon(response, it)
-                    }
 
                 currentCityLat.text = response.lat.toString()
                 currentCityLong.text = response.lon.toString()
@@ -182,7 +190,6 @@ class CurrentWeatherFragment : Fragment(R.layout.fragment_current) {
             override fun onQueryTextSubmit(query: String?): Boolean {
 
                 if (query != null) {
-                    //       viewModel.searchWeather(21.999, 19.005427, "Warszawa")
                     viewModel.searchLocation(query)
                     searchView.setQuery("", false)
                     searchView.clearFocus()
