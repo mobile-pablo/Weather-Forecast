@@ -7,6 +7,6 @@
  * MVVM 
  * ViewBinding
  * Dagger + Hilt
- * Retrofit
+ * Retrofit + Gson + Callback library
  * Room
  * Offline Caching (NetworkBoundResource)
