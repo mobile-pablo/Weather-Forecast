@@ -4,8 +4,10 @@ import android.os.Parcelable
 import kotlinx.android.parcel.Parcelize
 
 @Parcelize
-open class OpenWeatherCurrent(
+data class OpenWeatherCurrent(
     val dt: Long = 0,
+    val lon: Long =0,
+    val lat: Long =0,
     val sunrise: Long = 0,
     val sunset: Long = 0,
     val temp: Double = 0.0,

@@ -27,11 +27,12 @@ class CurrentWeatherFragment : Fragment(R.layout.fragment_current) {
     private val viewModel by viewModels<CurrentWeatherViewModel>()
     private var _binding: FragmentCurrentBinding? = null
     private val binding get() = _binding!!
+
+   lateinit var adapter :CurrentWeatherAdapter
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
         _binding = FragmentCurrentBinding.bind(view)
-
 
 
         viewModel.currentWeather.observe(viewLifecycleOwner) {
@@ -89,9 +90,11 @@ class CurrentWeatherFragment : Fragment(R.layout.fragment_current) {
                 currentQueryError.visibility = INVISIBLE
                 viewModel.currentError.value = null
 
-                val currentDate = Calendar.getInstance().time
-                val sdf = SimpleDateFormat("dd, MMM yyyy")
+                val currentDate = Date(response.current.dt*1000)
+                val sdf = SimpleDateFormat("dd, MMM yyyy HH:mm:ss")
                 currentCityDate.text = sdf.format(currentDate)
+                currentCityForecastRecyclerView.adapter = CurrentWeatherAdapter(response.hourly , response.timezone_offset)
+                currentCityForecastRecyclerView.setHasFixedSize(true)
 
 
                 currentCityTemperature.text = response.current.temp.toString()

@@ -175,7 +175,6 @@
             android:layout_height="wrap_content"
             android:layout_below="@id/current_city_small_box"
             android:layout_alignParentEnd="true"
-            android:layout_alignParentBottom="true"
             android:layout_marginBottom="0dp"
             android:clipToPadding="false"
             android:gravity="center_horizontal"
