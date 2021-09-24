@@ -3,10 +3,10 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/nav_graph"
-    app:startDestination="@id/currentFragment">
+    app:startDestination="@id/current_Fragment">
 
     <fragment
-        android:id="@+id/currentFragment"
+        android:id="@+id/current_Fragment"
         android:name="com.company.elverano.ui.currentWeather.CurrentWeatherFragment"
         android:label="fragment_current"
         tools:layout="@layout/fragment_current">
@@ -14,4 +14,14 @@
             android:name="OpenWeather"
             app:argType="com.company.elverano.data.openWeather.OpenWeatherResponse" />
     </fragment>
+    <fragment
+        android:id="@+id/map_Fragment"
+        android:name="com.company.elverano.ui.mapWeather.MapFragment"
+        android:label="fragment_map"
+        tools:layout="@layout/fragment_map" />
+    <fragment
+        android:id="@+id/search_Fragment"
+        android:name="com.company.elverano.ui.searchWeather.SearchFragment"
+        android:label="fragment_search"
+        tools:layout="@layout/fragment_search" />
 </navigation>

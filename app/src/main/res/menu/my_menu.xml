@@ -2,10 +2,17 @@
 <menu xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto">
 
-    <item android:id="@+id/menu_item_search"
+    <item android:id="@+id/search_Fragment"
         android:title="Search"
         android:icon="@drawable/ic_search"
-        app:actionViewClass="androidx.appcompat.widget.SearchView"
-        app:showAsAction="ifRoom|collapseActionView"
         />
+
+    <item
+        android:id="@+id/current_Fragment"
+        android:icon="@drawable/ic_home"
+        android:title="Home"/>
+
+    <item android:id="@+id/map_Fragment"
+        android:icon="@drawable/ic_map"
+        android:title="Map"/>
 </menu>

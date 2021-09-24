@@ -29,7 +29,6 @@ class CurrentWeatherFragment : Fragment(R.layout.fragment_current) {
     private var _binding: FragmentCurrentBinding? = null
     private val binding get() = _binding!!
 
-    lateinit var adapter: CurrentWeatherAdapter
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
@@ -79,8 +78,6 @@ class CurrentWeatherFragment : Fragment(R.layout.fragment_current) {
                 }
             }
         }
-
-        setHasOptionsMenu(true)
     }
 
     private fun updateUI(response: OpenWeatherResponse?) {
@@ -144,6 +141,7 @@ class CurrentWeatherFragment : Fragment(R.layout.fragment_current) {
 
     override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
         super.onCreateOptionsMenu(menu, inflater)
+   /*
         inflater.inflate(R.menu.my_menu, menu)
 
         val searchItem = menu.findItem(R.id.menu_item_search)
@@ -166,6 +164,7 @@ class CurrentWeatherFragment : Fragment(R.layout.fragment_current) {
             }
 
         })
+    */
     }
 
     override fun onDestroyView() {
