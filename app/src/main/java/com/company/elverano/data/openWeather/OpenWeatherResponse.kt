@@ -10,5 +10,6 @@ data class OpenWeatherResponse (
     var name: String,
     val current: OpenWeatherCurrent,
     val hourly: ArrayList<OpenWeatherHourly>,
-    val daily: ArrayList<OpenWeatherDaily>
+    val daily: ArrayList<OpenWeatherDaily>,
+    val timezone_offset: Int
 ): Parcelable

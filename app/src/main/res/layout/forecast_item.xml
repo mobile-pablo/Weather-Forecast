@@ -1,0 +1,55 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:paddingTop="20dp"
+    android:paddingBottom="20dp"
+    android:paddingLeft="10dp"
+    android:paddingRight="10dp">
+
+    <ImageView
+        android:id="@+id/forecast_city_image"
+        android:layout_width="70dp"
+        android:layout_height="70dp"
+        android:layout_centerHorizontal="true"
+        tools:src="@mipmap/ic_launcher" />
+    <TextView
+        android:id="@+id/forecast_city_day"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        tools:text="Sunday"
+        android:textColor="@color/white"
+        android:layout_centerInParent="true"
+        android:layout_below="@id/forecast_city_image"/>
+    <TextView
+        android:id="@+id/forecast_city_hour"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        tools:text="1 AM"
+        android:textSize="18sp"
+        android:textColor="@color/project_light_red"
+        android:layout_centerInParent="true"
+        android:layout_below="@id/forecast_city_day"/>
+<RelativeLayout
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:layout_below="@id/forecast_city_hour"
+    android:layout_centerInParent="true">
+    <TextView
+        android:id="@+id/forecast_item_temperature"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        tools:text="16"
+        android:textColor="@color/white"
+        android:textSize="30sp"/>
+    <TextView
+        android:id="@+id/forecast_item_measure"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="°"
+        android:textSize="30sp"
+        android:layout_toEndOf="@id/forecast_item_temperature"
+        android:textColor="@color/moon_yellow"/>
+</RelativeLayout>
+</RelativeLayout>

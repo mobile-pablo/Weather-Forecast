@@ -11,5 +11,6 @@
     <color name="project_gray">#141414</color>
     <color name="project_light_gray">#1B1B1E</color>
     <color name="moon_yellow">#eff301</color>
+    <color name="project_light_red">#FE5F55</color>
 
 </resources>

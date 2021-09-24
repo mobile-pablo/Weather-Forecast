@@ -94,8 +94,7 @@ class CurrentWeatherFragment : Fragment(R.layout.fragment_current) {
                 currentCityDate.text = sdf.format(currentDate)
 
 
-                currentCityTemperature.text =
-                    "${response.current.temp}°"
+                currentCityTemperature.text = response.current.temp.toString()
 
 
                 val isNight = response.current.getNight()
