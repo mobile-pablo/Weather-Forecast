@@ -1,11 +1,13 @@
 package com.company.elverano.ui.currentWeather
 
 
+import android.content.res.Resources
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import com.company.elverano.data.openWeather.OpenWeatherHourly
 import com.company.elverano.databinding.ForecastItemBinding
+import com.company.elverano.readAsset
 import java.text.SimpleDateFormat
 import java.time.DayOfWeek
 import java.time.LocalDate
@@ -13,7 +15,9 @@ import java.util.*
 
 class CurrentWeatherAdapter(
     private val lists: ArrayList<OpenWeatherHourly>,
-    private val offset: Int
+    private val offset: Int,
+    private val viewModel: CurrentWeatherViewModel,
+    private val res: Resources,
 ) : RecyclerView.Adapter<CurrentWeatherAdapter.LocalViewHolder>() {
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): LocalViewHolder {
         val binding =
@@ -35,9 +39,22 @@ class CurrentWeatherAdapter(
             binding.apply {
                 forecastItemTemperature.text = openWeatherHourly.temp.toString()
                 val date = Date(openWeatherHourly.dt * 1000 + offset * 1000)
-                val sdf = SimpleDateFormat("YYYY-MM-dd")
-                forecastCityHour.text = getWeekDayName(sdf.format(date))
-                forecastCityDay.text = date.day.toString()
+                val dateFormat = SimpleDateFormat("YYYY-MM-dd")
+                val hourFormat = SimpleDateFormat("hh a")
+                forecastCityHour.text = hourFormat.format(date)
+                forecastCityDay.text = getWeekDayName(dateFormat.format(date))
+
+                val isNight = openWeatherHourly.getNight()
+
+
+                binding.root.context?.let { context ->
+                    isNight?.let { isNight ->
+                        val imagePath =
+                            viewModel.setWeatherIcon(openWeatherHourly.weather[0].id, isNight,res) + ".png"
+                        val x = readAsset(context, imagePath)
+                        forecastCityImage.setImageBitmap(x)
+                    }
+                }
             }
         }
     }

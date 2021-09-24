@@ -20,4 +20,15 @@ data class OpenWeatherHourly(
     val wind_gust: Double = 0.0,
     val weather: List<OpenWeatherCurrent.OpenWeatherResult> = arrayListOf(),
     val pop: Double=0.0
-): Parcelable
+): Parcelable{
+    fun getNight(): Boolean? {
+        var icon = weather[0].icon
+        if (weather[0].icon.contains("n", true)) {
+            return true
+        } else if (weather[0].icon.contains("d", true)) {
+            return false
+        }
+
+        return null
+    }
+}

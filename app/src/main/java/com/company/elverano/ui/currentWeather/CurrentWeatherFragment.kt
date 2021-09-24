@@ -11,6 +11,7 @@ import androidx.appcompat.widget.SearchView
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.lifecycleScope
+import androidx.recyclerview.widget.LinearLayoutManager
 import com.company.elverano.R
 import com.company.elverano.data.openWeather.OpenWeatherResponse
 import com.company.elverano.databinding.FragmentCurrentBinding
@@ -28,7 +29,7 @@ class CurrentWeatherFragment : Fragment(R.layout.fragment_current) {
     private var _binding: FragmentCurrentBinding? = null
     private val binding get() = _binding!!
 
-   lateinit var adapter :CurrentWeatherAdapter
+    lateinit var adapter: CurrentWeatherAdapter
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
@@ -90,12 +91,18 @@ class CurrentWeatherFragment : Fragment(R.layout.fragment_current) {
                 currentQueryError.visibility = INVISIBLE
                 viewModel.currentError.value = null
 
-                val currentDate = Date(response.current.dt*1000)
+                val currentDate = Date(response.current.dt * 1000)
                 val sdf = SimpleDateFormat("dd, MMM yyyy HH:mm:ss")
                 currentCityDate.text = sdf.format(currentDate)
-                currentCityForecastRecyclerView.adapter = CurrentWeatherAdapter(response.hourly , response.timezone_offset)
+                currentCityForecastRecyclerView.adapter = CurrentWeatherAdapter(
+                    response.hourly,
+                    response.timezone_offset,
+                    viewModel,
+                    resources
+                )
                 currentCityForecastRecyclerView.setHasFixedSize(true)
-
+              currentCityForecastRecyclerView.layoutManager=  LinearLayoutManager(context).apply { isAutoMeasureEnabled = false
+              orientation=LinearLayoutManager.HORIZONTAL}
 
                 currentCityTemperature.text = response.current.temp.toString()
 
@@ -106,7 +113,11 @@ class CurrentWeatherFragment : Fragment(R.layout.fragment_current) {
                 context?.let { context ->
                     isNight?.let { isNight ->
                         val imagePath =
-                            setWeatherIcon(response.current.weather[0].id, isNight) + ".png"
+                            viewModel.setWeatherIcon(
+                                response.current.weather[0].id,
+                                isNight,
+                                resources
+                            ) + ".png"
                         val x = readAsset(context, imagePath)
                         currentCityImage.setImageBitmap(x)
                     }
@@ -125,130 +136,6 @@ class CurrentWeatherFragment : Fragment(R.layout.fragment_current) {
                             currentQueryError.text = it.message
                         }
                     }
-                }
-            }
-        }
-    }
-
-    private fun setWeatherIcon(id: Int, night: Boolean): String {
-        resources.apply {
-            return when (id) {
-
-                200, 201, 202 -> {
-                    if (!night)
-                        getString(R.string.clouds_rain_thunder)
-                    else
-                        getString(R.string.night_clouds_rain_thunder)
-                }
-
-                210 -> {
-                    if (!night)
-                        getString(R.string.cloud_thunder)
-                    else
-                        getString(R.string.night_clouds_thunder_sky)
-                }
-
-                211, 212, 221 -> {
-                    if (!night)
-                        getString(R.string.clouds_big_thunder)
-                    else
-                        getString(R.string.night_clouds_big_thunder)
-                }
-
-                230, 231, 231 -> {
-                    if (!night)
-                        getString(R.string.clouds_thunder_drizzle)
-                    else
-                        getString(R.string.night_clouds_thunder_drizzle)
-                }
-
-
-                300, 301, 701, 711, 721, 731, 741, 751, 761, 762, 771, 781 -> {
-                    if (!night)
-                        getString(R.string.clouds_drizzle)
-                    else
-                        getString(R.string.night_drizzle)
-                }
-
-                302 -> {
-                    if (!night)
-                        getString(R.string.clouds_big_drizzle)
-                    else
-                        getString(R.string.night_clouds_big_drizzle)
-                }
-
-
-                310, 311 -> {
-                    if (!night)
-                        getString(R.string.drizzle_rain)
-                    else
-                        getString(R.string.night_drizzle_rain)
-                }
-
-                312, 313, 314, 321 -> {
-                    if (!night)
-                        getString(R.string.drizzle_rain)
-                    else
-                        getString(R.string.night_big_drizzle_rain)
-                }
-
-
-                500, 501, 502, 503, 504, 20, 521, 522, 531 -> {
-                    if (!night)
-                        getString(R.string.rain)
-                    else
-                        getString(R.string.night_rain)
-                }
-
-                511 -> {
-                    if (!night)
-                        getString(R.string.freezing_rain)
-                    else
-                        getString(R.string.night_freezing_rain)
-                }
-
-                600, 601 -> {
-                    if (!night)
-                        getString(R.string.snow)
-                    else
-                        getString(R.string.night_snow)
-                }
-
-
-                602 -> {
-                    if (!night)
-                        getString(R.string.big_snow)
-                    else
-                        getString(R.string.night_big_snow)
-                }
-
-                611, 612, 613, 615, 616, 616, 620, 621, 622 -> {
-                    if (!night)
-                        getString(R.string.rain_snow)
-                    else
-                        getString(R.string.night_rain_snow)
-                }
-
-
-                800 -> {
-                    if (!night)
-                        getString(R.string.clear_sky)
-                    else
-                        getString(R.string.night_clear_sky)
-                }
-
-
-                801, 802, 803, 804 -> {
-                    if (!night)
-                        getString(R.string.clouds)
-                    else
-                        getString(R.string.night_clouds)
-                }
-
-
-                else -> {
-                    Log.d("OpenWeather", "Wrong ID : $id")
-                    getString(R.string.clouds)
                 }
             }
         }

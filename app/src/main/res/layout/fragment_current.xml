@@ -1,13 +1,20 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@android:color/transparent"
-    android:gravity="center"
+    tools:context=".ui.currentWeather.CurrentWeatherFragment"
     tools:background="@color/project_gray"
-    tools:context=".ui.currentWeather.CurrentWeatherFragment">
+    android:gravity="center">
+
+    <ImageView
+        android:layout_width="match_parent"
+        android:layout_height="200dp"
+        android:scaleType="fitStart"
+        android:layout_marginTop="80dp"
+        android:src="@drawable/world_map_gray" />
 
     <ProgressBar
         android:id="@+id/current_progress_bar"
@@ -28,13 +35,9 @@
         <RelativeLayout
             android:id="@+id/current_city_small_box"
             android:layout_width="match_parent"
-            android:layout_height="500dp">
+            android:layout_height="wrap_content">
 
-            <ImageView
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:scaleType="fitStart"
-                android:src="@drawable/world_map_gray" />
+
 
             <ImageView
                 android:id="@+id/current_city_image"
@@ -44,8 +47,9 @@
                 android:layout_marginTop="60dp" />
 
             <RelativeLayout
+                android:id="@+id/current_city_info_box"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content">
+                android:layout_height="80dp">
 
                 <TextView
                     android:id="@+id/current_city_date"
@@ -137,7 +141,6 @@
                     app:isw_thumb_color_left="#77B7D9"
                     app:isw_thumb_color_right="#606060" />
             </RelativeLayout>
-
             <RelativeLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
@@ -173,11 +176,9 @@
             android:id="@+id/current_city_forecast_recycler_view"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_below="@id/current_city_small_box"
-            android:layout_alignParentEnd="true"
+            android:layout_alignParentBottom="true"
             android:layout_marginBottom="0dp"
             android:clipToPadding="false"
-            android:gravity="center_horizontal"
             android:orientation="horizontal"
             app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
             tools:listitem="@layout/forecast_item" />
