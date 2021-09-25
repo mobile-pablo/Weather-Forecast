@@ -16,6 +16,7 @@ import com.company.elverano.R
 import com.company.elverano.data.openWeather.OpenWeatherResponse
 import com.company.elverano.databinding.FragmentCurrentBinding
 import com.company.elverano.readAsset
+import com.company.elverano.utils.ResultEvent
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.flow.collect
 import java.text.SimpleDateFormat
@@ -62,10 +63,10 @@ class CurrentWeatherFragment : Fragment(R.layout.fragment_current) {
 
             viewModel.resultEvent.collect { event ->
                 when (event) {
-                    is CurrentWeatherViewModel.ResultEvent.Success -> {
+                    is ResultEvent.Success -> {
                         Log.d("ResultEvent", "Success")
                     }
-                    is CurrentWeatherViewModel.ResultEvent.Error -> {
+                    is ResultEvent.Error -> {
                         binding.apply {
                             currentCityBox.visibility = INVISIBLE
                             currentQueryError.visibility = VISIBLE
@@ -78,6 +79,8 @@ class CurrentWeatherFragment : Fragment(R.layout.fragment_current) {
                 }
             }
         }
+
+        setHasOptionsMenu(true)
     }
 
     private fun updateUI(response: OpenWeatherResponse?) {
@@ -129,7 +132,7 @@ class CurrentWeatherFragment : Fragment(R.layout.fragment_current) {
                 viewLifecycleOwner.lifecycleScope.launchWhenResumed {
                     viewModel.resultEvent.collect {
                         println("Last result event: $it")
-                        if (it is CurrentWeatherViewModel.ResultEvent.Error) {
+                        if (it is ResultEvent.Error) {
                             currentQueryError.text = it.message
                         }
                     }
@@ -141,8 +144,8 @@ class CurrentWeatherFragment : Fragment(R.layout.fragment_current) {
 
     override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
         super.onCreateOptionsMenu(menu, inflater)
-   /*
-        inflater.inflate(R.menu.my_menu, menu)
+
+        inflater.inflate(R.menu.top_menu, menu)
 
         val searchItem = menu.findItem(R.id.menu_item_search)
         val searchView = searchItem.actionView as SearchView
@@ -164,7 +167,6 @@ class CurrentWeatherFragment : Fragment(R.layout.fragment_current) {
             }
 
         })
-    */
     }
 
     override fun onDestroyView() {

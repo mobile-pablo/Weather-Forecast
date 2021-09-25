@@ -11,6 +11,7 @@ import com.company.elverano.R
 import com.company.elverano.data.openWeather.OpenWeatherRepository
 import com.company.elverano.data.openWeather.OpenWeatherResponse
 import com.company.elverano.data.positionStack.PositionStackRepository
+import com.company.elverano.utils.ResultEvent
 import com.skydoves.sandwich.ApiResponse
 import com.skydoves.sandwich.request
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -43,7 +44,7 @@ class CurrentWeatherViewModel @Inject constructor(
     fun searchLocation(query: String) = viewModelScope.launch {
 
         currentQuery.value = query
-        val request = positionStackRepository.getLocation(query).request { response ->
+        positionStackRepository.getLocation(query).request { response ->
             when (response) {
                 is ApiResponse.Success -> {
                     val data = response.data.data
@@ -106,7 +107,6 @@ class CurrentWeatherViewModel @Inject constructor(
     private fun searchWeather(lat: Double, lon: Double, name: String, country: String) =
         viewModelScope.launch {
 
-            val request =
                 openWeatherRepository.getWeatherResponse(lon = lon, lat = lat).request { response ->
                     when (response) {
                         is ApiResponse.Success -> {
@@ -266,10 +266,5 @@ class CurrentWeatherViewModel @Inject constructor(
                 }
             }
         }
-    }
-
-    sealed class ResultEvent {
-        object Success : ResultEvent()
-        data class Error(var message: String) : ResultEvent()
     }
 }
