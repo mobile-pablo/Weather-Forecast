@@ -27,14 +27,13 @@ import javax.inject.Inject
 class CurrentWeatherViewModel @Inject constructor(
     private val openWeatherRepository: OpenWeatherRepository,
     private val positionStackRepository: PositionStackRepository,
-    private val state: SavedStateHandle
 ) : ViewModel() {
 
     var currentWeather = MutableLiveData<OpenWeatherResponse>()
     var currentName = MutableLiveData<String>()
     var currentCountry = MutableLiveData<String>()
     var currentError = MutableLiveData<String>()
-    private val currentQuery = state.getLiveData(CURRENT_QUERY, DEFAULT_QUERY)
+    private val currentQuery = MutableLiveData<String>()
     private val resultChannel = Channel<ResultEvent>()
     val resultEvent = resultChannel.receiveAsFlow()
 
@@ -107,10 +106,10 @@ class CurrentWeatherViewModel @Inject constructor(
 
     private fun searchWeather(lat: Double, lon: Double, name: String, country: String) =
         viewModelScope.launch {
-                openWeatherRepository.insertWeatherResponse(lon = lon, lat = lat)
-           val response =      openWeatherRepository.getWeatherResponse()
+            //    openWeatherRepository.insertWeatherResponse(lon = lon, lat = lat)
+           val response =      openWeatherRepository.getWeather(lon = lon, lat = lat)
             response.collect {
-                currentWeather.value = it
+                currentWeather.value = it.data!!
                 currentName.value = name
                 currentCountry.value = country
             }
