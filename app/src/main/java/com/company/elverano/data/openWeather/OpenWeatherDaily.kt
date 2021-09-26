@@ -1,8 +1,9 @@
 package com.company.elverano.data.openWeather
 
 import android.os.Parcelable
+import androidx.room.Entity
 import kotlinx.android.parcel.Parcelize
-
+@Entity(tableName = "open_weather_daily")
 @Parcelize
 data class OpenWeatherDaily(
     val dt: Long = 0,

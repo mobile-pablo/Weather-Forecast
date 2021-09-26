@@ -1,10 +1,16 @@
 package com.company.elverano.di
 
+import android.app.Application
+import android.content.Context
+import androidx.room.Room
 import com.company.elverano.api.OpenWeatherApi
 import com.company.elverano.api.PositionStackApi
+import com.company.elverano.data.openWeather.OpenWeatherDao
+import com.company.elverano.data.openWeather.OpenWeatherDatabase
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
+import dagger.hilt.android.qualifiers.ApplicationContext
 import dagger.hilt.components.SingletonComponent
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
@@ -42,4 +48,21 @@ object AppModule {
     @Provides
     @Singleton
     fun providePositionStackApi( @Named("positionStackRetrofit") positionStackRetrofit: Retrofit): PositionStackApi = positionStackRetrofit.create(PositionStackApi::class.java)
+
+    @Provides
+    @Singleton
+    fun provideAppDatabase(@ApplicationContext appContext: Context): OpenWeatherDatabase {
+        return Room.databaseBuilder(
+            appContext,
+            OpenWeatherDatabase::class.java,
+            "open_weather_database"
+        ).build()
+    }
+
+
+    // Dao is default singleton  becouse of Room
+
+    @Provides
+    fun provideTaskDao(db: OpenWeatherDatabase) = db.openWeatherDao()
+
 }

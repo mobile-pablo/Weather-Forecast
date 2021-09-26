@@ -10,9 +10,6 @@
         android:name="com.company.elverano.ui.currentWeather.CurrentWeatherFragment"
         android:label="fragment_current"
         tools:layout="@layout/fragment_current">
-        <argument
-            android:name="OpenWeather"
-            app:argType="com.company.elverano.data.openWeather.OpenWeatherResponse" />
     </fragment>
     <fragment
         android:id="@+id/map_Fragment"

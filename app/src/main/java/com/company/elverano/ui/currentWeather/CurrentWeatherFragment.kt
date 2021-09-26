@@ -37,7 +37,7 @@ class CurrentWeatherFragment : Fragment(R.layout.fragment_current) {
 
 
         viewModel.currentWeather.observe(viewLifecycleOwner) {
-            updateUI(it)
+                updateUI(it)
         }
         viewModel.currentName.observe(viewLifecycleOwner) {
             binding.currentCityName.text = it

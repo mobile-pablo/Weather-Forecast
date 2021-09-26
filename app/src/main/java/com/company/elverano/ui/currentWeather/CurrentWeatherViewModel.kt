@@ -16,6 +16,7 @@ import com.skydoves.sandwich.ApiResponse
 import com.skydoves.sandwich.request
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.channels.Channel
+import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.flow.receiveAsFlow
 import kotlinx.coroutines.launch
 import java.net.UnknownHostException
@@ -106,7 +107,17 @@ class CurrentWeatherViewModel @Inject constructor(
 
     private fun searchWeather(lat: Double, lon: Double, name: String, country: String) =
         viewModelScope.launch {
-
+                openWeatherRepository.insertWeatherResponse(lon = lon, lat = lat)
+           val response =      openWeatherRepository.getWeatherResponse()
+            response.collect {
+                currentWeather.value = it
+                currentName.value = name
+                currentCountry.value = country
+            }
+            viewModelScope.launch {
+                resultChannel.send(ResultEvent.Success)
+            }
+           /*
                 openWeatherRepository.getWeatherResponse(lon = lon, lat = lat).request { response ->
                     when (response) {
                         is ApiResponse.Success -> {
@@ -136,6 +147,7 @@ class CurrentWeatherViewModel @Inject constructor(
                         }
                     }
                 }
+            */
         }
 
 

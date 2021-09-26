@@ -18,5 +18,7 @@ interface PositionStackApi {
     }
 
     @GET("forward?access_key=$ClientID&limit=1")
-     fun getLocation(@Query("query") query: String): Call<PositionStackResponse>
+    fun getLocation(
+        @Query("query") query: String
+    ): Call<PositionStackResponse>
 }
