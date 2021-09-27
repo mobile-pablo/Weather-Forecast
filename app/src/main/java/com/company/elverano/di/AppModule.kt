@@ -4,9 +4,8 @@ import android.content.Context
 import androidx.room.Room
 import com.company.elverano.api.OpenWeatherApi
 import com.company.elverano.api.PositionStackApi
-import com.company.elverano.data.openWeather.OpenWeatherDao
 import com.company.elverano.data.openWeather.OpenWeatherDatabase
-import com.company.elverano.data.openWeather.query.OpenWeatherQueryDao
+import com.company.elverano.data.positionStack.PositionStackDatabase
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
@@ -51,11 +50,21 @@ object AppModule {
 
     @Provides
     @Singleton
-    fun provideAppDatabase(@ApplicationContext appContext: Context): OpenWeatherDatabase {
+    fun provideOpenWeatherDatabase(@ApplicationContext appContext: Context): OpenWeatherDatabase {
         return Room.databaseBuilder(
             appContext,
             OpenWeatherDatabase::class.java,
             "open_weather_database"
+        ).build()
+    }
+
+    @Provides
+    @Singleton
+    fun providePositionStackDatabase(@ApplicationContext appContext: Context): PositionStackDatabase {
+        return Room.databaseBuilder(
+            appContext,
+            PositionStackDatabase::class.java,
+            "position_stack_database"
         ).build()
     }
 }

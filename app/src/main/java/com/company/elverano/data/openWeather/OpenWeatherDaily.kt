@@ -4,7 +4,7 @@ import android.os.Parcelable
 import androidx.room.Entity
 import kotlinx.android.parcel.Parcelize
 @Entity(tableName = "open_weather_daily")
-@Parcelize
+
 data class OpenWeatherDaily(
     val dt: Long = 0,
     val sunrise: Long = 0,
@@ -22,9 +22,8 @@ data class OpenWeatherDaily(
     val clouds: Int = 0,
     val pop: Double = 0.0,
     val uvi: Double = 0.0
-) : Parcelable {
+) {
 
-    @Parcelize
     data class OpenWeatherDailyTemp(
         val day: Double = 0.0,
         val min: Double = 0.0,
@@ -32,5 +31,5 @@ data class OpenWeatherDaily(
         val night: Double = 0.0,
         val eve: Double = 0.0,
         val morn: Double = 0.0
-    ) : Parcelable
+    )
 }

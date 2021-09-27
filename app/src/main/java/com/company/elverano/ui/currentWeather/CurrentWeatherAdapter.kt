@@ -37,7 +37,6 @@ class CurrentWeatherAdapter(
     ) {
         fun onBind(openWeatherHourly: OpenWeatherHourly) {
             binding.apply {
-                println("T: "+openWeatherHourly.temp)
                 forecastItemTemperature.text =  String.format("%.2f", openWeatherHourly.temp)
                 val date = Date(openWeatherHourly.dt * 1000 + offset * 1000)
                 val dateFormat = SimpleDateFormat("YYYY-MM-dd")

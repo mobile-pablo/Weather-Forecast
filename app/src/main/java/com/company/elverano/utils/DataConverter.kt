@@ -4,6 +4,7 @@ import androidx.room.TypeConverter
 import com.company.elverano.data.openWeather.OpenWeatherCurrent
 import com.company.elverano.data.openWeather.OpenWeatherDaily
 import com.company.elverano.data.openWeather.OpenWeatherHourly
+import com.company.elverano.data.positionStack.PositionStack
 import com.google.gson.Gson
 import com.google.gson.reflect.TypeToken
 
@@ -53,4 +54,18 @@ class DataConverter {
     }
 
 
+
+    @TypeConverter
+    fun fromPositionStack(value: ArrayList<PositionStack>): String {
+        val gson = Gson()
+        val type = object : TypeToken<ArrayList<PositionStack>>() {}.type
+        return gson.toJson(value, type)
+    }
+
+    @TypeConverter
+    fun toPositionStack(value: String): ArrayList<PositionStack>{
+        val gson = Gson()
+        val type = object : TypeToken<ArrayList<PositionStack>>() {}.type
+        return gson.fromJson(value, type)
+    }
 }

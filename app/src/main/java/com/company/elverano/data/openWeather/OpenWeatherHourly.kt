@@ -1,11 +1,8 @@
 package com.company.elverano.data.openWeather
 
-import android.os.Parcelable
 import androidx.room.Entity
-import kotlinx.android.parcel.Parcelize
 
 @Entity(tableName = "open_weather_hourly")
-@Parcelize
 data class OpenWeatherHourly(
     val dt: Long = 0,
     val lon: Long =0,
@@ -22,7 +19,7 @@ data class OpenWeatherHourly(
     val wind_gust: Double = 0.0,
     val weather: List<OpenWeatherCurrent.OpenWeatherResult> = arrayListOf(),
     val pop: Double=0.0
-): Parcelable{
+){
     fun getNight(): Boolean? {
         var icon = weather[0].icon
         if (icon.contains("n", true)) {
