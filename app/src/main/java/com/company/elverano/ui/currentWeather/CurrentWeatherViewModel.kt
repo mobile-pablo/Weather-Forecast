@@ -15,8 +15,10 @@ import com.company.elverano.utils.ResultEvent
 import com.skydoves.sandwich.ApiResponse
 import com.skydoves.sandwich.request
 import dagger.hilt.android.lifecycle.HiltViewModel
+import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.channels.Channel
 import kotlinx.coroutines.flow.collect
+import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.flow.receiveAsFlow
 import kotlinx.coroutines.launch
 import java.net.UnknownHostException
@@ -33,17 +35,25 @@ class CurrentWeatherViewModel @Inject constructor(
     var currentName = MutableLiveData<String>()
     var currentCountry = MutableLiveData<String>()
     var currentError = MutableLiveData<String>()
-    private val currentQuery = MutableLiveData<String>()
+    private lateinit var currentQuery : String
     private val resultChannel = Channel<ResultEvent>()
     val resultEvent = resultChannel.receiveAsFlow()
 
     init {
-        searchLocation(currentQuery.value.toString())
+     GlobalScope.launch {
+         openWeatherRepository.getQuery().collectLatest {
+                if(it!=null){
+                    currentQuery = it.query
+                    searchLocation(it.query)
+                }
+         }
+     }
+
     }
 
     fun searchLocation(query: String) = viewModelScope.launch {
 
-        currentQuery.value = query
+        openWeatherRepository.insertQuery(query)
         positionStackRepository.getLocation(query).request { response ->
             when (response) {
                 is ApiResponse.Success -> {
@@ -106,16 +116,9 @@ class CurrentWeatherViewModel @Inject constructor(
 
     private fun searchWeather(lat: Double, lon: Double, name: String, country: String) =
         viewModelScope.launch {
-            //    openWeatherRepository.insertWeatherResponse(lon = lon, lat = lat)
-           val response =      openWeatherRepository.getWeather(lon = lon, lat = lat)
-            response.collect {
-                currentWeather.value = it.data!!
-                currentName.value = name
-                currentCountry.value = country
-            }
-            viewModelScope.launch {
-                resultChannel.send(ResultEvent.Success)
-            }
+       openWeatherRepository.getWeather(lon = lon, lat = lat).collect{
+
+      }
            /*
                 openWeatherRepository.getWeatherResponse(lon = lon, lat = lat).request { response ->
                     when (response) {
@@ -149,11 +152,6 @@ class CurrentWeatherViewModel @Inject constructor(
             */
         }
 
-
-    companion object {
-        private const val CURRENT_QUERY = "current_query"
-        const val DEFAULT_QUERY = "Rzeszow"
-    }
 
     fun setWeatherIcon(id: Int, night: Boolean, resources: Resources): String {
         resources.apply {

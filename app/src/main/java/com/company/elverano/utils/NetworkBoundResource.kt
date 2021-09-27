@@ -8,10 +8,9 @@ inline fun <ResultType, RequestType> networkBoundResource(
     crossinline saveFetchResult: suspend (RequestType) -> Unit,
     crossinline shouldFetch: (ResultType) -> Boolean = { true }
 ) = flow{
-    //First mowi ze bierze raz tylko z flow od funkcji query
     val data = query().first()
 
-//Tutaj podpielismy wartosc pod if i nie wazne co sie wykona tutaj to zawsze zwraca sie to query().map{... bo jest na koncu linijek
+
     val flow = if (shouldFetch(data)) {
         emit(Resource.Loading(data))
 

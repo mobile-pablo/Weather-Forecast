@@ -1,12 +1,12 @@
 package com.company.elverano.di
 
-import android.app.Application
 import android.content.Context
 import androidx.room.Room
 import com.company.elverano.api.OpenWeatherApi
 import com.company.elverano.api.PositionStackApi
 import com.company.elverano.data.openWeather.OpenWeatherDao
 import com.company.elverano.data.openWeather.OpenWeatherDatabase
+import com.company.elverano.data.openWeather.query.OpenWeatherQueryDao
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
@@ -58,11 +58,4 @@ object AppModule {
             "open_weather_database"
         ).build()
     }
-
-
-    // Dao is default singleton  becouse of Room
-
-    @Provides
-    fun provideTaskDao(db: OpenWeatherDatabase) = db.openWeatherDao()
-
 }

@@ -37,7 +37,7 @@ class CurrentWeatherFragment : Fragment(R.layout.fragment_current) {
 
 
         viewModel.currentWeather.observe(viewLifecycleOwner) {
-                updateUI(it)
+            updateUI(it)
         }
         viewModel.currentName.observe(viewLifecycleOwner) {
             binding.currentCityName.text = it
@@ -101,8 +101,10 @@ class CurrentWeatherFragment : Fragment(R.layout.fragment_current) {
                     resources
                 )
                 currentCityForecastRecyclerView.setHasFixedSize(true)
-              currentCityForecastRecyclerView.layoutManager=  LinearLayoutManager(context).apply { isAutoMeasureEnabled = false
-              orientation=LinearLayoutManager.HORIZONTAL}
+                currentCityForecastRecyclerView.layoutManager = LinearLayoutManager(context).apply {
+                    isAutoMeasureEnabled = false
+                    orientation = LinearLayoutManager.HORIZONTAL
+                }
 
                 currentCityTemperature.text = response.current.temp.toString()
 
