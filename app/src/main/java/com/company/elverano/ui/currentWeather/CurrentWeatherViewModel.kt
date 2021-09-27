@@ -45,28 +45,19 @@ class CurrentWeatherViewModel @Inject constructor(
     fun searchLocation(query: String) = viewModelScope.launch {
         println("Search location!  $query")
         positionStackRepository.getLocation(query).collect { response ->
-            when (response) {
-                is ApiResponse.Success<*> -> {
-                    val data = response.data?.data
-                    if(data!=null) {
-                        if (data.size > 0) {
-                            val item = data[0]
-                            println("Item : ${item.latitude} , ${item.longitude} , ${item.name}")
-                            searchWeather(
-                                lat = item.latitude,
-                                lon = item.longitude,
-                                name = item.name,
-                                country = item.country
-                            )
-                        } else {
-                            viewModelScope.launch {
-                                val msg = "No Item's found"
-                                resultChannel.send(ResultEvent.Error(msg))
-                                currentError.value = msg
-                            }
-                        }
-
-                    }else{
+            response.data?.let {
+                val data = it.data
+                if (data != null) {
+                    if (data.size > 0) {
+                        val item = data[0]
+                        println("Item : ${item.latitude} , ${item.longitude} , ${item.name}")
+                        searchWeather(
+                            lat = item.latitude,
+                            lon = item.longitude,
+                            name = item.name,
+                            country = item.country
+                        )
+                    } else {
                         viewModelScope.launch {
                             val msg = "No Item's found"
                             resultChannel.send(ResultEvent.Error(msg))
@@ -76,6 +67,7 @@ class CurrentWeatherViewModel @Inject constructor(
                 }
             }
         }
+
     }
 
 
@@ -85,7 +77,7 @@ class CurrentWeatherViewModel @Inject constructor(
        openWeatherRepository.getWeather(lon = lon, lat = lat).collect{
            val response = it.data
          response?.let {
-             currentWeather.value = it!!
+             currentWeather.value = it
              currentName.value = name
              currentCountry.value = country
          }
