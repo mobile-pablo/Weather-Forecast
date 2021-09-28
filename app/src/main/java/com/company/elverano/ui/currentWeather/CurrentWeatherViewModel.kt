@@ -31,28 +31,36 @@ class CurrentWeatherViewModel @Inject constructor(
     var currentError = MutableLiveData<String>()
     private val resultChannel = openWeatherRepository.resultChannel
     val resultEvent = resultChannel.receiveAsFlow()
-    private var searchJob: Job
+    private var searchJob: Job? = null
     private var couritineJob: Job? = null
 
     init {
+        searchJob?.cancel()
         searchJob = viewModelScope.launch {
             val openWeatherResponse = openWeatherRepository.getInitialWeather()
-            openWeatherResponse?.let {
-                currentWeather.value = it
+            if (openWeatherResponse == null) {
+                searchLocation("Warsaw")
+            } else {
+                openWeatherResponse?.let {
+                    currentWeather.value = it
+                }
             }
+
 
             val positionStackResponse = positionStackRepository.getInitialLocation()
-            positionStackResponse?.let {
-                currentName.value = it.data[0].name
-                currentCountry.value = it.data[0].country
-            }
+            positionStackResponse?.let { response ->
+                response.data?.let {
+                    currentName.value = it[0].name
+                    currentCountry.value = it[0].country
+                }
 
+            }
         }
 
     }
 
     fun searchLocation(query: String) {
-        searchJob.cancel()
+        searchJob?.cancel()
         searchJob = viewModelScope.launch {
             Log.d("CurrentWeather", "Search Location $query")
             positionStackRepository.getLocation(query).collectLatest { response ->
@@ -88,7 +96,6 @@ class CurrentWeatherViewModel @Inject constructor(
 
     private fun searchWeather(lat: Double, lon: Double, name: String, country: String) {
         couritineJob?.cancel()
-
         couritineJob = viewModelScope.launch {
             Log.d("CurrentWeather", "Search Weather")
             openWeatherRepository.getWeather(lon = lon, lat = lat).collectLatest {

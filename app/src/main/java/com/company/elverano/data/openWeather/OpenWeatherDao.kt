@@ -16,7 +16,7 @@ interface OpenWeatherDao {
     fun getWeather() : Flow<OpenWeatherResponse>
 
     @Query("SELECT * FROM open_weather_response")
-    suspend fun getInitialWeather() : OpenWeatherResponse
+    suspend fun getInitialWeather() : OpenWeatherResponse?
 
     @Delete
     suspend fun deleteWeather(openWeatherResponse: OpenWeatherResponse)

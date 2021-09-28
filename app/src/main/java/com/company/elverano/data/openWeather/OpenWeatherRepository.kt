@@ -27,7 +27,6 @@ class OpenWeatherRepository @Inject constructor(
             dao.getWeather()
         },
         fetch = {
-            delay(2000)
             api.getWeather(latitude = lat, longitude = lon)
         },
         saveFetchResult = { weather ->

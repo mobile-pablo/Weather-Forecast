@@ -28,7 +28,6 @@ class PositionStackRepository @Inject constructor(
             dao.getPositionStack()
         },
         fetch = {
-            delay(2000)
             api.getLocation(query = query)
         },
         saveFetchResult = { position ->
