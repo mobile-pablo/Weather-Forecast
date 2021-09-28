@@ -9,6 +9,7 @@ import com.skydoves.sandwich.request
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.channels.Channel
 import kotlinx.coroutines.delay
+import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch
 import java.net.UnknownHostException
 import javax.inject.Inject
@@ -73,4 +74,6 @@ class PositionStackRepository @Inject constructor(
 
         }
     )
+
+   suspend fun getInitialLocation() = dao.getInitialPositionStack()
 }

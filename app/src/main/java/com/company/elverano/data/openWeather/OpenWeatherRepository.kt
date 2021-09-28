@@ -73,4 +73,7 @@ class OpenWeatherRepository @Inject constructor(
 
         }
     )
+
+
+    suspend fun getInitialWeather() = dao.getInitialWeather()
 }

@@ -133,7 +133,7 @@ class CurrentWeatherFragment : Fragment(R.layout.fragment_current) {
                 currentQueryError.visibility = VISIBLE
                 viewLifecycleOwner.lifecycleScope.launchWhenResumed {
                     viewModel.resultEvent.collect {
-                        println("Last result event: $it")
+                        println("Last result event: ${it.javaClass}")
                         if (it is ResultEvent.Error) {
                             currentQueryError.text = it.message
                         }

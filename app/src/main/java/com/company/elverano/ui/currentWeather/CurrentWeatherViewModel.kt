@@ -11,11 +11,8 @@ import com.company.elverano.data.openWeather.OpenWeatherRepository
 import com.company.elverano.data.openWeather.OpenWeatherResponse
 import com.company.elverano.data.positionStack.PositionStackRepository
 import com.company.elverano.utils.ResultEvent
-import com.skydoves.sandwich.ApiResponse
 import dagger.hilt.android.lifecycle.HiltViewModel
-import kotlinx.coroutines.GlobalScope
-import kotlinx.coroutines.channels.Channel
-import kotlinx.coroutines.flow.collect
+import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.flow.receiveAsFlow
 import kotlinx.coroutines.launch
 import javax.inject.Inject
@@ -31,26 +28,35 @@ class CurrentWeatherViewModel @Inject constructor(
     var currentName = MutableLiveData<String>()
     var currentCountry = MutableLiveData<String>()
     var currentError = MutableLiveData<String>()
-    private lateinit var currentQuery : String
     private val resultChannel = openWeatherRepository.resultChannel
     val resultEvent = resultChannel.receiveAsFlow()
 
     init {
-     GlobalScope.launch {
-         searchLocation("Warsaw")
-     }
+        viewModelScope.launch {
+            val openWeatherResponse = openWeatherRepository.getInitialWeather()
+            openWeatherResponse?.let {
+                currentWeather.value = it
+            }
+
+            val positionStackResponse = positionStackRepository.getInitialLocation()
+            positionStackResponse?.let {
+                currentName.value = it.data[0].name
+                currentCountry.value = it.data[0].country
+            }
+
+        }
 
     }
 
     fun searchLocation(query: String) = viewModelScope.launch {
-        println("Search location!  $query")
-        positionStackRepository.getLocation(query).collect { response ->
+        Log.d("CurrentWeather", "Search Location $query")
+        positionStackRepository.getLocation(query).collectLatest { response ->
             response.data?.let {
                 val data = it.data
                 if (data != null) {
                     if (data.size > 0) {
                         val item = data[0]
-                        println("Item : ${item.latitude} , ${item.longitude} , ${item.name}")
+                        Log.d("CurrentWeather", "Item : ${item.latitude} , ${item.longitude} , ${item.name}")
                         searchWeather(
                             lat = item.latitude,
                             lon = item.longitude,
@@ -73,15 +79,15 @@ class CurrentWeatherViewModel @Inject constructor(
 
     private fun searchWeather(lat: Double, lon: Double, name: String, country: String) =
         viewModelScope.launch {
-
-       openWeatherRepository.getWeather(lon = lon, lat = lat).collect{
-           val response = it.data
-         response?.let {
-             currentWeather.value = it
-             currentName.value = name
-             currentCountry.value = country
-         }
-      }
+          Log.d("CurrentWeather", "Search Weather")
+            openWeatherRepository.getWeather(lon = lon, lat = lat).collectLatest {
+                val response = it.data
+                response?.let {
+                    currentWeather.value = it
+                    currentName.value = name
+                    currentCountry.value = country
+                }
+            }
 
 
         }
