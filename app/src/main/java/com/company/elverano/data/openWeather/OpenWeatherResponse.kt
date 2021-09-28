@@ -6,9 +6,10 @@ import androidx.room.PrimaryKey
 @Entity(tableName = "open_weather_response")
 
 data class OpenWeatherResponse (
+     @PrimaryKey(autoGenerate = true) val id: Int=0,
      val lat: Double=0.0,
      val lon: Double=0.0,
-     @PrimaryKey(autoGenerate = false)    var name: String="",
+     var name: String="",
      val current: OpenWeatherCurrent= OpenWeatherCurrent(),
      val hourly: ArrayList<OpenWeatherHourly> = arrayListOf(),
      val daily: ArrayList<OpenWeatherDaily> = arrayListOf(),

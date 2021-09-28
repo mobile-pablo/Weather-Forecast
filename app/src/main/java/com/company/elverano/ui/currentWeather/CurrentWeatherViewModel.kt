@@ -12,6 +12,7 @@ import com.company.elverano.data.openWeather.OpenWeatherResponse
 import com.company.elverano.data.positionStack.PositionStackRepository
 import com.company.elverano.utils.ResultEvent
 import dagger.hilt.android.lifecycle.HiltViewModel
+import kotlinx.coroutines.Job
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.flow.receiveAsFlow
 import kotlinx.coroutines.launch
@@ -30,9 +31,11 @@ class CurrentWeatherViewModel @Inject constructor(
     var currentError = MutableLiveData<String>()
     private val resultChannel = openWeatherRepository.resultChannel
     val resultEvent = resultChannel.receiveAsFlow()
+    private var searchJob: Job
+    private var couritineJob: Job? = null
 
     init {
-        viewModelScope.launch {
+        searchJob = viewModelScope.launch {
             val openWeatherResponse = openWeatherRepository.getInitialWeather()
             openWeatherResponse?.let {
                 currentWeather.value = it
@@ -48,38 +51,46 @@ class CurrentWeatherViewModel @Inject constructor(
 
     }
 
-    fun searchLocation(query: String) = viewModelScope.launch {
-        Log.d("CurrentWeather", "Search Location $query")
-        positionStackRepository.getLocation(query).collectLatest { response ->
-            response.data?.let {
-                val data = it.data
-                if (data != null) {
-                    if (data.size > 0) {
-                        val item = data[0]
-                        Log.d("CurrentWeather", "Item : ${item.latitude} , ${item.longitude} , ${item.name}")
-                        searchWeather(
-                            lat = item.latitude,
-                            lon = item.longitude,
-                            name = item.name,
-                            country = item.country
-                        )
-                    } else {
-                        viewModelScope.launch {
-                            val msg = "No Item's found"
-                            resultChannel.send(ResultEvent.Error(msg))
-                            currentError.value = msg
+    fun searchLocation(query: String) {
+        searchJob.cancel()
+        searchJob = viewModelScope.launch {
+            Log.d("CurrentWeather", "Search Location $query")
+            positionStackRepository.getLocation(query).collectLatest { response ->
+                response.data?.let {
+                    val data = it.data
+                    if (data != null) {
+                        if (data.size > 0) {
+                            val item = data[0]
+                            Log.d(
+                                "CurrentWeather",
+                                "Item : ${item.latitude} , ${item.longitude} , ${item.name}"
+                            )
+                            searchWeather(
+                                lat = item.latitude,
+                                lon = item.longitude,
+                                name = item.name,
+                                country = item.country
+                            )
+                        } else {
+                            viewModelScope.launch {
+                                val msg = "No Item's found"
+                                resultChannel.send(ResultEvent.Error(msg))
+                                currentError.value = msg
+                            }
                         }
                     }
                 }
             }
-        }
 
+        }
     }
 
 
-    private fun searchWeather(lat: Double, lon: Double, name: String, country: String) =
-        viewModelScope.launch {
-          Log.d("CurrentWeather", "Search Weather")
+    private fun searchWeather(lat: Double, lon: Double, name: String, country: String) {
+        couritineJob?.cancel()
+
+        couritineJob = viewModelScope.launch {
+            Log.d("CurrentWeather", "Search Weather")
             openWeatherRepository.getWeather(lon = lon, lat = lat).collectLatest {
                 val response = it.data
                 response?.let {
@@ -91,6 +102,7 @@ class CurrentWeatherViewModel @Inject constructor(
 
 
         }
+    }
 
 
     fun setWeatherIcon(id: Int, night: Boolean, resources: Resources): String {
