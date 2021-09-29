@@ -12,6 +12,7 @@ import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.LinearLayoutManager
+import com.bumptech.glide.Glide
 import com.company.elverano.R
 import com.company.elverano.data.openWeather.OpenWeatherResponse
 import com.company.elverano.databinding.FragmentCurrentBinding
@@ -108,24 +109,25 @@ class CurrentWeatherFragment : Fragment(R.layout.fragment_current) {
                     orientation = LinearLayoutManager.HORIZONTAL
                 }
 
-                currentCityTemperature.text = String.format("%.1f", response.current.temp)
+                currentCityTemperature.text = String.format("%.1f", response.current.temp).replace(",",".")
+
 
 
                 val isNight = response.current.getNight()
 
 
-                context?.let { context ->
+
                     isNight?.let { isNight ->
-                        val imagePath =
+                        val drawable =
                             viewModel.setWeatherIcon(
                                 response.current.weather[0].id,
                                 isNight,
                                 resources
-                            ) + ".webp"
-                        val x = readAsset(context, imagePath)
-                        currentCityImage.setImageBitmap(x)
+                            )
+
+                        context?.let { Glide.with(it).load(drawable).into(currentCityImage) }
                     }
-                }
+
 
 
                 currentCityLat.text = response.lat.toString()

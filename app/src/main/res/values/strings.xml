@@ -1,40 +1,40 @@
 <resources>
         <string name="app_name">Weather Forecast</string>
         
-        <string name="clear_sky">clearSky/clear_sky</string>
-        <string name="night_clear_sky">clearSky/night_clear_sky</string>
+        <string name="clear_sky">clear_sky</string>
+        <string name="night_clear_sky">night_clear_sky</string>
 
-        <string name="clouds">clouds/clouds</string>
-        <string name="night_clouds">clouds/night_clouds</string>
+        <string name="clouds">clouds</string>
+        <string name="night_clouds">night_clouds</string>
 
-        <string name="clouds_big_drizzle">drizzle/clouds_big_drizzle</string>
-        <string name="clouds_drizzle">drizzle/clouds_drizzle</string>
-        <string name="drizzle_rain">drizzle/drizzle_rain</string>
-        <string name="night_big_drizzle_rain">drizzle/night_big_drizzle_rain</string>
-        <string name="night_clouds_big_drizzle">drizzle/night_clouds_big_drizzle</string>
-        <string name="night_drizzle">drizzle/night_drizzle</string>
-        <string name="night_drizzle_rain">drizzle/night_drizzle_rain</string>
+        <string name="clouds_big_drizzle">clouds_big_drizzle</string>
+        <string name="clouds_drizzle">clouds_drizzle</string>
+        <string name="drizzle_rain">drizzle_rain</string>
+        <string name="night_big_drizzle_rain">night_big_drizzle_rain</string>
+        <string name="night_clouds_big_drizzle">night_clouds_big_drizzle</string>
+        <string name="night_drizzle">night_drizzle</string>
+        <string name="night_drizzle_rain">night_drizzle_rain</string>
 
 
-        <string name="freezing_rain">rain/freezing_rain</string>
-        <string name="night_freezing_rain">rain/night_freezing_rain</string>
-        <string name="night_rain">rain/night_rain</string>
-        <string name="rain">rain/rain</string>
+        <string name="freezing_rain">freezing_rain</string>
+        <string name="night_freezing_rain">night_freezing_rain</string>
+        <string name="night_rain">night_rain</string>
+        <string name="rain">rain</string>
 
-        <string name="big_snow">snow/big_snow</string>
-        <string name="night_big_snow">snow/night_big_snow</string>
-        <string name="night_rain_snow">snow/night_rain_snow</string>
-        <string name="night_snow">snow/night_snow</string>
-        <string name="rain_snow">snow/rain_snow</string>
-        <string name="snow">snow/snow</string>
+        <string name="big_snow">big_snow</string>
+        <string name="night_big_snow">night_big_snow</string>
+        <string name="night_rain_snow">night_rain_snow</string>
+        <string name="night_snow">night_snow</string>
+        <string name="rain_snow">rain_snow</string>
+        <string name="snow">snow</string>
         
-        <string name="cloud_thunder">thunderstorm/cloud_thunder</string>
-        <string name="clouds_big_thunder">thunderstorm/clouds_big_thunder</string>
-        <string name="clouds_rain_thunder">thunderstorm/clouds_rain_thunder</string>
-        <string name="clouds_thunder_drizzle">thunderstorm/clouds_thunder_drizzle</string>
-        <string name="night_clouds_big_thunder">thunderstorm/night_clouds_big_thunder</string>
-        <string name="night_clouds_rain_big_thunder">thunderstorm/night_clouds_rain_big_thunder</string>
-        <string name="night_clouds_rain_thunder">thunderstorm/night_clouds_rain_thunder</string>
-        <string name="night_clouds_thunder_drizzle">thunderstorm/night_clouds_thunder_drizzle</string>
-        <string name="night_clouds_thunder_sky">thunderstorm/night_clouds_thunder_sky</string>
+        <string name="cloud_thunder">cloud_thunder</string>
+        <string name="clouds_big_thunder">clouds_big_thunder</string>
+        <string name="clouds_rain_thunder">clouds_rain_thunder</string>
+        <string name="clouds_thunder_drizzle">clouds_thunder_drizzle</string>
+        <string name="night_clouds_big_thunder">night_clouds_big_thunder</string>
+        <string name="night_clouds_rain_big_thunder">night_clouds_rain_big_thunder</string>
+        <string name="night_clouds_rain_thunder">night_clouds_rain_thunder</string>
+        <string name="night_clouds_thunder_drizzle">night_clouds_thunder_drizzle</string>
+        <string name="night_clouds_thunder_sky">night_clouds_thunder_sky</string>
 </resources>

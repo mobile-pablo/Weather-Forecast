@@ -5,6 +5,8 @@ import android.content.res.Resources
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
+import com.bumptech.glide.Glide
+import com.company.elverano.R
 import com.company.elverano.data.openWeather.OpenWeatherHourly
 import com.company.elverano.databinding.ForecastItemBinding
 import com.company.elverano.readAsset
@@ -36,7 +38,7 @@ class CurrentWeatherAdapter(
     ) {
         fun onBind(openWeatherHourly: OpenWeatherHourly) {
             binding.apply {
-                forecastItemTemperature.text =  String.format("%.1f", openWeatherHourly.temp)
+                forecastItemTemperature.text =  String.format("%.1f", openWeatherHourly.temp).replace(",",".")
                 val date = Date(openWeatherHourly.dt * 1000 + offset * 1000)
                 val dateFormat = SimpleDateFormat("YYYY-MM-dd")
                 val hourFormat = SimpleDateFormat("hh a")
@@ -45,15 +47,11 @@ class CurrentWeatherAdapter(
 
                val isNight = openWeatherHourly.getNight()
 
-
-                binding.root.context?.let { context ->
                     isNight?.let { isNight ->
-                        val imagePath =
-                            viewModel.setWeatherIcon(openWeatherHourly.weather[0].id, isNight,res) + ".webp"
-                        val x = readAsset(context, imagePath)
-                        forecastCityImage.setImageBitmap(x)
+                        val drawable = viewModel.setWeatherIcon(openWeatherHourly.weather[0].id, isNight,res)
+                       Glide.with(itemView).load(drawable).into(forecastCityImage)
                     }
-                }
+
             }
         }
     }
