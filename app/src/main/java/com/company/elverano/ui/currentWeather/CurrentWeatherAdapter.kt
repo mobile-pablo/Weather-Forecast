@@ -27,7 +27,6 @@ class CurrentWeatherAdapter(
 
     override fun onBindViewHolder(holder: LocalViewHolder, position: Int) {
         val item = lists[position]
-
         holder.onBind(item)
 
     }
@@ -37,20 +36,20 @@ class CurrentWeatherAdapter(
     ) {
         fun onBind(openWeatherHourly: OpenWeatherHourly) {
             binding.apply {
-                forecastItemTemperature.text =  String.format("%.2f", openWeatherHourly.temp)
+                forecastItemTemperature.text =  String.format("%.1f", openWeatherHourly.temp)
                 val date = Date(openWeatherHourly.dt * 1000 + offset * 1000)
                 val dateFormat = SimpleDateFormat("YYYY-MM-dd")
                 val hourFormat = SimpleDateFormat("hh a")
                 forecastCityHour.text = hourFormat.format(date)
                 forecastCityDay.text = getWeekDayName(dateFormat.format(date))
 
-                val isNight = openWeatherHourly.getNight()
+               val isNight = openWeatherHourly.getNight()
 
 
                 binding.root.context?.let { context ->
                     isNight?.let { isNight ->
                         val imagePath =
-                            viewModel.setWeatherIcon(openWeatherHourly.weather[0].id, isNight,res) + ".png"
+                            viewModel.setWeatherIcon(openWeatherHourly.weather[0].id, isNight,res) + ".webp"
                         val x = readAsset(context, imagePath)
                         forecastCityImage.setImageBitmap(x)
                     }

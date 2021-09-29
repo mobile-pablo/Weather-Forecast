@@ -94,6 +94,8 @@ class CurrentWeatherFragment : Fragment(R.layout.fragment_current) {
                 val currentDate = Date(response.current.dt * 1000)
                 val sdf = SimpleDateFormat("dd, MMM yyyy HH:mm:ss")
                 currentCityDate.text = sdf.format(currentDate)
+                println(response.hourly.size)
+                currentCityForecastRecyclerView.visibility= VISIBLE
                 currentCityForecastRecyclerView.adapter = CurrentWeatherAdapter(
                     response.hourly,
                     response.timezone_offset,
@@ -106,7 +108,7 @@ class CurrentWeatherFragment : Fragment(R.layout.fragment_current) {
                     orientation = LinearLayoutManager.HORIZONTAL
                 }
 
-                currentCityTemperature.text = response.current.temp.toString()
+                currentCityTemperature.text = String.format("%.1f", response.current.temp)
 
 
                 val isNight = response.current.getNight()
@@ -119,7 +121,7 @@ class CurrentWeatherFragment : Fragment(R.layout.fragment_current) {
                                 response.current.weather[0].id,
                                 isNight,
                                 resources
-                            ) + ".png"
+                            ) + ".webp"
                         val x = readAsset(context, imagePath)
                         currentCityImage.setImageBitmap(x)
                     }
