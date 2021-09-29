@@ -35,7 +35,7 @@ class OpenWeatherRepository @Inject constructor(
                     when (it) {
                         is ApiResponse.Success -> {
                             GlobalScope.launch {
-                                dao.deleteWeather(it.data)
+                                dao.deleteWeather()
                                 dao.insertWeather(it.data)
                             }
                         }
