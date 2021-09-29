@@ -81,8 +81,6 @@ class CurrentWeatherFragment : Fragment(R.layout.fragment_current) {
                 }
             }
         }
-
-        setHasOptionsMenu(true)
     }
 
     private fun updateUI(response: OpenWeatherResponse?) {
@@ -97,7 +95,6 @@ class CurrentWeatherFragment : Fragment(R.layout.fragment_current) {
                 val currentDate = Date(response.current.dt * 1000)
                 val sdf = SimpleDateFormat("dd, MMM yyyy HH:mm:ss")
                 currentCityDate.text = sdf.format(currentDate)
-                println(response.hourly.size)
                 currentCityForecastRecyclerView.visibility = VISIBLE
                 currentCityForecastRecyclerView.adapter = CurrentWeatherAdapter(
                     response.hourly,
@@ -152,35 +149,6 @@ class CurrentWeatherFragment : Fragment(R.layout.fragment_current) {
                 }
             }
         }
-    }
-
-
-    override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
-        super.onCreateOptionsMenu(menu, inflater)
-
-        inflater.inflate(R.menu.top_menu, menu)
-
-        val searchItem = menu.findItem(R.id.menu_item_search)
-        val searchView = searchItem.actionView as SearchView
-
-        searchView.setOnQueryTextListener(object : SearchView.OnQueryTextListener {
-            override fun onQueryTextSubmit(query: String?): Boolean {
-
-                if (query != null) {
-                    binding.currentProgressBar.visibility= VISIBLE
-                    viewModel.searchLocation(query)
-                    searchView.setQuery("", false)
-                    searchView.clearFocus()
-                    searchItem.collapseActionView()
-                }
-                return true
-            }
-
-            override fun onQueryTextChange(newText: String?): Boolean {
-                return true
-            }
-
-        })
     }
 
     override fun onDestroyView() {

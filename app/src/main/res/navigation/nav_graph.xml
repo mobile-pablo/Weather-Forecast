@@ -20,5 +20,9 @@
         android:id="@+id/search_Fragment"
         android:name="com.company.elverano.ui.search.SearchFragment"
         android:label="fragment_search"
-        tools:layout="@layout/fragment_search" />
+        tools:layout="@layout/fragment_search" >
+        <action
+            android:id="@+id/action_search_Fragment_to_current_Fragment"
+            app:destination="@id/current_Fragment" />
+    </fragment>
 </navigation>

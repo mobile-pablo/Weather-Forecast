@@ -26,7 +26,7 @@ import javax.inject.Inject
 @HiltViewModel
 class CurrentWeatherViewModel @Inject constructor(
     private val openWeatherRepository: OpenWeatherRepository,
-    private val positionStackRepository: PositionStackRepository,
+    private val positionStackRepository: PositionStackRepository
 ) : ViewModel() {
 
     var currentWeather = MutableLiveData<OpenWeatherResponse>()
@@ -54,8 +54,10 @@ class CurrentWeatherViewModel @Inject constructor(
             val positionStackResponse = positionStackRepository.getLocationFromDatabase()
             positionStackResponse?.let { response ->
                 response.data?.let {
-                    currentName.value = it[0].name
-                    currentCountry.value = it[0].country
+               if(it.size>0){
+                   currentName.value = it[0].name
+                   currentCountry.value = it[0].country
+               }
                 }
 
             }
@@ -63,7 +65,7 @@ class CurrentWeatherViewModel @Inject constructor(
 
     }
 
-    fun searchLocation(query: String) {
+    private fun searchLocation(query: String) {
         searchJob?.cancel()
         searchJob = viewModelScope.launch {
             Log.d("CurrentWeather", "Search Location $query")

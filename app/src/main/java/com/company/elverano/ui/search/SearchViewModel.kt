@@ -11,9 +11,11 @@ import com.company.elverano.data.openWeather.OpenWeatherRepository
 import com.company.elverano.data.openWeather.OpenWeatherResponse
 import com.company.elverano.data.positionStack.PositionStackRepository
 import com.company.elverano.ui.currentWeather.CurrentWeatherViewModel
+import com.company.elverano.utils.ResultEvent
 import com.skydoves.sandwich.ApiResponse
 import com.skydoves.sandwich.request
 import dagger.hilt.android.lifecycle.HiltViewModel
+import kotlinx.coroutines.Job
 import kotlinx.coroutines.channels.Channel
 import kotlinx.coroutines.flow.receiveAsFlow
 import kotlinx.coroutines.launch
@@ -22,5 +24,136 @@ import javax.inject.Inject
 
 @HiltViewModel
 class SearchViewModel @Inject constructor(
+    private val positionStackRepository: PositionStackRepository,
+    private val openWeatherRepository: OpenWeatherRepository
 ): ViewModel() {
+    private var searchJob: Job?=null
+    private var couritineJob: Job?=null
+    var currentError = MutableLiveData<String>()
+    private val resultChannel =  Channel<ResultEvent>()
+    val resultEvent = resultChannel.receiveAsFlow()
+
+     fun searchLocation(query: String){
+        searchJob?.cancel()
+        searchJob = viewModelScope.launch {
+            Log.d("CurrentWeather", "Search Location $query")
+
+            val response =  positionStackRepository.getLocationFromAPI(query)
+            response.request { response ->
+                when (response) {
+                    is ApiResponse.Success -> {
+                        viewModelScope.launch {
+                            positionStackRepository.deletePositionFromDB()
+                            positionStackRepository.insertPositionToDB(response.data)
+
+                            response?.data?.let {
+                                val data = it.data
+                                if (data != null) {
+                                    if (data.size > 0) {
+                                        val item = data[0]
+                                        Log.d(
+                                            "CurrentWeather",
+                                            "Item : ${item.latitude} , ${item.longitude} , ${item.name}"
+                                        )
+                                        searchWeather(
+                                            lat = item.latitude,
+                                            lon = item.longitude,
+                                            name = item.name,
+                                            country = item.country
+                                        )
+                                        resultChannel.send(ResultEvent.Success)
+                                    } else {
+                                        viewModelScope.launch {
+                                            val msg = "No Item's found"
+                                            resultChannel.send(ResultEvent.Error(msg))
+                                            currentError.value = msg
+                                        }
+                                    }
+                                }
+                            }
+                        }
+
+
+                    }
+                    is ApiResponse.Failure.Error -> {
+                        viewModelScope.launch {
+                            val msg = "No Item's found\nError " + response.statusCode.code
+                            resultChannel.send(ResultEvent.Error(msg))
+                        }
+
+
+                    }
+                    is ApiResponse.Failure.Exception -> {
+                        when (response.exception) {
+                            is UnknownHostException -> {
+                                viewModelScope.launch {
+                                    val msg = "No Item's found\nNo Internet Connection!"
+                                    resultChannel.send(ResultEvent.Error(msg))
+                                }
+                            }
+                            else -> {
+                                viewModelScope.launch {
+                                    val msg =
+                                        "No Item's found\nException: ${response.exception.message}"
+                                    resultChannel.send(ResultEvent.Error(msg))
+                                }
+                                throw response.exception
+                            }
+                        }
+
+
+                    }
+                }
+            }
+
+        }
+    }
+
+    private fun searchWeather(lat: Double, lon: Double, name: String, country: String) {
+        couritineJob?.cancel()
+        couritineJob = viewModelScope.launch {
+            Log.d("CurrentWeather", "Search Weather")
+            openWeatherRepository.getWeatherFromAPI(lon = lon, lat = lat).request {
+                when (it) {
+                    is ApiResponse.Success -> {
+                        viewModelScope.launch {
+                            openWeatherRepository.deleteWeatherFromDatabase()
+                            openWeatherRepository.insertWeatherToDatabase(it.data)
+                            resultChannel.send(ResultEvent.Success)
+                        }
+
+                    }
+
+                    is ApiResponse.Failure.Error -> {
+                        viewModelScope.launch {
+                            val msg = "No Item's found\nError " + it.statusCode.code
+                            resultChannel.send(ResultEvent.Error(msg))
+                        }
+
+                    }
+
+                    is ApiResponse.Failure.Exception -> {
+                        when (it.exception) {
+                            is UnknownHostException -> {
+                                viewModelScope.launch {
+                                    val msg = "No Item's found\nNo Internet Connection!"
+                                    resultChannel.send(ResultEvent.Error(msg))
+                                }
+                            }
+                            else -> {
+                                viewModelScope.launch {
+                                    val msg =
+                                        "No Item's found\nException: ${it.exception.message}"
+                                    resultChannel.send(ResultEvent.Error(msg))
+                                }
+                                throw it.exception
+                            }
+                        }
+
+                    }
+
+                }
+            }
+        }
+    }
     }
