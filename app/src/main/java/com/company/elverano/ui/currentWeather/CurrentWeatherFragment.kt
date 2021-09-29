@@ -69,6 +69,7 @@ class CurrentWeatherFragment : Fragment(R.layout.fragment_current) {
                     }
                     is ResultEvent.Error -> {
                         binding.apply {
+                            binding.currentProgressBar.visibility= INVISIBLE
                             currentCityBox.visibility = INVISIBLE
                             currentQueryError.visibility = VISIBLE
                             currentQueryError.text = event.message
@@ -88,6 +89,7 @@ class CurrentWeatherFragment : Fragment(R.layout.fragment_current) {
 
         binding.apply {
             if (response != null) {
+                binding.currentProgressBar.visibility= INVISIBLE
                 currentCityBox.visibility = VISIBLE
                 currentQueryError.visibility = INVISIBLE
                 viewModel.currentError.value = null
@@ -165,6 +167,7 @@ class CurrentWeatherFragment : Fragment(R.layout.fragment_current) {
             override fun onQueryTextSubmit(query: String?): Boolean {
 
                 if (query != null) {
+                    binding.currentProgressBar.visibility= VISIBLE
                     viewModel.searchLocation(query)
                     searchView.setQuery("", false)
                     searchView.clearFocus()

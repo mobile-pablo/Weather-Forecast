@@ -9,17 +9,22 @@
     tools:background="@color/project_gray"
     android:gravity="center">
 
+<RelativeLayout
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:gravity="center"
+    android:layout_marginTop="80dp">
     <ImageView
-        android:layout_width="match_parent"
+        android:layout_width="wrap_content"
         android:layout_height="200dp"
-        android:scaleType="fitStart"
-        android:layout_marginTop="80dp"
         android:src="@drawable/world_map_gray" />
+</RelativeLayout>
 
     <ProgressBar
         android:id="@+id/current_progress_bar"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:indeterminateTint="@color/project_light_red"
         android:layout_centerInParent="true"
         android:visibility="invisible"
         tools:visibility="visible" />
