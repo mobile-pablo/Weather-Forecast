@@ -13,10 +13,10 @@ import androidx.fragment.app.viewModels
 import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.bumptech.glide.Glide
+import com.bumptech.glide.load.resource.drawable.DrawableTransitionOptions
 import com.company.elverano.R
 import com.company.elverano.data.openWeather.OpenWeatherResponse
 import com.company.elverano.databinding.FragmentCurrentBinding
-import com.company.elverano.readAsset
 import com.company.elverano.utils.ResultEvent
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.flow.collect
@@ -96,7 +96,7 @@ class CurrentWeatherFragment : Fragment(R.layout.fragment_current) {
                 val sdf = SimpleDateFormat("dd, MMM yyyy HH:mm:ss")
                 currentCityDate.text = sdf.format(currentDate)
                 println(response.hourly.size)
-                currentCityForecastRecyclerView.visibility= VISIBLE
+                currentCityForecastRecyclerView.visibility = VISIBLE
                 currentCityForecastRecyclerView.adapter = CurrentWeatherAdapter(
                     response.hourly,
                     response.timezone_offset,
@@ -109,24 +109,29 @@ class CurrentWeatherFragment : Fragment(R.layout.fragment_current) {
                     orientation = LinearLayoutManager.HORIZONTAL
                 }
 
-                currentCityTemperature.text = String.format("%.1f", response.current.temp).replace(",",".")
-
+                currentCityTemperature.text =
+                    String.format("%.1f", response.current.temp).replace(",", ".")
 
 
                 val isNight = response.current.getNight()
 
 
 
-                    isNight?.let { isNight ->
-                        val drawable =
-                            viewModel.setWeatherIcon(
-                                response.current.weather[0].id,
-                                isNight,
-                                resources
-                            )
+                isNight?.let { isNight ->
+                    val drawable =
+                        viewModel.setWeatherIcon(
+                            response.current.weather[0].id,
+                            isNight,
+                            resources
+                        )
 
-                        context?.let { Glide.with(it).load(drawable).into(currentCityImage) }
+                    context?.let {
+                        Glide.with(it)
+                            .load(drawable)
+                            .transition(DrawableTransitionOptions.withCrossFade())
+                            .into(currentCityImage)
                     }
+                }
 
 
 
