@@ -13,12 +13,12 @@
     </fragment>
     <fragment
         android:id="@+id/map_Fragment"
-        android:name="com.company.elverano.ui.mapWeather.MapFragment"
+        android:name="com.company.elverano.ui.map.MapFragment"
         android:label="fragment_map"
         tools:layout="@layout/fragment_map" />
     <fragment
         android:id="@+id/search_Fragment"
-        android:name="com.company.elverano.ui.searchWeather.SearchFragment"
+        android:name="com.company.elverano.ui.search.SearchFragment"
         android:label="fragment_search"
         tools:layout="@layout/fragment_search" />
 </navigation>

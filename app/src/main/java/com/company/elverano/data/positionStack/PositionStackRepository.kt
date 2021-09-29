@@ -1,17 +1,6 @@
 package com.company.elverano.data.positionStack
 
-import androidx.room.withTransaction
 import com.company.elverano.api.PositionStackApi
-import com.company.elverano.utils.ResultEvent
-import com.company.elverano.utils.networkBoundResource
-import com.skydoves.sandwich.ApiResponse
-import com.skydoves.sandwich.request
-import kotlinx.coroutines.GlobalScope
-import kotlinx.coroutines.channels.Channel
-import kotlinx.coroutines.delay
-import kotlinx.coroutines.flow.collectLatest
-import kotlinx.coroutines.launch
-import java.net.UnknownHostException
 import javax.inject.Inject
 import javax.inject.Singleton
 
@@ -20,59 +9,16 @@ class PositionStackRepository @Inject constructor(
     private val api: PositionStackApi,
     private val database: PositionStackDatabase
 ) {
-    val resultChannel = Channel<ResultEvent>()
     private val dao: PositionStackDao = database.positionStackDao()
 
-    fun getLocation(query: String) = networkBoundResource(
-        query = {
-            dao.getPositionStack()
-        },
-        fetch = {
-            api.getLocation(query = query)
-        },
-        saveFetchResult = { position ->
-            database.withTransaction {
-                position.request {
-                    when (it) {
-                        is ApiResponse.Success -> {
-                            GlobalScope.launch {
-                                dao.deletePositionStack()
-                                dao.insertPositionStack(it.data)
-                            }
-                        }
+    fun getLocationFromAPI(query: String) = api.getLocation(query)
 
-                        is ApiResponse.Failure.Exception -> {
-                            when (it.exception) {
-                                is UnknownHostException -> {
-                                    GlobalScope.launch {
-                                        val msg = "No Item's found\nNo Internet Connection!"
-                                        resultChannel.send(ResultEvent.Error(msg))
-                                    }
-                                }
-                                else -> {
-                                    GlobalScope.launch {
-                                        val msg =
-                                            "No Item's found\nException: ${it.exception.message}"
-                                        resultChannel.send(ResultEvent.Error(msg))
-                                    }
-                                    throw it.exception
-                                }
-                            }
-                        }
+    suspend fun getLocationFromDatabase() = dao.getPositionStack()
+    suspend fun insertPositionToDB(data: PositionStackResponse) {
+        dao.insertPositionStack(data)
+    }
 
-                        is ApiResponse.Failure.Error -> {
-                            GlobalScope.launch {
-                                val msg = "No Item's found\nError " + it.statusCode.code
-                                resultChannel.send(ResultEvent.Error(msg))
-                            }
-                        }
-                    }
-                }
-
-            }
-
-        }
-    )
-
-   suspend fun getInitialLocation() = dao.getInitialPositionStack()
+   suspend fun deletePositionFromDB() {
+        dao.deletePositionStack()
+    }
 }

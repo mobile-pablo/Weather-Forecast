@@ -18,11 +18,11 @@ interface PositionStackDao{
 
     @NotNull
     @Query("SELECT * FROM position_stack_response")
-    fun getPositionStack() : Flow<PositionStackResponse>
+    suspend fun getPositionStack() : PositionStackResponse?
 
     @NotNull
     @Query("SELECT * FROM position_stack_response")
-    suspend fun getInitialPositionStack(): PositionStackResponse
+    suspend fun getInitialPositionStack(): PositionStackResponse?
 
     @Query("DELETE FROM position_stack_response")
     suspend fun deletePositionStack()

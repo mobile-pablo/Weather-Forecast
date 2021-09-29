@@ -4,7 +4,7 @@
     android:layout_height="match_parent"
     xmlns:tools="http://schemas.android.com/tools"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    tools:context=".ui.mapWeather.MapFragment">
+    tools:context=".ui.map.MapFragment">
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"

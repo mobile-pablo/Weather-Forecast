@@ -13,13 +13,13 @@ interface OpenWeatherDao {
     suspend fun insertWeather(openWeatherResponse: OpenWeatherResponse)
 
     @Query("SELECT * FROM open_weather_response")
-    fun getWeather() : Flow<OpenWeatherResponse>
+    suspend fun getWeather() : OpenWeatherResponse?
 
     @Query("SELECT * FROM open_weather_response")
     suspend fun getInitialWeather() : OpenWeatherResponse?
 
-    @Delete
-    suspend fun deleteWeather(openWeatherResponse: OpenWeatherResponse)
+    @Query("DELETE FROM open_weather_response")
+    suspend fun deleteWeather()
 
 
 }
