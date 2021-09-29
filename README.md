@@ -9,8 +9,6 @@
  * Dagger + Hilt
  * Retrofit + Gson + Callback library
  * Room
- * Offline Caching (NetworkBoundResource)
-
 
 Icons: https://figmaelements.com/3d-weather-icons-pack/ 
 
