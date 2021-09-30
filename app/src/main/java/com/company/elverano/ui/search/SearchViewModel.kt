@@ -5,6 +5,7 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.company.elverano.data.openWeather.OpenWeatherRepository
+import com.company.elverano.data.openWeather.OpenWeatherResponse
 import com.company.elverano.data.positionStack.PositionStackRepository
 import com.company.elverano.utils.ResultEvent
 import com.skydoves.sandwich.ApiResponse
@@ -15,6 +16,7 @@ import kotlinx.coroutines.channels.Channel
 import kotlinx.coroutines.flow.receiveAsFlow
 import kotlinx.coroutines.launch
 import java.net.UnknownHostException
+import java.util.*
 import javax.inject.Inject
 
 @HiltViewModel
@@ -25,13 +27,18 @@ class SearchViewModel @Inject constructor(
     private var searchJob: Job? = null
     private var couritineJob: Job? = null
     var currentError = MutableLiveData<String>()
+    var weatherList = MutableLiveData<Stack<OpenWeatherResponse>>()
     private val resultChannel = Channel<ResultEvent>()
     val resultEvent = resultChannel.receiveAsFlow()
 
     fun searchLocation(query: String) {
         searchJob?.cancel()
         searchJob = viewModelScope.launch {
-            Log.d("CurrentWeather", "Search Location $query")
+
+            //Old weather is added to list. Two item's of search history  (not current weather)  will be displayed in Fragment
+            openWeatherRepository.getWeatherFromDB()?.let {
+                weatherList.value?.push(it)
+            }
 
             val response = positionStackRepository.getLocationFromAPI(query)
             response.request { response ->
@@ -106,7 +113,6 @@ class SearchViewModel @Inject constructor(
     private fun searchWeather(lat: Double, lon: Double, name: String, country: String) {
         couritineJob?.cancel()
         couritineJob = viewModelScope.launch {
-            Log.d("CurrentWeather", "Search Weather")
             openWeatherRepository.getWeatherFromAPI(lon = lon, lat = lat).request {
                 when (it) {
                     is ApiResponse.Success -> {
