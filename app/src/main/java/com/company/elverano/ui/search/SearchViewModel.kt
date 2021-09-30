@@ -7,6 +7,7 @@ import androidx.lifecycle.viewModelScope
 import com.company.elverano.data.openWeather.OpenWeatherRepository
 import com.company.elverano.data.openWeather.OpenWeatherResponse
 import com.company.elverano.data.positionStack.PositionStackRepository
+import com.company.elverano.dummy
 import com.company.elverano.utils.ResultEvent
 import com.skydoves.sandwich.ApiResponse
 import com.skydoves.sandwich.request
@@ -16,7 +17,6 @@ import kotlinx.coroutines.channels.Channel
 import kotlinx.coroutines.flow.receiveAsFlow
 import kotlinx.coroutines.launch
 import java.net.UnknownHostException
-import java.util.*
 import javax.inject.Inject
 
 @HiltViewModel
@@ -27,7 +27,8 @@ class SearchViewModel @Inject constructor(
     private var searchJob: Job? = null
     private var couritineJob: Job? = null
     var currentError = MutableLiveData<String>()
-    var weatherList = MutableLiveData<Stack<OpenWeatherResponse>>()
+    var weatherList = Array<OpenWeatherResponse>(2, { dummy.dummy_wroclaw; dummy.dummy_krakow})
+
     private val resultChannel = Channel<ResultEvent>()
     val resultEvent = resultChannel.receiveAsFlow()
 
@@ -37,7 +38,11 @@ class SearchViewModel @Inject constructor(
 
             //Old weather is added to list. Two item's of search history  (not current weather)  will be displayed in Fragment
             openWeatherRepository.getWeatherFromDB()?.let {
-                weatherList.value?.push(it)
+                val x = weatherList[0]
+                x.let {
+                    weatherList[1] = x
+                }
+                weatherList[0]= it
             }
 
             val response = positionStackRepository.getLocationFromAPI(query)
@@ -53,10 +58,6 @@ class SearchViewModel @Inject constructor(
                                 if (data != null) {
                                     if (data.size > 0) {
                                         val item = data[0]
-                                        Log.d(
-                                            "CurrentWeather",
-                                            "Item : ${item.latitude} , ${item.longitude} , ${item.name}"
-                                        )
                                         searchWeather(
                                             lat = item.latitude,
                                             lon = item.longitude,
@@ -117,8 +118,20 @@ class SearchViewModel @Inject constructor(
                 when (it) {
                     is ApiResponse.Success -> {
                         viewModelScope.launch {
+                            val item = it.data
                             openWeatherRepository.deleteWeatherFromDatabase()
-                            openWeatherRepository.insertWeatherToDatabase(it.data)
+                            openWeatherRepository.insertWeatherToDatabase(item)
+                            Log.d(
+                                "CurrentWeather",
+                                "\nItem :\n" +
+                                        "Lat: ${item.lat},\n" +
+                                        "Long:  ${item.lon},\n" +
+                                        "Name:  ${item.name},\n" +
+                                        "Temp :  ${item.current.temp},\n" +
+                                        "Main: ${item.current.weather[0].main},\n" +
+                                        "Id: ${item.current.weather[0].id},\n" +
+                                        "Description: ${item.current.weather[0].description} " +
+                                        "Icon:  ${item.current.weather[0].icon}")
                             resultChannel.send(ResultEvent.Success)
                         }
 
