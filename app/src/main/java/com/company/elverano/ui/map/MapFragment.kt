@@ -1,64 +1,89 @@
 package com.company.elverano.ui.map
 
-import android.content.Context
 import android.os.Bundle
+import android.util.Log
+import android.view.LayoutInflater
 import android.view.View
+import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import com.company.elverano.R
 import com.company.elverano.databinding.FragmentMapBinding
-import com.here.android.mpa.common.GeoCoordinate
-import com.here.android.mpa.common.MapSettings
-import com.here.android.mpa.common.OnEngineInitListener
-import com.here.android.mpa.mapping.AndroidXMapFragment
-import com.here.android.mpa.mapping.Map
-import kotlinx.android.synthetic.main.fragment_map.view.*
-import java.io.File
+import com.company.elverano.utils.DummyData
+import com.here.sdk.core.GeoCoordinates
+import com.here.sdk.mapviewlite.MapStyle
+import com.here.sdk.mapviewlite.MapViewLite
 
 
-class MapFragment: Fragment(R.layout.fragment_map) {
-private var _binding: FragmentMapBinding?=null
+class MapFragment : Fragment(R.layout.fragment_map) {
+    private var _binding: FragmentMapBinding? = null
     val binding get() = _binding!!
-    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
-        super.onViewCreated(view, savedInstanceState)
-        _binding = FragmentMapBinding.bind(view)
-        initialize(50.041913, 21.995905)
+    private val TAG = MapFragment::class.java.simpleName
+    private var permissionsRequestor: PermissionsRequestor? = null
+    private var mapView: MapViewLite? = null
+
+    override fun onCreateView(
+        inflater: LayoutInflater,
+        container: ViewGroup?,
+        savedInstanceState: Bundle?
+    ): View? {
+        _binding = FragmentMapBinding.inflate(inflater,container,false)
+
+        mapView = binding.hereMapView
+        mapView!!.onCreate(savedInstanceState)
+        handleAndroidPermissions()
+
+        return binding.root
+
     }
 
-    override fun onDestroyView() {
-        super.onDestroyView()
-        _binding=null
+    private fun handleAndroidPermissions() {
+        permissionsRequestor = PermissionsRequestor(requireActivity())
+        permissionsRequestor!!.request(object : PermissionsRequestor.ResultListener {
+            override fun permissionsGranted() {
+                loadMapScene()
+            }
+
+            override fun permissionsDenied() {
+                Log.e(TAG, "Permissions denied by user.")
+            }
+        })
     }
 
+    override fun onRequestPermissionsResult(
+        requestCode: Int,
+        permissions: Array<String?>,
+        grantResults: IntArray
+    ) {
+        permissionsRequestor?.onRequestPermissionsResult(requestCode, grantResults)
+    }
 
-    private var map: Map? = null
-
-    // map fragment embedded in this activity
-    private var mapFragment: AndroidXMapFragment? = null
-
-    private fun initialize(lat: Double, lon: Double) {
-        // Search for the map fragment to finish setup by calling init().
-        mapFragment = childFragmentManager.findFragmentById(R.id.here_map_fragment) as AndroidXMapFragment
-
-        // Set up disk map cache path for this application
-        // Use path under your application folder for storing the disk cache
-
-        MapSettings.setDiskCacheRootPath("${context?.externalCacheDir}${File.separator}.here-maps")
-
-        mapFragment!!.init {
-            OnEngineInitListener { error ->
-                if(error == OnEngineInitListener.Error.NONE){
-                    println("Map is ready!")
-                    map = mapFragment!!.map
-
-                    map?.setCenter( GeoCoordinate(lat,lon, 0.0),  Map.Animation.NONE)
-                    map?.let {
-                        it.zoomLevel = (it.maxZoomLevel + it.minZoomLevel) / 2;
-                    }
-
-                }else{
-                    println("ERROR: Cannot initialize Map Fragment")
-                }
+    private fun loadMapScene() {
+        // Load a scene from the SDK to render the map with a map style.
+        mapView!!.mapScene.loadScene(
+            MapStyle.NORMAL_DAY
+        ) { errorCode ->
+            if (errorCode == null) {
+                val place =DummyData.dummy_krakow
+                mapView!!.camera.target = GeoCoordinates(place.lat,  place.lon)
+                mapView!!.camera.zoomLevel = 14.0
+            } else {
+                Log.d(TAG, "onLoadScene failed: $errorCode")
             }
         }
+    }
+
+     override fun onPause() {
+        super.onPause()
+        mapView!!.onPause()
+    }
+
+     override fun onResume() {
+        super.onResume()
+        mapView!!.onResume()
+    }
+
+     override fun onDestroy() {
+        super.onDestroy()
+        mapView!!.onDestroy()
     }
 }

@@ -1,14 +1,14 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     xmlns:tools="http://schemas.android.com/tools"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     tools:context=".ui.map.MapFragment">
-
-    <fragment
-        class="com.here.android.mpa.mapping.AndroidXMapFragment"
-        android:id="@+id/here_map_fragment"
+    <com.here.sdk.mapviewlite.MapViewLite
+        android:id="@+id/here_map_view"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"/>
-</androidx.constraintlayout.widget.ConstraintLayout>
+        android:layout_height="match_parent"
+        android:layout_centerInParent="true">
+    </com.here.sdk.mapviewlite.MapViewLite>
+</RelativeLayout>
