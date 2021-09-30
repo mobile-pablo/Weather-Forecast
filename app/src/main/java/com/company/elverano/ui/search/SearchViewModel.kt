@@ -1,13 +1,11 @@
 package com.company.elverano.ui.search
 
-import android.util.Log
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.company.elverano.data.openWeather.OpenWeatherRepository
-import com.company.elverano.data.openWeather.OpenWeatherResponse
 import com.company.elverano.data.positionStack.PositionStackRepository
-import com.company.elverano.dummy
+import com.company.elverano.utils.DummyData
 import com.company.elverano.utils.ResultEvent
 import com.skydoves.sandwich.ApiResponse
 import com.skydoves.sandwich.request
@@ -27,7 +25,7 @@ class SearchViewModel @Inject constructor(
     private var searchJob: Job? = null
     private var couritineJob: Job? = null
     var currentError = MutableLiveData<String>()
-    var weatherList = Array<OpenWeatherResponse>(2, { dummy.dummy_wroclaw; dummy.dummy_krakow})
+    var weatherList = Array(2, { DummyData.dummy_wroclaw; DummyData.dummy_krakow})
 
     private val resultChannel = Channel<ResultEvent>()
     val resultEvent = resultChannel.receiveAsFlow()
@@ -121,17 +119,6 @@ class SearchViewModel @Inject constructor(
                             val item = it.data
                             openWeatherRepository.deleteWeatherFromDatabase()
                             openWeatherRepository.insertWeatherToDatabase(item)
-                            Log.d(
-                                "CurrentWeather",
-                                "\nItem :\n" +
-                                        "Lat: ${item.lat},\n" +
-                                        "Long:  ${item.lon},\n" +
-                                        "Name:  ${item.name},\n" +
-                                        "Temp :  ${item.current.temp},\n" +
-                                        "Main: ${item.current.weather[0].main},\n" +
-                                        "Id: ${item.current.weather[0].id},\n" +
-                                        "Description: ${item.current.weather[0].description} " +
-                                        "Icon:  ${item.current.weather[0].icon}")
                             resultChannel.send(ResultEvent.Success)
                         }
 
