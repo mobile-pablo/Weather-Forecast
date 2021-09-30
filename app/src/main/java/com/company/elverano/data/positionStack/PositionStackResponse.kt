@@ -5,6 +5,6 @@ import androidx.room.PrimaryKey
 
 @Entity(tableName = "position_stack_response")
 data class PositionStackResponse(
-    @PrimaryKey(autoGenerate = true) val id: Int=0,
+    @PrimaryKey(autoGenerate = true) val id: Int,
     val data: ArrayList<PositionStack>
 )

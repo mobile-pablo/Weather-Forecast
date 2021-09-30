@@ -12,6 +12,5 @@ data class OpenWeatherResponse (
      var name: String="",
      val current: OpenWeatherCurrent= OpenWeatherCurrent(),
      val hourly: ArrayList<OpenWeatherHourly> = arrayListOf(),
-     val daily: ArrayList<OpenWeatherDaily> = arrayListOf(),
      val timezone_offset: Int =0
 )

@@ -22,7 +22,7 @@ interface OpenWeatherApi{
     }
 
 
-    @GET("$oneCall?appid=$CLIENT_ID&exclude=minutely&units=metric")
+    @GET("$oneCall?appid=$CLIENT_ID&exclude=minutely,daily&units=metric")
     fun getWeather(
         @Query("lat") latitude: Double,
         @Query("lon") longitude: Double

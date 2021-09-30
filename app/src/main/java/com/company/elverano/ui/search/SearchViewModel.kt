@@ -1,16 +1,11 @@
 package com.company.elverano.ui.search
 
-import android.content.res.Resources
 import android.util.Log
 import androidx.lifecycle.MutableLiveData
-import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.company.elverano.R
 import com.company.elverano.data.openWeather.OpenWeatherRepository
-import com.company.elverano.data.openWeather.OpenWeatherResponse
 import com.company.elverano.data.positionStack.PositionStackRepository
-import com.company.elverano.ui.currentWeather.CurrentWeatherViewModel
 import com.company.elverano.utils.ResultEvent
 import com.skydoves.sandwich.ApiResponse
 import com.skydoves.sandwich.request
@@ -26,19 +21,19 @@ import javax.inject.Inject
 class SearchViewModel @Inject constructor(
     private val positionStackRepository: PositionStackRepository,
     private val openWeatherRepository: OpenWeatherRepository
-): ViewModel() {
-    private var searchJob: Job?=null
-    private var couritineJob: Job?=null
+) : ViewModel() {
+    private var searchJob: Job? = null
+    private var couritineJob: Job? = null
     var currentError = MutableLiveData<String>()
-    private val resultChannel =  Channel<ResultEvent>()
+    private val resultChannel = Channel<ResultEvent>()
     val resultEvent = resultChannel.receiveAsFlow()
 
-     fun searchLocation(query: String){
+    fun searchLocation(query: String) {
         searchJob?.cancel()
         searchJob = viewModelScope.launch {
             Log.d("CurrentWeather", "Search Location $query")
 
-            val response =  positionStackRepository.getLocationFromAPI(query)
+            val response = positionStackRepository.getLocationFromAPI(query)
             response.request { response ->
                 when (response) {
                     is ApiResponse.Success -> {
@@ -61,7 +56,6 @@ class SearchViewModel @Inject constructor(
                                             name = item.name,
                                             country = item.country
                                         )
-                                        resultChannel.send(ResultEvent.Success)
                                     } else {
                                         viewModelScope.launch {
                                             val msg = "No Item's found"
@@ -156,4 +150,4 @@ class SearchViewModel @Inject constructor(
             }
         }
     }
-    }
+}

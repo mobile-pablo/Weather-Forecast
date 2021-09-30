@@ -128,7 +128,7 @@ if $cygwin ; then
         OURCYGPATTERN="$OURCYGPATTERN|($GRADLE_CYGPATTERN)"
     fi
     # Now convert the arguments - kludge to limit ourselves to /bin/sh
-    i=0
+    i
     for arg in "$@" ; do
         CHECK=`echo "$arg"|egrep -c "$OURCYGPATTERN" -`
         CHECK2=`echo "$arg"|egrep -c "^-"`                                 ### Determine if an option

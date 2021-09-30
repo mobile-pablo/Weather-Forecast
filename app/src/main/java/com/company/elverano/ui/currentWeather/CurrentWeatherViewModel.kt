@@ -33,7 +33,7 @@ class CurrentWeatherViewModel @Inject constructor(
     var currentName = MutableLiveData<String>()
     var currentCountry = MutableLiveData<String>()
     var currentError = MutableLiveData<String>()
-    private val resultChannel =  Channel<ResultEvent>()
+    private val resultChannel = Channel<ResultEvent>()
     val resultEvent = resultChannel.receiveAsFlow()
     private var searchJob: Job? = null
     private var couritineJob: Job? = null
@@ -54,10 +54,10 @@ class CurrentWeatherViewModel @Inject constructor(
             val positionStackResponse = positionStackRepository.getLocationFromDatabase()
             positionStackResponse?.let { response ->
                 response.data?.let {
-               if(it.size>0){
-                   currentName.value = it[0].name
-                   currentCountry.value = it[0].country
-               }
+                    if (it.size > 0) {
+                        currentName.value = it[0].name
+                        currentCountry.value = it[0].country
+                    }
                 }
 
             }
@@ -70,74 +70,72 @@ class CurrentWeatherViewModel @Inject constructor(
         searchJob = viewModelScope.launch {
             Log.d("CurrentWeather", "Search Location $query")
 
-            val response =  positionStackRepository.getLocationFromAPI(query)
+            val response = positionStackRepository.getLocationFromAPI(query)
             response.request { response ->
-                    when (response) {
-                        is ApiResponse.Success -> {
-                            viewModelScope.launch {
-                                positionStackRepository.deletePositionFromDB()
-                                positionStackRepository.insertPositionToDB(response.data)
+                when (response) {
+                    is ApiResponse.Success -> {
+                        viewModelScope.launch {
+                            positionStackRepository.deletePositionFromDB()
+                            positionStackRepository.insertPositionToDB(response.data)
 
-                                response?.data?.let {
-                                    val data = it.data
-                                    if (data != null) {
-                                        if (data.size > 0) {
-                                            val item = data[0]
-                                            Log.d(
-                                                "CurrentWeather",
-                                                "Item : ${item.latitude} , ${item.longitude} , ${item.name}"
-                                            )
-                                            searchWeather(
-                                                lat = item.latitude,
-                                                lon = item.longitude,
-                                                name = item.name,
-                                                country = item.country
-                                            )
-                                        } else {
-                                            viewModelScope.launch {
-                                                val msg = "No Item's found"
-                                                resultChannel.send(ResultEvent.Error(msg))
-                                                currentError.value = msg
-                                            }
+                            response?.data?.let {
+                                val data = it.data
+                                if (data != null) {
+                                    if (data.size > 0) {
+                                        val item = data[0]
+                                        Log.d(
+                                            "CurrentWeather",
+                                            "Item : ${item.latitude} , ${item.longitude} , ${item.name}"
+                                        )
+                                        searchWeather(
+                                            lat = item.latitude,
+                                            lon = item.longitude,
+                                            name = item.name,
+                                            country = item.country
+                                        )
+                                    } else {
+                                        viewModelScope.launch {
+                                            val msg = "No Item's found"
+                                            resultChannel.send(ResultEvent.Error(msg))
+                                            currentError.value = msg
                                         }
                                     }
                                 }
-
-                                resultChannel.send(ResultEvent.Success)
                             }
-
-
                         }
-                        is ApiResponse.Failure.Error -> {
-                            viewModelScope.launch {
-                                val msg = "No Item's found\nError " + response.statusCode.code
-                                resultChannel.send(ResultEvent.Error(msg))
-                            }
 
 
+                    }
+                    is ApiResponse.Failure.Error -> {
+                        viewModelScope.launch {
+                            val msg = "No Item's found\nError " + response.statusCode.code
+                            resultChannel.send(ResultEvent.Error(msg))
                         }
-                        is ApiResponse.Failure.Exception -> {
-                            when (response.exception) {
-                                is UnknownHostException -> {
-                                    viewModelScope.launch {
-                                        val msg = "No Item's found\nNo Internet Connection!"
-                                        resultChannel.send(ResultEvent.Error(msg))
-                                    }
-                                }
-                                else -> {
-                                    viewModelScope.launch {
-                                        val msg =
-                                            "No Item's found\nException: ${response.exception.message}"
-                                        resultChannel.send(ResultEvent.Error(msg))
-                                    }
-                                    throw response.exception
+
+
+                    }
+                    is ApiResponse.Failure.Exception -> {
+                        when (response.exception) {
+                            is UnknownHostException -> {
+                                viewModelScope.launch {
+                                    val msg = "No Item's found\nNo Internet Connection!"
+                                    resultChannel.send(ResultEvent.Error(msg))
                                 }
                             }
-
-
+                            else -> {
+                                viewModelScope.launch {
+                                    val msg =
+                                        "No Item's found\nException: ${response.exception.message}"
+                                    resultChannel.send(ResultEvent.Error(msg))
+                                }
+                                throw response.exception
+                            }
                         }
+
+
                     }
                 }
+            }
 
         }
     }
@@ -147,53 +145,55 @@ class CurrentWeatherViewModel @Inject constructor(
         couritineJob?.cancel()
         couritineJob = viewModelScope.launch {
             Log.d("CurrentWeather", "Search Weather")
-            openWeatherRepository.getWeatherFromAPI(lon = lon, lat = lat).request {
-                        when (it) {
-                            is ApiResponse.Success -> {
-                                viewModelScope.launch {
-                                    openWeatherRepository.deleteWeatherFromDatabase()
-                                    openWeatherRepository.insertWeatherToDatabase(it.data)
+            val response = openWeatherRepository.getWeatherFromAPI(lon = lon, lat = lat)
+            response.request { response ->
+                when (response) {
+                    is ApiResponse.Success -> {
+                        viewModelScope.launch {
+                            openWeatherRepository.deleteWeatherFromDatabase()
+                            openWeatherRepository.insertWeatherToDatabase(response.data)
 
-                                    it.data?.let {
-                                        currentWeather.value = it
-                                        currentName.value = name
-                                        currentCountry.value = country
-                                    }
-
-                                    resultChannel.send(ResultEvent.Success)
-                                }
-
+                            response?.data?.let {
+                                currentWeather.value = it
+                                currentName.value = name
+                                currentCountry.value = country
+                                resultChannel.send(ResultEvent.Success)
                             }
 
-                            is ApiResponse.Failure.Error -> {
-                                viewModelScope.launch {
-                                    val msg = "No Item's found\nError " + it.statusCode.code
-                                    resultChannel.send(ResultEvent.Error(msg))
-                                }
-
-                            }
-
-                            is ApiResponse.Failure.Exception -> {
-                                when (it.exception) {
-                                    is UnknownHostException -> {
-                                        viewModelScope.launch {
-                                            val msg = "No Item's found\nNo Internet Connection!"
-                                            resultChannel.send(ResultEvent.Error(msg))
-                                        }
-                                    }
-                                    else -> {
-                                        viewModelScope.launch {
-                                            val msg =
-                                                "No Item's found\nException: ${it.exception.message}"
-                                            resultChannel.send(ResultEvent.Error(msg))
-                                        }
-                                        throw it.exception
-                                    }
-                                }
-
-                            }
 
                         }
+
+                    }
+
+                    is ApiResponse.Failure.Error -> {
+                        viewModelScope.launch {
+                            val msg = "No Item's found\nError " + response.statusCode.code
+                            resultChannel.send(ResultEvent.Error(msg))
+                        }
+
+                    }
+
+                    is ApiResponse.Failure.Exception -> {
+                        when (response.exception) {
+                            is UnknownHostException -> {
+                                viewModelScope.launch {
+                                    val msg = "No Item's found\nNo Internet Connection!"
+                                    resultChannel.send(ResultEvent.Error(msg))
+                                }
+                            }
+                            else -> {
+                                viewModelScope.launch {
+                                    val msg =
+                                        "No Item's found\nException: ${response.exception.message}"
+                                    resultChannel.send(ResultEvent.Error(msg))
+                                }
+                                throw response.exception
+                            }
+                        }
+
+                    }
+
+                }
             }
         }
     }
@@ -213,7 +213,7 @@ class CurrentWeatherViewModel @Inject constructor(
                     if (!night)
                         getDrawable(R.drawable.cloud_thunder)
                     else
-                       getDrawable(R.drawable.night_clouds_thunder_sky)
+                        getDrawable(R.drawable.night_clouds_thunder_sky)
                 }
 
                 211, 212, 221 -> {
