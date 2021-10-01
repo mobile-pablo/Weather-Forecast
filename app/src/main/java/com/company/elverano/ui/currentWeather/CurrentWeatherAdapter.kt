@@ -9,6 +9,7 @@ import com.bumptech.glide.Glide
 import com.bumptech.glide.load.resource.drawable.DrawableTransitionOptions
 import com.company.elverano.data.openWeather.OpenWeatherHourly
 import com.company.elverano.databinding.ForecastItemBinding
+import com.company.elverano.utils.setWeatherIcon
 import java.text.SimpleDateFormat
 import java.time.DayOfWeek
 import java.time.LocalDate
@@ -17,7 +18,6 @@ import java.util.*
 class CurrentWeatherAdapter(
     private val lists: ArrayList<OpenWeatherHourly>,
     private val offset: Int,
-    private val viewModel: CurrentWeatherViewModel,
     private val res: Resources,
 ) : RecyclerView.Adapter<CurrentWeatherAdapter.LocalViewHolder>() {
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): LocalViewHolder {
@@ -49,7 +49,7 @@ class CurrentWeatherAdapter(
 
                 isNight?.let { isNight ->
                     val drawable =
-                        viewModel.setWeatherIcon(openWeatherHourly.weather[0].id, isNight, res)
+                        setWeatherIcon(openWeatherHourly.weather[0].id, isNight, res)
                     Glide.with(itemView)
                         .load(drawable)
                         .transition(DrawableTransitionOptions.withCrossFade())

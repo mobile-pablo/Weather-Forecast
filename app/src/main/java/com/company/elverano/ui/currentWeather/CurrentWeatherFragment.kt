@@ -15,6 +15,7 @@ import com.company.elverano.R
 import com.company.elverano.data.openWeather.OpenWeatherResponse
 import com.company.elverano.databinding.FragmentCurrentBinding
 import com.company.elverano.utils.ResultEvent
+import com.company.elverano.utils.setWeatherIcon
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.flow.collect
 import java.text.SimpleDateFormat
@@ -96,7 +97,6 @@ class CurrentWeatherFragment : Fragment(R.layout.fragment_current) {
                 currentCityForecastRecyclerView.adapter = CurrentWeatherAdapter(
                     response.hourly,
                     response.timezone_offset,
-                    viewModel,
                     resources
                 )
                 currentCityForecastRecyclerView.setHasFixedSize(true)
@@ -115,7 +115,7 @@ class CurrentWeatherFragment : Fragment(R.layout.fragment_current) {
 
                 isNight?.let { isNight ->
                     val drawable =
-                        viewModel.setWeatherIcon(
+                        setWeatherIcon(
                             response.current.weather[0].id,
                             isNight,
                             resources

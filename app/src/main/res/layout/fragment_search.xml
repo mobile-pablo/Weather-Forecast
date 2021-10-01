@@ -27,6 +27,15 @@
         android:layout_width="match_parent"
         android:layout_height="50dp"
         android:layoutDirection="rtl"
+        android:background="@drawable/search_view_bg"
+        android:layout_marginLeft="40dp"
+        app:queryBackground="@null"
+        android:queryHint="hint"
+        app:defaultQueryHint="hint"
+        android:iconifiedByDefault="false"
+        app:iconifiedByDefault="false"
+        android:layout_marginRight="40dp"
+        android:layout_marginTop="40dp"
         app:queryHint="Search city"
         app:theme="@style/AppSearchView" />
 
@@ -36,7 +45,7 @@
         android:layout_height="wrap_content"
         android:layout_below="@id/search_view"
         android:layout_centerHorizontal="true"
-        android:layout_marginTop="120dp">
+        android:layout_marginTop="40dp">
 
         <RelativeLayout
             android:layout_width="150dp"
@@ -192,14 +201,15 @@
         android:layout_alignParentBottom="true"
         android:layout_marginLeft="20dp"
         android:layout_marginRight="20dp"
-        android:layout_marginBottom="100dp"
+        android:layout_marginBottom="50dp"
         android:background="@drawable/current_details_bg">
 
         <ImageView
+            android:id="@+id/search_current_img"
             android:layout_width="50dp"
             android:layout_height="50dp"
             android:layout_centerHorizontal="true"
-            android:src="@drawable/clouds_thunder_drizzle" />
+            tools:src="@drawable/clouds_thunder_drizzle" />
 
         <LinearLayout
             android:layout_width="match_parent"
@@ -225,19 +235,19 @@
                         android:layout_centerHorizontal="true"
                         android:layout_marginTop="20dp"
                         android:fontFamily="@font/roboto_light"
-                        android:text="Precipation"
+                        android:text="Wind degrees"
                         android:textColor="#FFFFFF"
                         android:textSize="20sp" />
 
                     <TextView
-                        android:id="@+id/search_current_precepation"
+                        android:id="@+id/search_current_wind_degrees"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_below="@id/search_current_txt_1"
                         android:layout_centerHorizontal="true"
                         android:layout_marginTop="10dp"
                         android:fontFamily="@font/lato_bold"
-                        android:text="30%"
+                        tools:text="30%"
                         android:textColor="@color/white"
                         android:textSize="18sp" />
                 </RelativeLayout>
@@ -267,7 +277,7 @@
                         android:layout_centerHorizontal="true"
                         android:layout_marginTop="10dp"
                         android:fontFamily="@font/lato_bold"
-                        android:text="10%"
+                        tools:text="10%"
                         android:textColor="@color/white"
                         android:textSize="18sp" />
                 </RelativeLayout>
@@ -276,7 +286,7 @@
             <View
                 android:layout_width="1dp"
                 android:layout_height="match_parent"
-                android:layout_marginTop="50dp"
+                android:layout_marginTop="60dp"
                 android:layout_marginBottom="20dp"
                 android:background="@color/white" />
 
@@ -311,7 +321,7 @@
                         android:layout_centerHorizontal="true"
                         android:layout_marginTop="10dp"
                         android:fontFamily="@font/lato_bold"
-                        android:text="8 km/h"
+                        tools:text="8 km/h"
                         android:textColor="@color/white"
                         android:textSize="18sp" />
                 </RelativeLayout>
@@ -341,7 +351,7 @@
                         android:layout_centerHorizontal="true"
                         android:layout_marginTop="10dp"
                         android:fontFamily="@font/lato_bold"
-                        android:text="840hPa"
+                        tools:text="840hPa"
                         android:textColor="@color/white"
                         android:textSize="18sp" />
                 </RelativeLayout>
