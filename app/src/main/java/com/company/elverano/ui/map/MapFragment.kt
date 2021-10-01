@@ -6,34 +6,49 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
+import androidx.fragment.app.viewModels
 import com.company.elverano.R
 import com.company.elverano.databinding.FragmentMapBinding
 import com.company.elverano.utils.DummyData
 import com.here.sdk.core.GeoCoordinates
 import com.here.sdk.mapviewlite.MapStyle
 import com.here.sdk.mapviewlite.MapViewLite
+import dagger.hilt.android.AndroidEntryPoint
 
-
+@AndroidEntryPoint
 class MapFragment : Fragment(R.layout.fragment_map) {
+
     private var _binding: FragmentMapBinding? = null
     val binding get() = _binding!!
+
     private val TAG = MapFragment::class.java.simpleName
     private var permissionsRequestor: PermissionsRequestor? = null
     private var mapView: MapViewLite? = null
+
+    private val viewModel by viewModels<MapViewModel>()
+    var place = DummyData.dummy_krakow
 
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        _binding = FragmentMapBinding.inflate(inflater,container,false)
+        _binding = FragmentMapBinding.inflate(inflater, container, false)
 
         mapView = binding.hereMapView
         mapView!!.onCreate(savedInstanceState)
-        handleAndroidPermissions()
 
+
+        viewModel.weatherResponse.observe(viewLifecycleOwner) {
+            place = it
+            handleAndroidPermissions()
+        }
         return binding.root
 
+    }
+
+    companion object{
+        const val ZOOM_LVL =11.0
     }
 
     private fun handleAndroidPermissions() {
@@ -63,26 +78,25 @@ class MapFragment : Fragment(R.layout.fragment_map) {
             MapStyle.NORMAL_DAY
         ) { errorCode ->
             if (errorCode == null) {
-                val place =DummyData.dummy_krakow
-                mapView!!.camera.target = GeoCoordinates(place.lat,  place.lon)
-                mapView!!.camera.zoomLevel = 14.0
+                mapView!!.camera.target = GeoCoordinates(place.lat, place.lon)
+                mapView!!.camera.zoomLevel = ZOOM_LVL
             } else {
                 Log.d(TAG, "onLoadScene failed: $errorCode")
             }
         }
     }
 
-     override fun onPause() {
+    override fun onPause() {
         super.onPause()
         mapView!!.onPause()
     }
 
-     override fun onResume() {
+    override fun onResume() {
         super.onResume()
         mapView!!.onResume()
     }
 
-     override fun onDestroy() {
+    override fun onDestroy() {
         super.onDestroy()
         mapView!!.onDestroy()
     }

@@ -14,6 +14,8 @@ import kotlinx.coroutines.Job
 import kotlinx.coroutines.channels.Channel
 import kotlinx.coroutines.flow.receiveAsFlow
 import kotlinx.coroutines.launch
+import java.lang.reflect.InvocationTargetException
+import java.net.SocketTimeoutException
 import java.net.UnknownHostException
 import javax.inject.Inject
 
@@ -25,7 +27,7 @@ class SearchViewModel @Inject constructor(
     private var searchJob: Job? = null
     private var couritineJob: Job? = null
     var currentError = MutableLiveData<String>()
-    var weatherList = Array(2, { DummyData.dummy_wroclaw; DummyData.dummy_krakow})
+    var weatherList = Array(2) { DummyData.dummy_wroclaw; DummyData.dummy_krakow }
 
     private val resultChannel = Channel<ResultEvent>()
     val resultEvent = resultChannel.receiveAsFlow()
@@ -56,12 +58,15 @@ class SearchViewModel @Inject constructor(
                                 if (data != null) {
                                     if (data.size > 0) {
                                         val item = data[0]
-                                        searchWeather(
-                                            lat = item.latitude,
-                                            lon = item.longitude,
-                                            name = item.name,
-                                            country = item.country
-                                        )
+                                        item?.let { item ->
+                                            searchWeather(
+                                                lat = item.latitude,
+                                                lon = item.longitude,
+                                                name = item.name,
+                                                country = item.country
+                                            )
+                                        }
+
                                     } else {
                                         viewModelScope.launch {
                                             val msg = "No Item's found"
@@ -88,6 +93,19 @@ class SearchViewModel @Inject constructor(
                             is UnknownHostException -> {
                                 viewModelScope.launch {
                                     val msg = "No Item's found\nNo Internet Connection!"
+                                    resultChannel.send(ResultEvent.Error(msg))
+                                }
+                            }
+                            is InvocationTargetException -> {
+                                viewModelScope.launch {
+                                    val msg = "No Item's found!"
+                                    resultChannel.send(ResultEvent.Error(msg))
+                                }
+                            }
+
+                            is SocketTimeoutException -> {
+                                viewModelScope.launch {
+                                    val msg = "No Item's found!"
                                     resultChannel.send(ResultEvent.Error(msg))
                                 }
                             }

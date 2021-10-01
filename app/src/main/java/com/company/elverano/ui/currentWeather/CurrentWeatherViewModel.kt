@@ -81,16 +81,21 @@ class CurrentWeatherViewModel @Inject constructor(
                                 if (data != null) {
                                     if (data.size > 0) {
                                         val item = data[0]
+
+                                        item?.let { item ->
+                                            searchWeather(
+                                                lat = item.latitude,
+                                                lon = item.longitude,
+                                                name = item.name,
+                                                country = item.country
+                                            )
+                                        }
+
                                         Log.d(
                                             "CurrentWeather",
                                             "Item : ${item.latitude} , ${item.longitude} , ${item.name}"
                                         )
-                                        searchWeather(
-                                            lat = item.latitude,
-                                            lon = item.longitude,
-                                            name = item.name,
-                                            country = item.country
-                                        )
+
                                     } else {
                                         viewModelScope.launch {
                                             val msg = "No Item's found"
