@@ -1,17 +1,24 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    xmlns:tools="http://schemas.android.com/tools"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
     tools:background="@color/project_gray"
     tools:context=".ui.search.SearchFragment">
+
+    <ImageView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_centerInParent="true"
+        android:src="@drawable/world_map_gray" />
+
     <ProgressBar
         android:id="@+id/search_progress_bar"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:indeterminateTint="@color/project_light_red"
         android:layout_centerInParent="true"
+        android:indeterminateTint="@color/project_light_red"
         android:visibility="invisible"
         tools:visibility="visible" />
 
@@ -19,20 +26,168 @@
         android:id="@+id/search_view"
         android:layout_width="match_parent"
         android:layout_height="50dp"
-        app:queryHint="Search city"
         android:layoutDirection="rtl"
-        app:theme="@style/AppSearchView"/>
+        app:queryHint="Search city"
+        app:theme="@style/AppSearchView" />
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/search_view"
+        android:gravity="center_horizontal"
+        android:layout_marginTop="50dp"
+        android:paddingTop="10dp">
+
+        <eightbitlab.com.blurview.BlurView
+            android:id="@+id/blur_view_one"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_margin="10dp"
+            android:background="@color/blur_bg"
+            android:padding="8dp">
+
+            <RelativeLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content">
+
+                <TextView
+                    android:id="@+id/history_city_name_one"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentTop="true"
+                    android:layout_centerHorizontal="true"
+                    android:gravity="center_vertical"
+                    android:textColor="@color/white"
+                    android:textStyle="bold"
+                    android:text="Zamość" />
+
+                <ImageView
+                    android:id="@+id/history_city_img_one"
+                    android:layout_width="100dp"
+                    android:layout_height="100dp"
+                    android:layout_below="@id/history_city_name_one"
+                    android:layout_centerHorizontal="true"
+                    app:srcCompat="@drawable/clear_sky" />
+
+                <TextView
+                    android:id="@+id/history_city_temp_one"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_below="@id/history_city_img_one"
+                    android:gravity="center_vertical"
+                    android:textColor="@color/white"
+                    android:textSize="30sp"
+                    android:text="16" />
+
+                <TextView
+                    android:id="@+id/history_city_measure_one"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_below="@id/history_city_img_one"
+                    android:layout_alignTop="@id/history_city_temp_one"
+                    android:layout_alignBottom="@id/history_city_temp_one"
+                    android:layout_toEndOf="@id/history_city_temp_one"
+                    android:gravity="center_vertical"
+                    android:text="°"
+                    android:textColor="@color/project_light_red"
+                    android:textSize="30sp" />
+
+                <TextView
+                    android:id="@+id/history_city_main_one"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_below="@id/history_city_img_one"
+                    android:layout_alignTop="@id/history_city_temp_one"
+                    android:layout_alignBottom="@id/history_city_temp_one"
+                    android:layout_marginLeft="10dp"
+                    android:layout_toEndOf="@id/history_city_measure_one"
+                    android:gravity="center_vertical"
+                    android:textColor="#CCFFFFFF"
+                    android:text="Clear sky" />
+            </RelativeLayout>
+        </eightbitlab.com.blurview.BlurView>
+
+        <eightbitlab.com.blurview.BlurView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_margin="10dp"
+            android:background="@color/blur_bg"
+            android:padding="8dp">
+
+            <RelativeLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content">
+
+                <TextView
+                    android:id="@+id/history_city_name_two"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentTop="true"
+                    android:layout_centerHorizontal="true"
+                    android:gravity="center_vertical"
+                    android:textColor="@color/white"
+                    android:textStyle="bold"
+                    android:text="Kraków" />
+
+                <ImageView
+                    android:id="@+id/history_city_img_two"
+                    android:layout_width="100dp"
+                    android:layout_height="100dp"
+                    android:layout_below="@id/history_city_name_two"
+                    android:layout_centerHorizontal="true"
+                    app:srcCompat="@drawable/clouds_thunder_drizzle" />
+
+                <TextView
+                    android:id="@+id/history_city_temp_two"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_below="@id/history_city_img_two"
+                    android:gravity="center_vertical"
+                    android:textColor="@color/white"
+                    android:textSize="30sp"
+                    android:text="-8" />
+
+                <TextView
+                    android:id="@+id/history_city_measure_two"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_below="@id/history_city_img_two"
+                    android:layout_alignTop="@id/history_city_temp_two"
+                    android:layout_alignBottom="@id/history_city_temp_two"
+                    android:layout_toEndOf="@id/history_city_temp_two"
+                    android:gravity="center_vertical"
+                    android:text="°"
+                    android:textColor="@color/project_light_red"
+                    android:textSize="30sp" />
+
+                <TextView
+                    android:id="@+id/history_city_main_two"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_below="@id/history_city_img_two"
+                    android:layout_alignTop="@id/history_city_temp_two"
+                    android:layout_alignBottom="@id/history_city_temp_two"
+                    android:layout_marginLeft="10dp"
+                    android:layout_toEndOf="@id/history_city_measure_two"
+                    android:gravity="center_vertical"
+                    android:textColor="#CCFFFFFF"
+                    android:text="Thunder" />
+            </RelativeLayout>
+        </eightbitlab.com.blurview.BlurView>
+    </LinearLayout>
 
     <eightbitlab.com.blurview.BlurView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:background="#63303030" android:layout_centerInParent="true">
+        android:layout_centerInParent="true"
+        android:background="#63ffffff">
+
         <TextView
-            android:text="Search"
-            android:textColor="@color/white"
-            android:textSize="30dp"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:src="@mipmap/ic_launcher"/>
+            android:src="@mipmap/ic_launcher"
+            android:text="Search"
+            android:textColor="@color/white"
+            android:textSize="30dp" />
     </eightbitlab.com.blurview.BlurView>
 </RelativeLayout>
