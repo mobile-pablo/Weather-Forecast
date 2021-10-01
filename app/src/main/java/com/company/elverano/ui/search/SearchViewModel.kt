@@ -1,18 +1,17 @@
 package com.company.elverano.ui.search
 
-import android.content.res.Resources
-import android.graphics.drawable.Drawable
-import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.company.elverano.R
 import com.company.elverano.data.openWeather.OpenWeatherRepository
 import com.company.elverano.data.openWeather.OpenWeatherResponse
 import com.company.elverano.data.positionStack.PositionStackRepository
 import com.company.elverano.utils.DummyData
 import com.company.elverano.utils.ResultEvent
+import com.google.gson.Gson
+import com.google.gson.GsonBuilder
+import com.google.gson.reflect.TypeToken
 import com.skydoves.sandwich.ApiResponse
 import com.skydoves.sandwich.request
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -24,6 +23,7 @@ import java.lang.reflect.InvocationTargetException
 import java.net.SocketTimeoutException
 import java.net.UnknownHostException
 import javax.inject.Inject
+
 
 @HiltViewModel
 class SearchViewModel @Inject constructor(
@@ -42,6 +42,8 @@ class SearchViewModel @Inject constructor(
     val  weatherResponse: LiveData<OpenWeatherResponse> get() = _weatherResponse
 
     init {
+        weatherList[0] = DummyData.dummy_wroclaw
+        weatherList[1] = DummyData.dummy_krakow
         viewModelScope.launch {
             _weatherResponse.value =  openWeatherRepository.getWeatherFromDB()
         }

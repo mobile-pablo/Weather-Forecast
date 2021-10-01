@@ -10,10 +10,12 @@ import androidx.fragment.app.viewModels
 import com.company.elverano.R
 import com.company.elverano.databinding.FragmentMapBinding
 import com.company.elverano.utils.DummyData
-import com.here.sdk.core.GeoCoordinates
-import com.here.sdk.mapviewlite.MapStyle
-import com.here.sdk.mapviewlite.MapViewLite
+import com.here.android.mpa.common.GeoCoordinate
+import com.here.android.mpa.common.OnEngineInitListener
+import com.here.android.mpa.mapping.AndroidXMapFragment
+import com.here.android.mpa.mapping.Map
 import dagger.hilt.android.AndroidEntryPoint
+
 
 @AndroidEntryPoint
 class MapFragment : Fragment(R.layout.fragment_map) {
@@ -23,7 +25,8 @@ class MapFragment : Fragment(R.layout.fragment_map) {
 
     private val TAG = MapFragment::class.java.simpleName
     private var permissionsRequestor: PermissionsRequestor? = null
-    private var mapView: MapViewLite? = null
+    private lateinit var map: Map
+    private var mapView: AndroidXMapFragment? = null
 
     private val viewModel by viewModels<MapViewModel>()
     var place = DummyData.dummy_krakow
@@ -34,17 +37,27 @@ class MapFragment : Fragment(R.layout.fragment_map) {
         savedInstanceState: Bundle?
     ): View? {
         _binding = FragmentMapBinding.inflate(inflater, container, false)
+        return binding.root
 
-        mapView = binding.hereMapView
-        mapView!!.onCreate(savedInstanceState)
+    }
+
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+        mapView?.onCreate(savedInstanceState)
+    }
+
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
+
+        mapView = childFragmentManager.findFragmentById(R.id.here_map_view) as AndroidXMapFragment
+
+
 
 
         viewModel.weatherResponse.observe(viewLifecycleOwner) {
             place = it
             handleAndroidPermissions()
         }
-        return binding.root
-
     }
 
     companion object{
@@ -74,30 +87,38 @@ class MapFragment : Fragment(R.layout.fragment_map) {
 
     private fun loadMapScene() {
         // Load a scene from the SDK to render the map with a map style.
-        mapView!!.mapScene.loadScene(
-            MapStyle.NORMAL_DAY
-        ) { errorCode ->
-            if (errorCode == null) {
-                mapView!!.camera.target = GeoCoordinates(place.lat, place.lon)
-                mapView!!.camera.zoomLevel = ZOOM_LVL
-            } else {
-                Log.d(TAG, "onLoadScene failed: $errorCode")
+        mapView!!.init(object : OnEngineInitListener {
+            override fun onEngineInitializationCompleted(error: OnEngineInitListener.Error?) {
+                if (error == OnEngineInitListener.Error.NONE) {
+                    map = mapView?.map!!
+                    map.setCenter(GeoCoordinate(place.lat, place.lon), Map.Animation.NONE)
+                    map.zoomLevel = ZOOM_LVL
+
+                    val nightScheme =
+                        map.createCustomizableScheme("newCustomScheme", Map.Scheme.NORMAL_NIGHT)
+                    nightScheme?.let { map.setMapScheme(it) }
+
+                } else {
+                    System.out.println("ERROR: Cannot initialize Map Fragment");
+                }
             }
-        }
+
+        })
+
     }
 
     override fun onPause() {
         super.onPause()
-        mapView!!.onPause()
+        mapView?.onPause()
     }
 
     override fun onResume() {
         super.onResume()
-        mapView!!.onResume()
+        mapView?.onResume()
     }
 
     override fun onDestroy() {
         super.onDestroy()
-        mapView!!.onDestroy()
+        mapView?.onDestroy()
     }
 }

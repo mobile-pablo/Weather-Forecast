@@ -15,6 +15,7 @@ import com.company.elverano.R
 import com.company.elverano.data.openWeather.OpenWeatherResponse
 import com.company.elverano.databinding.FragmentCurrentBinding
 import com.company.elverano.utils.ResultEvent
+import com.company.elverano.utils.formatDoubleString
 import com.company.elverano.utils.setWeatherIcon
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.flow.collect
@@ -105,9 +106,7 @@ class CurrentWeatherFragment : Fragment(R.layout.fragment_current) {
                     orientation = LinearLayoutManager.HORIZONTAL
                 }
 
-                currentCityTemperature.text =
-                    String.format("%.1f", response.current.temp).replace(",", ".")
-
+                currentCityTemperature.text =  formatDoubleString(response.current.temp,1)
 
                 val isNight = response.current.getNight()
 

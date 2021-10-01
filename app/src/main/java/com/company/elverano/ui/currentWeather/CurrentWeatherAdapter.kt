@@ -9,6 +9,7 @@ import com.bumptech.glide.Glide
 import com.bumptech.glide.load.resource.drawable.DrawableTransitionOptions
 import com.company.elverano.data.openWeather.OpenWeatherHourly
 import com.company.elverano.databinding.ForecastItemBinding
+import com.company.elverano.utils.formatDoubleString
 import com.company.elverano.utils.setWeatherIcon
 import java.text.SimpleDateFormat
 import java.time.DayOfWeek
@@ -37,8 +38,7 @@ class CurrentWeatherAdapter(
     ) {
         fun onBind(openWeatherHourly: OpenWeatherHourly) {
             binding.apply {
-                forecastItemTemperature.text =
-                    String.format("%.1f", openWeatherHourly.temp).replace(",", ".")
+                forecastItemTemperature.text = formatDoubleString(openWeatherHourly.temp,1)
                 val date = Date(openWeatherHourly.dt * 1000 + offset * 1000)
                 val dateFormat = SimpleDateFormat("YYYY-MM-dd")
                 val hourFormat = SimpleDateFormat("hh a")
