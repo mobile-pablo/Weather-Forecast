@@ -24,6 +24,9 @@ android {
 
         buildConfigField("String", "OPEN_WEATHER_ACCESS_KEY", open_weather_access_key)
         buildConfigField("String", "POSITION_STACK_ACCESS_KEY", position_stack_access_key)
+
+        renderscriptTargetApi 25
+        renderscriptSupportModeEnabled true
     }
 
     buildTypes {
@@ -103,6 +106,5 @@ dependencies {
     kapt "androidx.room:room-compiler:$room_version"
 
     //Blur View
-    implementation 'com.eightbitlab:supportrenderscriptblur:1.0.2'
-    implementation 'com.eightbitlab:blurview:1.6.6'
+    implementation 'jp.wasabeef:blurry:2.1.0'
 }

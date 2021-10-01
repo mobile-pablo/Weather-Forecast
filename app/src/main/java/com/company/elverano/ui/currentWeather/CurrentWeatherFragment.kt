@@ -2,12 +2,9 @@ package com.company.elverano.ui.currentWeather
 
 import android.os.Bundle
 import android.util.Log
-import android.view.Menu
-import android.view.MenuInflater
 import android.view.View
 import android.view.View.INVISIBLE
 import android.view.View.VISIBLE
-import androidx.appcompat.widget.SearchView
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.lifecycleScope
@@ -69,7 +66,7 @@ class CurrentWeatherFragment : Fragment(R.layout.fragment_current) {
                     }
                     is ResultEvent.Error -> {
                         binding.apply {
-                            binding.currentProgressBar.visibility= INVISIBLE
+                            binding.currentProgressBar.visibility = INVISIBLE
                             currentCityBox.visibility = INVISIBLE
                             currentQueryError.visibility = VISIBLE
                             currentQueryError.text = event.message
@@ -87,7 +84,7 @@ class CurrentWeatherFragment : Fragment(R.layout.fragment_current) {
 
         binding.apply {
             if (response != null) {
-                binding.currentProgressBar.visibility= INVISIBLE
+                binding.currentProgressBar.visibility = INVISIBLE
                 currentCityBox.visibility = VISIBLE
                 currentQueryError.visibility = INVISIBLE
                 viewModel.currentError.value = null
