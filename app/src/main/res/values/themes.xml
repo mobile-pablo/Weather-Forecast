@@ -1,11 +1,11 @@
 <resources xmlns:tools="http://schemas.android.com/tools">
     <!-- Base application theme. -->
-    <style name="Theme.WeatherForecast"   parent="Theme.MaterialComponents.Light.NoActionBar">
+    <style name="Theme.WeatherForecast"     parent="Theme.AppCompat.Light.DarkActionBar">
         <!-- parent="Theme.AppCompat.NoActionBar" -->
         <!-- Primary brand color. -->
 
-        <item name="colorPrimary">@color/project_gray</item>
-        <item name="colorPrimaryDark">@color/project_gray</item>
+        <item name="colorPrimary">@color/project_background</item>
+        <item name="colorPrimaryDark">@color/project_background</item>
         <item name="colorAccent">@color/teal_200</item>
 
         <!-- Secondary brand color. -->
@@ -26,4 +26,14 @@
 
         <item name="android:textColor">@color/white</item>
     </style>
+
+
+    <!-- dark application theme. -->
+    <style name="darkTheme" parent="Theme.AppCompat.Light.DarkActionBar">
+        <!-- Customize your theme here. -->
+        <item name="colorPrimary">#000</item>
+        <item name="colorPrimaryDark">#000</item>
+        <item name="colorAccent">#000</item>
+    </style>
+
 </resources>

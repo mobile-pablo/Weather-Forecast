@@ -4,14 +4,14 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:background="@color/project_gray"
+    tools:background="@color/project_background"
     tools:context=".ui.search.SearchFragment">
 
     <ImageView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_centerInParent="true"
-        android:src="@drawable/world_map_gray" />
+        android:src="@drawable/world_map" />
 
     <ProgressBar
         android:id="@+id/search_progress_bar"
@@ -71,7 +71,7 @@
                     android:fontFamily="@font/lato"
                     android:gravity="center_vertical"
                     tools:text="Zamość"
-                    android:textColor="@color/white"
+                    android:textColor="@color/project_main_text"
                     android:textStyle="bold" />
 
                 <ImageView
@@ -89,7 +89,7 @@
                     android:layout_below="@id/history_city_img_one"
                     android:gravity="center_vertical"
                     tools:text="16"
-                    android:textColor="@color/white"
+                    android:textColor="@color/project_main_text"
                     android:textSize="30sp" />
 
                 <TextView
@@ -116,7 +116,7 @@
                     android:layout_toEndOf="@id/history_city_measure_one"
                     android:gravity="center_vertical"
                     tools:text="Clear Sky"
-                    android:textColor="@color/project_light_white" />
+                    android:textColor="@color/project_v3_text" />
             </RelativeLayout>
         </RelativeLayout>
 
@@ -144,7 +144,7 @@
                     android:fontFamily="@font/lato"
                     android:gravity="center_vertical"
                     tools:text="Kraków"
-                    android:textColor="@color/white"
+                    android:textColor="@color/project_main_text"
                     android:textStyle="bold" />
 
                 <ImageView
@@ -162,7 +162,7 @@
                     android:layout_below="@id/history_city_img_two"
                     android:gravity="center_vertical"
                     tools:text="-8"
-                    android:textColor="@color/white"
+                    android:textColor="@color/project_main_text"
                     android:textSize="30sp" />
 
                 <TextView
@@ -189,7 +189,7 @@
                     android:layout_toEndOf="@id/history_city_measure_two"
                     android:gravity="center_vertical"
                     tools:text="Thunder"
-                    android:textColor="@color/project_light_white" />
+                    android:textColor="@color/project_v3_text" />
             </RelativeLayout>
         </RelativeLayout>
     </LinearLayout>
@@ -236,7 +236,7 @@
                         android:layout_marginTop="20dp"
                         android:fontFamily="@font/roboto_light"
                         android:text="Wind degrees"
-                        android:textColor="#FFFFFF"
+                        android:textColor="@color/project_main_text"
                         android:textSize="20sp" />
 
                     <TextView
@@ -248,7 +248,7 @@
                         android:layout_marginTop="10dp"
                         android:fontFamily="@font/lato_bold"
                         tools:text="30%"
-                        android:textColor="@color/white"
+                        android:textColor="@color/project_main_text"
                         android:textSize="18sp" />
                 </RelativeLayout>
 
@@ -266,7 +266,7 @@
                         android:layout_marginTop="20dp"
                         android:fontFamily="@font/roboto_light"
                         android:text="Humidity"
-                        android:textColor="#FFFFFF"
+                        android:textColor="@color/project_main_text"
                         android:textSize="20sp" />
 
                     <TextView
@@ -278,7 +278,7 @@
                         android:layout_marginTop="10dp"
                         android:fontFamily="@font/lato_bold"
                         tools:text="10%"
-                        android:textColor="@color/white"
+                        android:textColor="@color/project_main_text"
                         android:textSize="18sp" />
                 </RelativeLayout>
             </LinearLayout>
@@ -310,7 +310,7 @@
                         android:layout_marginTop="20dp"
                         android:fontFamily="@font/roboto_light"
                         android:text="Wind speed"
-                        android:textColor="#FFFFFF"
+                        android:textColor="@color/project_main_text"
                         android:textSize="20sp" />
 
                     <TextView
@@ -322,7 +322,7 @@
                         android:layout_marginTop="10dp"
                         android:fontFamily="@font/lato_bold"
                         tools:text="8 km/h"
-                        android:textColor="@color/white"
+                        android:textColor="@color/project_main_text"
                         android:textSize="18sp" />
                 </RelativeLayout>
 
@@ -340,7 +340,7 @@
                         android:layout_marginTop="20dp"
                         android:fontFamily="@font/roboto_light"
                         android:text="Pressure"
-                        android:textColor="#FFFFFF"
+                        android:textColor="@color/project_main_text"
                         android:textSize="20sp" />
 
                     <TextView
@@ -352,7 +352,7 @@
                         android:layout_marginTop="10dp"
                         android:fontFamily="@font/lato_bold"
                         tools:text="840hPa"
-                        android:textColor="@color/white"
+                        android:textColor="@color/project_main_text"
                         android:textSize="18sp" />
                 </RelativeLayout>
             </LinearLayout>

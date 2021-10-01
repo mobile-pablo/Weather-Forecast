@@ -5,6 +5,7 @@ import android.util.Log
 import android.view.View
 import android.view.View.INVISIBLE
 import android.view.View.VISIBLE
+import androidx.appcompat.app.AppCompatDelegate
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.lifecycleScope
@@ -17,6 +18,7 @@ import com.company.elverano.databinding.FragmentCurrentBinding
 import com.company.elverano.utils.ResultEvent
 import com.company.elverano.utils.formatDoubleString
 import com.company.elverano.utils.setWeatherIcon
+import com.polyak.iconswitch.IconSwitch
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.flow.collect
 import java.text.SimpleDateFormat
@@ -35,7 +37,30 @@ class CurrentWeatherFragment : Fragment(R.layout.fragment_current) {
 
         _binding = FragmentCurrentBinding.bind(view)
 
+        if (AppCompatDelegate.getDefaultNightMode() == AppCompatDelegate.MODE_NIGHT_YES) {
+            binding.themeSwitch.checked = IconSwitch.Checked.RIGHT
+        } else {
+            binding.themeSwitch.checked = IconSwitch.Checked.LEFT
+        }
 
+        addObservers()
+
+        binding.themeSwitch.setCheckedChangeListener { isChecked ->
+            if (isChecked  == IconSwitch.Checked.RIGHT) {
+                AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_YES)
+            } else {
+                AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_NO)
+            }
+
+        }
+
+
+        viewLifecycleOwner.lifecycleScope.launchWhenStarted {
+        collectEvents()
+        }
+    }
+
+    private fun addObservers() {
         viewModel.currentWeather.observe(viewLifecycleOwner) {
             updateUI(it)
         }
@@ -56,27 +81,24 @@ class CurrentWeatherFragment : Fragment(R.layout.fragment_current) {
                 }
             }
         }
+    }
 
-
-
-        viewLifecycleOwner.lifecycleScope.launchWhenStarted {
-
-            viewModel.resultEvent.collect { event ->
-                when (event) {
-                    is ResultEvent.Success -> {
-                        Log.d("ResultEvent", "Success")
+    private  suspend fun collectEvents() {
+        viewModel.resultEvent.collect { event ->
+            when (event) {
+                is ResultEvent.Success -> {
+                    Log.d("ResultEvent", "Success")
+                }
+                is ResultEvent.Error -> {
+                    binding.apply {
+                        binding.currentProgressBar.visibility = INVISIBLE
+                        currentCityBox.visibility = INVISIBLE
+                        currentQueryError.visibility = VISIBLE
+                        currentQueryError.text = event.message
+                        viewModel.currentWeather.value = null
+                        viewModel.currentName.value = null
                     }
-                    is ResultEvent.Error -> {
-                        binding.apply {
-                            binding.currentProgressBar.visibility = INVISIBLE
-                            currentCityBox.visibility = INVISIBLE
-                            currentQueryError.visibility = VISIBLE
-                            currentQueryError.text = event.message
-                            viewModel.currentWeather.value = null
-                            viewModel.currentName.value = null
-                        }
-                        Log.d("ResultEvent", "Error")
-                    }
+                    Log.d("ResultEvent", "Error")
                 }
             }
         }

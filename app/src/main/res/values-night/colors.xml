@@ -8,18 +8,17 @@
     <color name="black">#FF000000</color>
     <color name="white">#FFFFFFFF</color>
 
-    <color name="project_main_text">#000000</color>
-    <color name="project_v2_text">#80000000</color>
-    <color name="project_v3_text">#CC000000</color>
-    <color name="project_gray">#63EAEAEA</color>
+    <color name="project_main_text">#FFFFFF</color>
+    <color name="project_v2_text">#80FFFFFF</color>
+    <color name="project_v3_text">#CCFFFFFF</color>
+    <color name="project_gray">#63303030</color>
     <color name="project_classic_gray">#606060</color>
-    <color name="project_background">#ffffff</color>
+    <color name="project_background">#141414</color>
     <color name="project_background_v2">#101014</color>
     <color name="project_background_light">#1B1B1E</color>
-    <color name="moon_yellow">#E5C517</color>
-    <color name="sky_blue">#77B7D9</color>
-    <color name="project_light_red">#B04349</color>
+    <color name="moon_yellow">#FFDB1A</color>
+    <color name="project_light_red">#FE5F55</color>
+    <color name="project_map_bg">#2d2d2d</color>
     <color name="project_map_color">#535353</color>
-    <color name="project_map_bg">#D5D5D5</color>
     <color name="project_light_white">#CCFFFFFF</color>
 </resources>

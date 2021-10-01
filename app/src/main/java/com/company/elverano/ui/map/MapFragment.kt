@@ -5,6 +5,7 @@ import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.appcompat.app.AppCompatDelegate
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import com.company.elverano.R
@@ -94,9 +95,17 @@ class MapFragment : Fragment(R.layout.fragment_map) {
                     map.setCenter(GeoCoordinate(place.lat, place.lon), Map.Animation.NONE)
                     map.zoomLevel = ZOOM_LVL
 
-                    val nightScheme =
-                        map.createCustomizableScheme("newCustomScheme", Map.Scheme.NORMAL_NIGHT)
-                    nightScheme?.let { map.setMapScheme(it) }
+
+                    if (AppCompatDelegate.getDefaultNightMode() == AppCompatDelegate.MODE_NIGHT_YES) {
+                        val nightScheme =
+                            map.createCustomizableScheme("nightScheme", Map.Scheme.NORMAL_NIGHT)
+                        nightScheme?.let { map.setMapScheme(it) }
+                    } else {
+                        val dayScheme =
+                            map.createCustomizableScheme("dayScheme", Map.Scheme.NORMAL_DAY)
+                        dayScheme?.let { map.setMapScheme(it) }
+                    }
+
 
                 } else {
                     System.out.println("ERROR: Cannot initialize Map Fragment");

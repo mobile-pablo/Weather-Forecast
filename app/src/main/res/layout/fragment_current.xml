@@ -6,7 +6,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:context=".ui.currentWeather.CurrentWeatherFragment"
-    tools:background="@color/project_gray"
+    tools:background="@color/project_background"
     android:gravity="center">
 
 <RelativeLayout
@@ -17,7 +17,7 @@
     <ImageView
         android:layout_width="wrap_content"
         android:layout_height="200dp"
-        android:src="@drawable/world_map_gray" />
+        android:src="@drawable/world_map" />
 </RelativeLayout>
 
     <ProgressBar
@@ -65,7 +65,7 @@
                     android:paddingTop="4dp"
                     android:paddingRight="4dp"
                     android:paddingBottom="4dp"
-                    android:textColor="@color/project_light_white"
+                    android:textColor="@color/project_v3_text"
                     tools:text="22, Feb 2021" />
 
                 <TextView
@@ -74,7 +74,7 @@
                     android:layout_height="30dp"
                     android:layout_below="@id/current_city_date"
                     android:drawableLeft="@drawable/ic_location"
-                    android:drawableTint="@color/white"
+                    android:drawableTint="@color/project_main_text"
                     android:ellipsize="end"
                     android:fontFamily="@font/lato_bold"
                     android:gravity="center_vertical"
@@ -83,7 +83,7 @@
                     android:paddingTop="4dp"
                     android:paddingBottom="4dp"
                     android:textAllCaps="true"
-                    android:textColor="#FFFFFF"
+                    android:textColor="@color/project_main_text"
                     tools:text="Rzeszów" />
 
                 <TextView
@@ -99,7 +99,7 @@
                     android:paddingTop="4dp"
                     android:paddingRight="4dp"
                     android:paddingBottom="4dp"
-                    android:textColor="#80FFFFFF"
+                    android:textColor="@color/project_v2_text"
                     tools:text=", Poland" />
 
                 <TextView
@@ -111,7 +111,7 @@
                     android:paddingLeft="8dp"
                     android:paddingTop="1dp"
                     android:paddingRight="4dp"
-                    android:textColor="#FFFDFD"
+                    android:textColor="@color/project_main_text"
                     android:textSize="10sp"
                     tools:text="50.4342" />
 
@@ -125,7 +125,7 @@
                     android:paddingLeft="4dp"
                     android:paddingTop="1dp"
                     android:paddingRight="4dp"
-                    android:textColor="#FFFFFF"
+                    android:textColor="@color/project_main_text"
                     android:textSize="10sp"
                     tools:text="-3.8434" />
 
@@ -137,14 +137,14 @@
                     android:layout_centerVertical="true"
                     app:isw_active_tint_icon_left="@android:color/transparent"
                     app:isw_active_tint_icon_right="@color/moon_yellow"
-                    app:isw_background_color="@color/project_light_gray"
+                    app:isw_background_color="@color/project_background_light"
                     app:isw_default_selection="right"
                     app:isw_icon_left="@drawable/ic_day_mode_icon"
                     app:isw_icon_right="@drawable/ic_night_mode_icon"
                     app:isw_inactive_tint_icon_left="@android:color/transparent"
                     app:isw_inactive_tint_icon_right="@color/moon_yellow"
-                    app:isw_thumb_color_left="#77B7D9"
-                    app:isw_thumb_color_right="#606060" />
+                    app:isw_thumb_color_left="@color/sky_blue"
+                    app:isw_thumb_color_right="@color/project_classic_gray" />
             </RelativeLayout>
             <RelativeLayout
                 android:layout_width="match_parent"
@@ -159,7 +159,7 @@
                     android:layout_marginTop="30dp"
                     android:gravity="center"
                     android:maxLines="1"
-                    android:textColor="#FFFFFF"
+                    android:textColor="@color/project_main_text"
                     android:textSize="60sp"
                     android:visibility="visible"
                     tools:text="16"
@@ -196,7 +196,7 @@
         android:layout_centerInParent="true"
         android:fontFamily="@font/lato"
         android:textAlignment="center"
-        android:textColor="@color/white"
+        android:textColor="@color/project_main_text"
         android:textSize="30sp"
         android:textStyle="bold"
         android:visibility="invisible"

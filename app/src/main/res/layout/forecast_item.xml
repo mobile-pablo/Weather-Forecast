@@ -19,7 +19,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         tools:text="Sunday"
-        android:textColor="@color/white"
+        android:textColor="@color/project_main_text"
         android:layout_centerInParent="true"
         android:layout_below="@id/forecast_city_image"/>
     <TextView
@@ -41,7 +41,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         tools:text="16"
-        android:textColor="@color/white"
+        android:textColor="@color/project_main_text"
         android:textSize="30sp"/>
     <TextView
         android:id="@+id/forecast_item_measure"
