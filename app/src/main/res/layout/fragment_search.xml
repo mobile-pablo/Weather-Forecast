@@ -206,8 +206,9 @@
 
         <ImageView
             android:id="@+id/search_current_img"
-            android:layout_width="50dp"
-            android:layout_height="50dp"
+            android:layout_width="40dp"
+            android:layout_height="40dp"
+            android:layout_marginTop="10dp"
             android:layout_centerHorizontal="true"
             tools:src="@drawable/clouds_thunder_drizzle" />
 
