@@ -1,10 +1,8 @@
 package com.company.elverano.ui.search
 
-import android.graphics.Color
 import android.os.Bundle
 import android.util.Log
 import android.view.View
-import android.view.ViewGroup
 import androidx.appcompat.widget.SearchView
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
@@ -15,16 +13,25 @@ import com.company.elverano.databinding.FragmentSearchBinding
 import com.company.elverano.utils.ResultEvent
 import dagger.hilt.android.AndroidEntryPoint
 import jp.wasabeef.blurry.Blurry
-import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.launch
 
 
 @AndroidEntryPoint
-class SearchFragment: Fragment(R.layout.fragment_search) {
-    private var _binding : FragmentSearchBinding?=null
+class SearchFragment : Fragment(R.layout.fragment_search) {
+    private var _binding: FragmentSearchBinding? = null
     private val binding get() = _binding!!
     private val viewModel by viewModels<SearchViewModel>()
+
+    companion object {
+        const val RADIUS = 5
+        const val SMALL_RADIUS =3
+        const val SAMPLING = 8
+        const val SMALL_SAMPLING=4
+        const val ANIM_DURATION = 500
+    }
+
+
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         _binding = FragmentSearchBinding.bind(view)
@@ -32,16 +39,22 @@ class SearchFragment: Fragment(R.layout.fragment_search) {
         view.post {
             viewLifecycleOwner.lifecycleScope.launch {
                 Blurry.with(context)
-                    .radius(5)
-                    .sampling(8)
-                    .async().animate(500)
+                    .radius(RADIUS)
+                    .sampling(SAMPLING)
+                    .async().animate(ANIM_DURATION)
                     .onto(binding.historyItemOne)
 
                 Blurry.with(context)
-                    .radius(5)
-                    .sampling(8)
-                    .async().animate(500)
+                    .radius(RADIUS)
+                    .sampling(SAMPLING)
+                    .async().animate(ANIM_DURATION)
                     .onto(binding.historyItemTwo)
+
+                Blurry.with(context)
+                    .radius(SMALL_RADIUS)
+                    .sampling(SMALL_SAMPLING)
+                    .async().animate(ANIM_DURATION)
+                    .onto(binding.searchCurrentDetailsBox)
             }
         }
 
@@ -90,8 +103,9 @@ class SearchFragment: Fragment(R.layout.fragment_search) {
         }
     }
 
+
     override fun onDestroyView() {
         super.onDestroyView()
-        _binding=null
+        _binding = null
     }
 }

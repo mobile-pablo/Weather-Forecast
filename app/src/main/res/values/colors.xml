@@ -14,4 +14,6 @@
     <color name="moon_yellow">#eff301</color>
     <color name="project_light_red">#FE5F55</color>
     <color name="project_map_color">#535353</color>
+
+    <color name="project_light_white">#CCFFFFFF</color>
 </resources>

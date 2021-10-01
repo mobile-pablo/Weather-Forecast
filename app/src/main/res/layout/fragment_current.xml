@@ -65,7 +65,7 @@
                     android:paddingTop="4dp"
                     android:paddingRight="4dp"
                     android:paddingBottom="4dp"
-                    android:textColor="#CCFFFFFF"
+                    android:textColor="@color/project_light_white"
                     tools:text="22, Feb 2021" />
 
                 <TextView
