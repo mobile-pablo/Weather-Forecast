@@ -9,6 +9,7 @@ import com.bumptech.glide.Glide
 import com.bumptech.glide.load.resource.drawable.DrawableTransitionOptions
 import com.company.elverano.data.openWeather.OpenWeatherHourly
 import com.company.elverano.databinding.ForecastItemBinding
+import com.company.elverano.utils.fadeIn
 import com.company.elverano.utils.formatDoubleString
 import com.company.elverano.utils.setWeatherIcon
 import java.text.SimpleDateFormat
@@ -38,15 +39,20 @@ class CurrentWeatherAdapter(
     ) {
         fun onBind(openWeatherHourly: OpenWeatherHourly) {
             binding.apply {
-                forecastItemTemperature.text = formatDoubleString(openWeatherHourly.temp,1)
+                forecastItemTemperature.text = formatDoubleString(openWeatherHourly.temp, 1)
+                forecastItemTemperature.fadeIn()
+                forecastItemMeasure.fadeIn()
+
+
                 val date = Date(openWeatherHourly.dt * 1000 + offset * 1000)
                 val dateFormat = SimpleDateFormat("YYYY-MM-dd")
                 val hourFormat = SimpleDateFormat("hh a")
                 forecastCityHour.text = hourFormat.format(date)
+                forecastCityHour.fadeIn()
                 forecastCityDay.text = getWeekDayName(dateFormat.format(date))
+                forecastCityDay.fadeIn()
 
                 val isNight = openWeatherHourly.getNight()
-
                 isNight?.let { isNight ->
                     val drawable =
                         setWeatherIcon(openWeatherHourly.weather[0].id, isNight, res)

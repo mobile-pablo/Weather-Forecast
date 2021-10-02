@@ -3,6 +3,8 @@ package com.company.elverano.utils
 import android.content.res.Resources
 import android.graphics.drawable.Drawable
 import android.util.Log
+import android.view.View
+import android.view.animation.AlphaAnimation
 import com.company.elverano.R
 
 fun setWeatherIcon(id: Int, night: Boolean, resources: Resources): Drawable {
@@ -132,4 +134,19 @@ fun setWeatherIcon(id: Int, night: Boolean, resources: Resources): Drawable {
 
 fun formatDoubleString(x: Double, places: Int): String {
     return String.format("%." + places + "f", x).replace(",", ".")
+}
+
+
+inline fun View.fadeIn(durationMillis: Long = 1000) {
+    this.startAnimation(AlphaAnimation(0F, 1F).apply {
+        duration = durationMillis
+        fillAfter = true
+    })
+}
+
+inline fun View.fadeOut(durationMillis: Long = 1000) {
+    this.startAnimation(AlphaAnimation(1F, 0F).apply {
+        duration = durationMillis
+        fillAfter = true
+    })
 }

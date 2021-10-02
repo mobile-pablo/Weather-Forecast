@@ -16,11 +16,10 @@ import com.bumptech.glide.load.resource.drawable.DrawableTransitionOptions
 import com.company.elverano.R
 import com.company.elverano.data.openWeather.OpenWeatherResponse
 import com.company.elverano.databinding.FragmentCurrentBinding
-import com.company.elverano.utils.ResultEvent
-import com.company.elverano.utils.formatDoubleString
-import com.company.elverano.utils.setWeatherIcon
+import com.company.elverano.utils.*
 import com.polyak.iconswitch.IconSwitch
 import dagger.hilt.android.AndroidEntryPoint
+import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.collect
 import java.text.SimpleDateFormat
 import java.util.*
@@ -76,18 +75,24 @@ class CurrentWeatherFragment : Fragment(R.layout.fragment_current) {
             updateUI(it)
         }
         viewModel.currentName.observe(viewLifecycleOwner) {
-            if (it != null) {
-                binding.currentCityName.text = it
-            } else {
-                binding.currentCityName.text = ""
+            binding.apply {
+                if (it != null) {
+                    currentCityName.text = it
+                } else {
+                    binding.currentCityName.text = ""
+                }
+                currentCityName.fadeIn()
             }
         }
 
         viewModel.currentCountry.observe(viewLifecycleOwner) {
-            if (it != null) {
-                binding.currentCityCountry.text = ", $it"
-            } else {
-                binding.currentCityCountry.text = ""
+            binding.apply {
+                if (it != null) {
+                    currentCityCountry.text = ", $it"
+                } else {
+                   currentCityCountry.text = ""
+                }
+                currentCityCountry.fadeIn()
             }
         }
 
@@ -132,6 +137,7 @@ class CurrentWeatherFragment : Fragment(R.layout.fragment_current) {
                 currentQueryError.visibility = INVISIBLE
                 viewModel.currentError.value = null
 
+                themeSwitch.fadeIn()
 
                 //For unknown reasons GMT time is having 2 hour delay for every country.
                 val delay = 2 * 3600 * 1000
@@ -139,6 +145,7 @@ class CurrentWeatherFragment : Fragment(R.layout.fragment_current) {
                     Date(response.current.dt * 1000 + response.timezone_offset * 1000 - delay)
                 val sdf = SimpleDateFormat("dd, MMM yyyy HH:mm:ss")
                 currentCityDate.text = sdf.format(currentDate)
+                currentCityDate.fadeIn()
                 currentCityForecastRecyclerView.visibility = VISIBLE
                 currentCityForecastRecyclerView.adapter = CurrentWeatherAdapter(
                     response.hourly,
@@ -152,7 +159,8 @@ class CurrentWeatherFragment : Fragment(R.layout.fragment_current) {
                 }
 
                 currentCityTemperature.text = formatDoubleString(response.current.temp, 1)
-
+                currentCityTemperature.fadeIn()
+                currentCityMeasure.fadeIn()
                 val isNight = response.current.getNight()
 
 
@@ -176,8 +184,9 @@ class CurrentWeatherFragment : Fragment(R.layout.fragment_current) {
 
 
                 currentCityLat.text = response.lat.toString()
+                currentCityLat.fadeIn()
                 currentCityLong.text = response.lon.toString()
-
+                currentCityLong.fadeIn()
 
                 currentCityInfoBox.visibility = VISIBLE
                 currentCityName.setCompoundDrawablesWithIntrinsicBounds(
@@ -188,7 +197,7 @@ class CurrentWeatherFragment : Fragment(R.layout.fragment_current) {
                 );
                 currentCityMeasure.visibility = VISIBLE
             } else {
-                currentCityName.setCompoundDrawablesWithIntrinsicBounds(0, 0, 0, 0);
+                currentCityName.setCompoundDrawablesWithIntrinsicBounds(0, 0, 0, 0)
                 currentCityInfoBox.visibility = INVISIBLE
                 currentCityMeasure.visibility = INVISIBLE
                 currentCityBox.visibility = INVISIBLE

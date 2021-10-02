@@ -15,11 +15,15 @@ import com.company.elverano.data.historyWeather.HistoryWeatherResponse
 import com.company.elverano.data.openWeather.OpenWeatherResponse
 import com.company.elverano.databinding.FragmentSearchBinding
 import com.company.elverano.utils.ResultEvent
+import com.company.elverano.utils.fadeIn
 import com.company.elverano.utils.formatDoubleString
 import com.company.elverano.utils.setWeatherIcon
 import dagger.hilt.android.AndroidEntryPoint
 import jp.wasabeef.blurry.Blurry
+import kotlinx.coroutines.GlobalScope
+import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.collect
+import kotlinx.coroutines.launch
 
 
 @AndroidEntryPoint
@@ -34,6 +38,7 @@ class SearchFragment : Fragment(R.layout.fragment_search) {
         const val SAMPLING = 8
         const val SMALL_SAMPLING = 2
         const val ANIM_DURATION = 500
+        const val FADE_IN_DURATION: Long =1500
     }
 
 
@@ -133,9 +138,11 @@ class SearchFragment : Fragment(R.layout.fragment_search) {
             searchCurrentWindSpeed.text = "${weather.current.wind_speed} km/h"
             searchCurrentWindDegrees.text = "${weather.current.wind_deg} ∡"
 
-            view?.post {
-                initializeBlur()
-            }
+            searchCurrentHumidity.fadeIn(FADE_IN_DURATION)
+            searchCurrentPressure.fadeIn(FADE_IN_DURATION)
+            searchCurrentWindSpeed.fadeIn(FADE_IN_DURATION)
+            searchCurrentWindDegrees.fadeIn(FADE_IN_DURATION)
+
 
             val isNight = weather.current.getNight()
             isNight?.let {
@@ -154,6 +161,13 @@ class SearchFragment : Fragment(R.layout.fragment_search) {
                 }
 
 
+            }
+
+            GlobalScope.launch {
+                delay(500)
+                view?.post {
+                    initializeBlur()
+                }
             }
         }
     }
@@ -185,6 +199,10 @@ class SearchFragment : Fragment(R.layout.fragment_search) {
                     }
 
                 }
+
+                historyCityNameOne.fadeIn()
+                historyCityTempOne.fadeIn()
+                historyCityMainOne.fadeIn()
             }
 
             secondItem?.let {
@@ -208,6 +226,10 @@ class SearchFragment : Fragment(R.layout.fragment_search) {
                     }
 
                 }
+
+                historyCityNameTwo.fadeIn()
+                historyCityTempTwo.fadeIn()
+                historyCityMainTwo.fadeIn()
             }
     }
     }

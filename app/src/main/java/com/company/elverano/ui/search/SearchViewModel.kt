@@ -160,7 +160,7 @@ class SearchViewModel @Inject constructor(
                     lat = response.lat,
                     lon = response.lon,
                     name = name,
-                    weather_id = response.id,
+                    weather_id = response.current.weather[0].id,
                     temp = response.current.temp,
                     main = response.current.weather[0].main,
                     description = response.current.weather[0].description,
