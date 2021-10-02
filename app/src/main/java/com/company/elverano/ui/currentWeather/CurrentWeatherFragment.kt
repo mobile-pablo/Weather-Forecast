@@ -1,6 +1,7 @@
 package com.company.elverano.ui.currentWeather
 
 import android.os.Bundle
+import android.text.Html
 import android.util.Log
 import android.view.View
 import android.view.View.INVISIBLE
@@ -65,11 +66,19 @@ class CurrentWeatherFragment : Fragment(R.layout.fragment_current) {
             updateUI(it)
         }
         viewModel.currentName.observe(viewLifecycleOwner) {
-            binding.currentCityName.text = it
+            if(it!=null) {
+                binding.currentCityName.text = it
+            }else{
+                binding.currentCityName.text  = ""
+            }
         }
 
         viewModel.currentCountry.observe(viewLifecycleOwner) {
-            binding.currentCityCountry.text = ", $it"
+           if(it!=null){
+               binding.currentCityCountry.text = ", $it"
+           }else{
+               binding.currentCityCountry.text = ""
+           }
         }
 
         viewModel.currentError.observe(viewLifecycleOwner) {

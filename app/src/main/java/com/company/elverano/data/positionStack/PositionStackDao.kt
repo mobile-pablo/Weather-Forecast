@@ -20,7 +20,7 @@ interface PositionStackDao{
 
     @NotNull
     @Query("SELECT * FROM position_stack_response")
-    suspend fun getPositionStack() : PositionStackResponse
+    suspend fun getPositionStack() : PositionStackResponse?
 
 
     @Query("DELETE FROM position_stack_response")

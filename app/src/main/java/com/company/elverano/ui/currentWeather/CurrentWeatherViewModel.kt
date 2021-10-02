@@ -47,10 +47,10 @@ class CurrentWeatherViewModel @Inject constructor(
                 }
             }
 
-            positionStackRepository.getLocationFromDatabase().data.let {
+            positionStackRepository.getLocationFromDatabase()?.data?.let {
                 if (it.isNotEmpty()) {
                     currentName.value = it[0].name
-                    currentCountry.value = it[0].country
+                    currentCountry.value = it[0].country_code
                 }
             }
 
@@ -70,7 +70,7 @@ class CurrentWeatherViewModel @Inject constructor(
                             positionStackRepository.deletePositionFromDB()
                             positionStackRepository.insertPositionToDB(response.data)
 
-                            response.data.data.let {
+                            response.data.data?.let {
                                 if (it.isNotEmpty()) {
                                     val item = it[0]
 

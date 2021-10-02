@@ -69,19 +69,27 @@ class SearchViewModel @Inject constructor(
                             positionStackRepository.insertPositionToDB(apiResponse.data)
 
                             val data = apiResponse.data.data
-                            if (data.isNotEmpty()) {
-                                val item = data[0]
-                                searchWeather(
-                                    lat = item.latitude,
-                                    lon = item.longitude,)
-                            } else {
+
+                            if(data==null){
                                 viewModelScope.launch {
                                     val msg = "No Item's found"
                                     resultChannel.send(ResultEvent.Error(msg))
                                     currentError.value = msg
                                 }
+                            }else{
+                                if (data.isNotEmpty()) {
+                                    val item = data[0]
+                                    searchWeather(
+                                        lat = item.latitude,
+                                        lon = item.longitude,)
+                                } else {
+                                    viewModelScope.launch {
+                                        val msg = "No Item's found"
+                                        resultChannel.send(ResultEvent.Error(msg))
+                                        currentError.value = msg
+                                    }
+                                }
                             }
-
 
                         }
 
