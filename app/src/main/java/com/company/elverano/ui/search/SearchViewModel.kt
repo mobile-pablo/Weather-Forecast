@@ -61,22 +61,19 @@ class SearchViewModel @Inject constructor(
             }
 
             val response = positionStackRepository.getLocationFromAPI(query)
-            response.request { response ->
-                when (response) {
+            response.request { apiResponse ->
+                when (apiResponse) {
                     is ApiResponse.Success -> {
                         viewModelScope.launch {
                             positionStackRepository.deletePositionFromDB()
-                            positionStackRepository.insertPositionToDB(response.data)
+                            positionStackRepository.insertPositionToDB(apiResponse.data)
 
-                            val data = response.data.data
+                            val data = apiResponse.data.data
                             if (data.isNotEmpty()) {
                                 val item = data[0]
                                 searchWeather(
                                     lat = item.latitude,
-                                    lon = item.longitude,
-                                    name = item.name,
-                                    country = item.country
-                                )
+                                    lon = item.longitude,)
                             } else {
                                 viewModelScope.launch {
                                     val msg = "No Item's found"
@@ -92,14 +89,14 @@ class SearchViewModel @Inject constructor(
                     }
                     is ApiResponse.Failure.Error -> {
                         viewModelScope.launch {
-                            val msg = "No Item's found\nError " + response.statusCode.code
+                            val msg = "No Item's found\nError " + apiResponse.statusCode.code
                             resultChannel.send(ResultEvent.Error(msg))
                         }
 
 
                     }
                     is ApiResponse.Failure.Exception -> {
-                        when (response.exception) {
+                        when (apiResponse.exception) {
                             is UnknownHostException -> {
                                 viewModelScope.launch {
                                     val msg = "No Item's found\nNo Internet Connection!"
@@ -122,10 +119,10 @@ class SearchViewModel @Inject constructor(
                             else -> {
                                 viewModelScope.launch {
                                     val msg =
-                                        "No Item's found\nException: ${response.exception.message}"
+                                        "No Item's found\nException: ${apiResponse.exception.message}"
                                     resultChannel.send(ResultEvent.Error(msg))
                                 }
-                                throw response.exception
+                                throw apiResponse.exception
                             }
                         }
 
@@ -137,7 +134,7 @@ class SearchViewModel @Inject constructor(
         }
     }
 
-    private fun searchWeather(lat: Double, lon: Double, name: String, country: String) {
+    private fun searchWeather(lat: Double, lon: Double) {
         couritineJob?.cancel()
         couritineJob = viewModelScope.launch {
             openWeatherRepository.getWeatherFromAPI(lon = lon, lat = lat).request {

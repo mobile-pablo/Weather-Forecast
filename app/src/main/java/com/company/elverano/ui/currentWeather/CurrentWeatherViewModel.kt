@@ -1,13 +1,10 @@
 package com.company.elverano.ui.currentWeather
 
 
-import android.content.res.Resources
-import android.graphics.drawable.Drawable
 import android.util.Log
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.company.elverano.R
 import com.company.elverano.data.openWeather.OpenWeatherRepository
 import com.company.elverano.data.openWeather.OpenWeatherResponse
 import com.company.elverano.data.positionStack.PositionStackRepository
@@ -51,11 +48,11 @@ class CurrentWeatherViewModel @Inject constructor(
             }
 
             positionStackRepository.getLocationFromDatabase().data.let {
-                    if (it.isNotEmpty()) {
-                        currentName.value = it[0].name
-                        currentCountry.value = it[0].country
-                    }
+                if (it.isNotEmpty()) {
+                    currentName.value = it[0].name
+                    currentCountry.value = it[0].country
                 }
+            }
 
 
         }
@@ -74,30 +71,30 @@ class CurrentWeatherViewModel @Inject constructor(
                             positionStackRepository.insertPositionToDB(response.data)
 
                             response.data.data.let {
-                                    if (it.isNotEmpty()) {
-                                        val item = it[0]
+                                if (it.isNotEmpty()) {
+                                    val item = it[0]
 
-                                        item?.let { item ->
-                                            searchWeather(
-                                                lat = item.latitude,
-                                                lon = item.longitude,
-                                                name = item.name,
-                                                country = item.country
-                                            )
-                                        }
-
-                                        Log.d(
-                                            "CurrentWeather",
-                                            "Item : ${item.latitude} , ${item.longitude} , ${item.name}"
+                                    item?.let { item ->
+                                        searchWeather(
+                                            lat = item.latitude,
+                                            lon = item.longitude,
+                                            name = item.name,
+                                            country = item.country
                                         )
-
-                                    } else {
-                                        viewModelScope.launch {
-                                            val msg = "No Item's found"
-                                            resultChannel.send(ResultEvent.Error(msg))
-                                            currentError.value = msg
-                                        }
                                     }
+
+                                    Log.d(
+                                        "CurrentWeather",
+                                        "Item : ${item.latitude} , ${item.longitude} , ${item.name}"
+                                    )
+
+                                } else {
+                                    viewModelScope.launch {
+                                        val msg = "No Item's found"
+                                        resultChannel.send(ResultEvent.Error(msg))
+                                        currentError.value = msg
+                                    }
+                                }
 
                             }
                         }
@@ -150,12 +147,10 @@ class CurrentWeatherViewModel @Inject constructor(
                             openWeatherRepository.deleteWeatherFromDatabase()
                             openWeatherRepository.insertWeatherToDatabase(response.data)
 
-                            response?.data?.let {
-                                currentWeather.value = it
-                                currentName.value = name
-                                currentCountry.value = country
-                                resultChannel.send(ResultEvent.Success)
-                            }
+                            currentWeather.value = response.data
+                            currentName.value = name
+                            currentCountry.value = country
+                            resultChannel.send(ResultEvent.Success)
 
 
                         }
