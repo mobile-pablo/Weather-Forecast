@@ -1,5 +1,6 @@
 package com.company.elverano.ui.currentWeather
 
+import android.content.Context
 import android.os.Bundle
 import android.util.Log
 import android.view.View
@@ -36,6 +37,7 @@ class CurrentWeatherFragment : Fragment(R.layout.fragment_current) {
         super.onViewCreated(view, savedInstanceState)
 
         _binding = FragmentCurrentBinding.bind(view)
+        val sharedPref = activity?.getPreferences(Context.MODE_PRIVATE) ?: return
 
         if (AppCompatDelegate.getDefaultNightMode() == AppCompatDelegate.MODE_NIGHT_YES) {
             binding.themeSwitch.checked = IconSwitch.Checked.RIGHT
@@ -46,12 +48,19 @@ class CurrentWeatherFragment : Fragment(R.layout.fragment_current) {
         addObservers()
 
         binding.themeSwitch.setCheckedChangeListener { isChecked ->
+            var newTheme = -3
             if (isChecked == IconSwitch.Checked.RIGHT) {
+                newTheme = 1
                 AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_YES)
             } else {
+                newTheme = 0
                 AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_NO)
             }
 
+            with(sharedPref.edit()) {
+                putInt(getString(R.string.theme_mode), newTheme)
+                apply()
+            }
         }
 
 
@@ -171,7 +180,12 @@ class CurrentWeatherFragment : Fragment(R.layout.fragment_current) {
 
 
                 currentCityInfoBox.visibility = VISIBLE
-                currentCityName.setCompoundDrawablesWithIntrinsicBounds(R.drawable.ic_location, 0, 0, 0);
+                currentCityName.setCompoundDrawablesWithIntrinsicBounds(
+                    R.drawable.ic_location,
+                    0,
+                    0,
+                    0
+                );
                 currentCityMeasure.visibility = VISIBLE
             } else {
                 currentCityName.setCompoundDrawablesWithIntrinsicBounds(0, 0, 0, 0);
