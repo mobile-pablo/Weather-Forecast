@@ -16,6 +16,7 @@ import com.bumptech.glide.load.resource.drawable.DrawableTransitionOptions
 import com.company.elverano.R
 import com.company.elverano.data.openWeather.OpenWeatherResponse
 import com.company.elverano.databinding.FragmentCurrentBinding
+import com.company.elverano.ui.MainActivity
 import com.company.elverano.utils.*
 import com.polyak.iconswitch.IconSwitch
 import dagger.hilt.android.AndroidEntryPoint
@@ -38,7 +39,8 @@ class CurrentWeatherFragment : Fragment(R.layout.fragment_current) {
         _binding = FragmentCurrentBinding.bind(view)
         val sharedPref = activity?.getPreferences(Context.MODE_PRIVATE) ?: return
 
-        if (AppCompatDelegate.getDefaultNightMode() == AppCompatDelegate.MODE_NIGHT_YES) {
+        val mainActivity = activity as MainActivity
+        if (mainActivity.mDelegate.localNightMode == AppCompatDelegate.MODE_NIGHT_YES) {
             binding.themeSwitch.checked = IconSwitch.Checked.RIGHT
         } else {
             binding.themeSwitch.checked = IconSwitch.Checked.LEFT
@@ -50,10 +52,10 @@ class CurrentWeatherFragment : Fragment(R.layout.fragment_current) {
             var newTheme = -3
             if (isChecked == IconSwitch.Checked.RIGHT) {
                 newTheme = 1
-                AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_YES)
+                mainActivity.mDelegate.localNightMode = AppCompatDelegate.MODE_NIGHT_YES
             } else {
                 newTheme = 0
-                AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_NO)
+                mainActivity.mDelegate.localNightMode = AppCompatDelegate.MODE_NIGHT_NO
             }
 
             with(sharedPref.edit()) {

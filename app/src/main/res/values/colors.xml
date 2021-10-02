@@ -22,4 +22,5 @@
     <color name="project_map_color">#535353</color>
     <color name="project_map_bg">#D5D5D5</color>
     <color name="project_light_white">#CCFFFFFF</color>
+    <color name="status_bar_color">#B04349</color>
 </resources>
