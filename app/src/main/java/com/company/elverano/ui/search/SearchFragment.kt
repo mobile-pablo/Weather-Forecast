@@ -179,7 +179,6 @@ class SearchFragment : Fragment(R.layout.fragment_search) {
             historyCityTempTwo.text  = formatDoubleString(secondItem.current.temp,0)
             historyCityMainTwo.text = secondItem.current.weather[0].main
             val isNight_second = secondItem.current.getNight()
-            println("Get night: $isNight_second")
             isNight_second?.let {
                 val drawable =
                     setWeatherIcon(

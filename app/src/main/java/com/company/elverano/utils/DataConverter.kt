@@ -39,16 +39,16 @@ class DataConverter {
 
 
     @TypeConverter
-    fun fromPositionStack(value: ArrayList<PositionStack>): String {
+    fun fromPositionStack(value: List<PositionStack>): String {
         val gson = Gson()
-        val type = object : TypeToken<ArrayList<PositionStack>>() {}.type
+        val type = object : TypeToken<List<PositionStack>>() {}.type
         return gson.toJson(value, type)
     }
 
     @TypeConverter
-    fun toPositionStack(value: String): ArrayList<PositionStack>{
+    fun toPositionStack(value: String): List<PositionStack>{
         val gson = Gson()
-        val type = object : TypeToken<ArrayList<PositionStack>>() {}.type
+        val type = object : TypeToken<List<PositionStack>>() {}.type
         return gson.fromJson(value, type)
     }
 }

@@ -9,9 +9,6 @@ import com.company.elverano.data.openWeather.OpenWeatherResponse
 import com.company.elverano.data.positionStack.PositionStackRepository
 import com.company.elverano.utils.DummyData
 import com.company.elverano.utils.ResultEvent
-import com.google.gson.Gson
-import com.google.gson.GsonBuilder
-import com.google.gson.reflect.TypeToken
 import com.skydoves.sandwich.ApiResponse
 import com.skydoves.sandwich.request
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -38,14 +35,15 @@ class SearchViewModel @Inject constructor(
     private val resultChannel = Channel<ResultEvent>()
     val resultEvent = resultChannel.receiveAsFlow()
 
-    private var _weatherResponse  = MutableLiveData<OpenWeatherResponse>()
-    val  weatherResponse: LiveData<OpenWeatherResponse> get() = _weatherResponse
+    private var _weatherResponse = MutableLiveData<OpenWeatherResponse>()
+    val weatherResponse: LiveData<OpenWeatherResponse> get() = _weatherResponse
 
     init {
         weatherList[0] = DummyData.dummy_wroclaw
         weatherList[1] = DummyData.dummy_krakow
+
         viewModelScope.launch {
-            _weatherResponse.value =  openWeatherRepository.getWeatherFromDB()
+            _weatherResponse.value = openWeatherRepository.getWeatherFromDB()
         }
     }
 
@@ -59,7 +57,7 @@ class SearchViewModel @Inject constructor(
                 x.let {
                     weatherList[1] = x
                 }
-                weatherList[0]= it
+                weatherList[0] = it
             }
 
             val response = positionStackRepository.getLocationFromAPI(query)
@@ -70,29 +68,24 @@ class SearchViewModel @Inject constructor(
                             positionStackRepository.deletePositionFromDB()
                             positionStackRepository.insertPositionToDB(response.data)
 
-                            response?.data?.let {
-                                val data = it.data
-                                if (data != null) {
-                                    if (data.size > 0) {
-                                        val item = data[0]
-                                        item?.let { item ->
-                                            searchWeather(
-                                                lat = item.latitude,
-                                                lon = item.longitude,
-                                                name = item.name,
-                                                country = item.country
-                                            )
-                                        }
-
-                                    } else {
-                                        viewModelScope.launch {
-                                            val msg = "No Item's found"
-                                            resultChannel.send(ResultEvent.Error(msg))
-                                            currentError.value = msg
-                                        }
-                                    }
+                            val data = response.data.data
+                            if (data.isNotEmpty()) {
+                                val item = data[0]
+                                searchWeather(
+                                    lat = item.latitude,
+                                    lon = item.longitude,
+                                    name = item.name,
+                                    country = item.country
+                                )
+                            } else {
+                                viewModelScope.launch {
+                                    val msg = "No Item's found"
+                                    resultChannel.send(ResultEvent.Error(msg))
+                                    currentError.value = msg
                                 }
                             }
+
+
                         }
 
 

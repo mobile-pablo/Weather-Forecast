@@ -1,13 +1,14 @@
 package com.company.elverano.data.openWeather
 
 import com.company.elverano.api.OpenWeatherApi
+import com.company.elverano.data.AppDatabase
 import javax.inject.Inject
 import javax.inject.Singleton
 
 @Singleton
 class OpenWeatherRepository @Inject constructor(
     private val api: OpenWeatherApi,
-    private val database: OpenWeatherDatabase,
+    private val database: AppDatabase,
 ) {
     private val dao = database.openWeatherDao()
 

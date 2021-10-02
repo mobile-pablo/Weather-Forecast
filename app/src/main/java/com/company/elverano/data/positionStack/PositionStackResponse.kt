@@ -2,8 +2,12 @@ package com.company.elverano.data.positionStack
 
 import androidx.room.Entity
 import androidx.room.PrimaryKey
+import com.google.gson.annotations.SerializedName
+
 
 @Entity(tableName = "position_stack_response")
 data class PositionStackResponse(
-@PrimaryKey(autoGenerate = false) val data: ArrayList<PositionStack>
+    @PrimaryKey(autoGenerate = true) val id : Int =0,
+    @SerializedName("data")
+ val data: List<PositionStack>
 )

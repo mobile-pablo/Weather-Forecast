@@ -50,17 +50,14 @@ class CurrentWeatherViewModel @Inject constructor(
                 }
             }
 
-
-            val positionStackResponse = positionStackRepository.getLocationFromDatabase()
-            positionStackResponse?.let { response ->
-                response.data?.let {
-                    if (it.size > 0) {
+            positionStackRepository.getLocationFromDatabase().data.let {
+                    if (it.isNotEmpty()) {
                         currentName.value = it[0].name
                         currentCountry.value = it[0].country
                     }
                 }
 
-            }
+
         }
 
     }
@@ -76,11 +73,9 @@ class CurrentWeatherViewModel @Inject constructor(
                             positionStackRepository.deletePositionFromDB()
                             positionStackRepository.insertPositionToDB(response.data)
 
-                            response?.data?.let {
-                                val data = it.data
-                                if (data != null) {
-                                    if (data.size > 0) {
-                                        val item = data[0]
+                            response.data.data.let {
+                                    if (it.isNotEmpty()) {
+                                        val item = it[0]
 
                                         item?.let { item ->
                                             searchWeather(
@@ -103,7 +98,7 @@ class CurrentWeatherViewModel @Inject constructor(
                                             currentError.value = msg
                                         }
                                     }
-                                }
+
                             }
                         }
 

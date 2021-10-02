@@ -46,7 +46,7 @@ class CurrentWeatherFragment : Fragment(R.layout.fragment_current) {
         addObservers()
 
         binding.themeSwitch.setCheckedChangeListener { isChecked ->
-            if (isChecked  == IconSwitch.Checked.RIGHT) {
+            if (isChecked == IconSwitch.Checked.RIGHT) {
                 AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_YES)
             } else {
                 AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_NO)
@@ -56,7 +56,7 @@ class CurrentWeatherFragment : Fragment(R.layout.fragment_current) {
 
 
         viewLifecycleOwner.lifecycleScope.launchWhenStarted {
-        collectEvents()
+            collectEvents()
         }
     }
 
@@ -83,7 +83,7 @@ class CurrentWeatherFragment : Fragment(R.layout.fragment_current) {
         }
     }
 
-    private  suspend fun collectEvents() {
+    private suspend fun collectEvents() {
         viewModel.resultEvent.collect { event ->
             when (event) {
                 is ResultEvent.Success -> {
@@ -113,9 +113,13 @@ class CurrentWeatherFragment : Fragment(R.layout.fragment_current) {
                 currentQueryError.visibility = INVISIBLE
                 viewModel.currentError.value = null
 
-                val currentDate = Date(response.current.dt * 1000)
+
+                //For unknown reasons GMT time is having 2 hour delay for every country.
+                val delay = 2*3600*1000
+                val currentDate =
+                    Date(response.current.dt * 1000 + response.timezone_offset * 1000 - delay)
                 val sdf = SimpleDateFormat("dd, MMM yyyy HH:mm:ss")
-                currentCityDate.text = sdf.format(currentDate)
+                currentCityDate.text =sdf.format(currentDate)
                 currentCityForecastRecyclerView.visibility = VISIBLE
                 currentCityForecastRecyclerView.adapter = CurrentWeatherAdapter(
                     response.hourly,
@@ -128,7 +132,7 @@ class CurrentWeatherFragment : Fragment(R.layout.fragment_current) {
                     orientation = LinearLayoutManager.HORIZONTAL
                 }
 
-                currentCityTemperature.text =  formatDoubleString(response.current.temp,1)
+                currentCityTemperature.text = formatDoubleString(response.current.temp, 1)
 
                 val isNight = response.current.getNight()
 
