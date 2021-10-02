@@ -70,6 +70,8 @@
                     android:layout_centerHorizontal="true"
                     android:fontFamily="@font/lato"
                     android:gravity="center_vertical"
+                    android:ellipsize="end"
+                    android:maxLines="1"
                     tools:text="Zamość"
                     android:textColor="@color/project_main_text"
                     android:textStyle="bold" />
@@ -82,41 +84,46 @@
                     android:layout_centerHorizontal="true"
                     tools:srcCompat="@drawable/clear_sky" />
 
-                <TextView
-                    android:id="@+id/history_city_temp_one"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_below="@id/history_city_img_one"
-                    android:gravity="center_vertical"
-                    tools:text="16"
-                    android:textColor="@color/project_main_text"
-                    android:textSize="30sp" />
+<RelativeLayout
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:layout_below="@id/history_city_img_one"
+    android:layout_centerHorizontal="true">
+    <TextView
+        android:id="@+id/history_city_temp_one"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:gravity="center_vertical"
+        tools:text="16"
+        android:textColor="@color/project_main_text"
+        android:textSize="30sp" />
 
-                <TextView
-                    android:id="@+id/history_city_measure_one"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_below="@id/history_city_img_one"
-                    android:layout_alignTop="@id/history_city_temp_one"
-                    android:layout_alignBottom="@id/history_city_temp_one"
-                    android:layout_toEndOf="@id/history_city_temp_one"
-                    android:gravity="center_vertical"
-                    android:text="°"
-                    android:textColor="@color/project_light_red"
-                    android:textSize="30sp" />
+    <TextView
+        android:id="@+id/history_city_measure_one"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignTop="@id/history_city_temp_one"
+        android:layout_alignBottom="@id/history_city_temp_one"
+        android:layout_toEndOf="@id/history_city_temp_one"
+        android:gravity="center_vertical"
+        android:text="@string/temperature_measure"
+        android:textColor="@color/project_light_red"
+        android:textSize="30sp" />
 
-                <TextView
-                    android:id="@+id/history_city_main_one"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_below="@id/history_city_img_one"
-                    android:layout_alignTop="@id/history_city_temp_one"
-                    android:layout_alignBottom="@id/history_city_temp_one"
-                    android:layout_marginLeft="10dp"
-                    android:layout_toEndOf="@id/history_city_measure_one"
-                    android:gravity="center_vertical"
-                    tools:text="Clear Sky"
-                    android:textColor="@color/project_v3_text" />
+    <TextView
+        android:id="@+id/history_city_main_one"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignTop="@id/history_city_temp_one"
+        android:layout_alignBottom="@id/history_city_temp_one"
+        android:layout_marginLeft="10dp"
+        android:layout_toEndOf="@id/history_city_measure_one"
+        android:gravity="center_vertical"
+        tools:text="Clear Sky"
+        android:ellipsize="end"
+        android:maxLines="1"
+        android:textColor="@color/project_v3_text" />
+</RelativeLayout>
             </RelativeLayout>
         </RelativeLayout>
 
@@ -144,6 +151,8 @@
                     android:fontFamily="@font/lato"
                     android:gravity="center_vertical"
                     tools:text="Kraków"
+                    android:ellipsize="end"
+                    android:maxLines="1"
                     android:textColor="@color/project_main_text"
                     android:textStyle="bold" />
 
@@ -155,41 +164,46 @@
                     android:layout_centerHorizontal="true"
                     tools:srcCompat="@drawable/clouds_thunder_drizzle" />
 
-                <TextView
-                    android:id="@+id/history_city_temp_two"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_below="@id/history_city_img_two"
-                    android:gravity="center_vertical"
-                    tools:text="-8"
-                    android:textColor="@color/project_main_text"
-                    android:textSize="30sp" />
+<RelativeLayout
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:layout_centerHorizontal="true"
+    android:layout_below="@id/history_city_img_two">
+    <TextView
+        android:id="@+id/history_city_temp_two"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:gravity="center_vertical"
+        tools:text="-8"
+        android:textColor="@color/project_main_text"
+        android:textSize="30sp" />
 
-                <TextView
-                    android:id="@+id/history_city_measure_two"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_below="@id/history_city_img_two"
-                    android:layout_alignTop="@id/history_city_temp_two"
-                    android:layout_alignBottom="@id/history_city_temp_two"
-                    android:layout_toEndOf="@id/history_city_temp_two"
-                    android:gravity="center_vertical"
-                    android:text="°"
-                    android:textColor="@color/project_light_red"
-                    android:textSize="30sp" />
+    <TextView
+        android:id="@+id/history_city_measure_two"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignTop="@id/history_city_temp_two"
+        android:layout_alignBottom="@id/history_city_temp_two"
+        android:layout_toEndOf="@id/history_city_temp_two"
+        android:gravity="center_vertical"
+        android:text="@string/temperature_measure"
+        android:textColor="@color/project_light_red"
+        android:textSize="30sp" />
 
-                <TextView
-                    android:id="@+id/history_city_main_two"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_below="@id/history_city_img_two"
-                    android:layout_alignTop="@id/history_city_temp_two"
-                    android:layout_alignBottom="@id/history_city_temp_two"
-                    android:layout_marginLeft="10dp"
-                    android:layout_toEndOf="@id/history_city_measure_two"
-                    android:gravity="center_vertical"
-                    tools:text="Thunder"
-                    android:textColor="@color/project_v3_text" />
+    <TextView
+        android:id="@+id/history_city_main_two"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignTop="@id/history_city_temp_two"
+        android:layout_alignBottom="@id/history_city_temp_two"
+        android:layout_marginLeft="10dp"
+        android:layout_toEndOf="@id/history_city_measure_two"
+        android:gravity="center_vertical"
+        tools:text="Thunder"
+        android:ellipsize="end"
+        android:maxLines="1"
+        android:textColor="@color/project_v3_text" />
+</RelativeLayout>
             </RelativeLayout>
         </RelativeLayout>
     </LinearLayout>

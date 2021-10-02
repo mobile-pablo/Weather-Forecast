@@ -11,6 +11,7 @@ import androidx.navigation.fragment.findNavController
 import com.bumptech.glide.Glide
 import com.bumptech.glide.load.resource.drawable.DrawableTransitionOptions
 import com.company.elverano.R
+import com.company.elverano.data.historyWeather.HistoryWeatherResponse
 import com.company.elverano.data.openWeather.OpenWeatherResponse
 import com.company.elverano.databinding.FragmentSearchBinding
 import com.company.elverano.utils.ResultEvent
@@ -42,7 +43,15 @@ class SearchFragment : Fragment(R.layout.fragment_search) {
 
 
         viewModel.weatherResponse.observe(viewLifecycleOwner) {
-            updateUI(it)
+          it?.let {
+              updateUI(it)
+          }
+        }
+
+        viewModel.historyResponse.observe(viewLifecycleOwner){
+            it?.let {
+                updateHistoryUI(it)
+            }
         }
 
         addSearchViewListener()
@@ -145,59 +154,62 @@ class SearchFragment : Fragment(R.layout.fragment_search) {
                 }
 
 
-
-
             }
-
-
-            //Initialize forecast data
-          val firstItem =   viewModel.weatherList[0]
-          val secondItem = viewModel.weatherList[1]
-
-            historyCityNameOne.text = firstItem.name
-            historyCityTempOne.text   = formatDoubleString(firstItem.current.temp,0)
-            historyCityMainOne.text = firstItem.current.weather[0].main
-            val isNight_first = firstItem.current.getNight()
-            isNight_first?.let {
-                val drawable =
-                    setWeatherIcon(
-                        firstItem.current.weather[0].id,
-                        it,
-                        resources
-                    )
-
-                context?.let {
-                    Glide.with(it)
-                        .load(drawable)
-                        .transition(DrawableTransitionOptions.withCrossFade())
-                        .into(historyCityImgOne)
-                }
-
-            }
-
-            historyCityNameTwo.text = secondItem.name
-            historyCityTempTwo.text  = formatDoubleString(secondItem.current.temp,0)
-            historyCityMainTwo.text = secondItem.current.weather[0].main
-            val isNight_second = secondItem.current.getNight()
-            isNight_second?.let {
-                val drawable =
-                    setWeatherIcon(
-                        secondItem.current.weather[0].id,
-                        it,
-                        resources
-                    )
-
-                context?.let {
-                    Glide.with(it)
-                        .load(drawable)
-                        .transition(DrawableTransitionOptions.withCrossFade())
-                        .into(historyCityImgTwo)
-                }
-
-            }
-
-
         }
+    }
+
+    private fun updateHistoryUI(historyResponse: HistoryWeatherResponse){
+        val firstItem = historyResponse.data?.get(0)
+        val secondItem = historyResponse.data?.get(1)
+
+        binding.apply {
+
+            firstItem?.let {
+                historyCityNameOne.text = firstItem.name
+                historyCityTempOne.text = formatDoubleString(firstItem.temp, 0)
+                historyCityMainOne.text = firstItem.main
+                val isNight_first = firstItem.getNight()
+                isNight_first?.let {
+                    val drawable =
+                        setWeatherIcon(
+                            firstItem.weather_id,
+                            it,
+                            resources
+                        )
+
+                    context?.let {
+                        Glide.with(it)
+                            .load(drawable)
+                            .transition(DrawableTransitionOptions.withCrossFade())
+                            .into(historyCityImgOne)
+                    }
+
+                }
+            }
+
+            secondItem?.let {
+                historyCityNameTwo.text = secondItem.name
+                historyCityTempTwo.text = formatDoubleString(secondItem.temp, 0)
+                historyCityMainTwo.text = secondItem.main
+                val isNight_second = secondItem.getNight()
+                isNight_second?.let {
+                    val drawable =
+                        setWeatherIcon(
+                            secondItem.weather_id,
+                            it,
+                            resources
+                        )
+
+                    context?.let {
+                        Glide.with(it)
+                            .load(drawable)
+                            .transition(DrawableTransitionOptions.withCrossFade())
+                            .into(historyCityImgTwo)
+                    }
+
+                }
+            }
+    }
     }
 
 

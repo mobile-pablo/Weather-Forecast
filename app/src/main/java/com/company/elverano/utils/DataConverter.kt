@@ -1,6 +1,7 @@
 package com.company.elverano.utils
 
 import androidx.room.TypeConverter
+import com.company.elverano.data.historyWeather.HistoryWeather
 import com.company.elverano.data.openWeather.OpenWeatherCurrent
 import com.company.elverano.data.openWeather.OpenWeatherHourly
 import com.company.elverano.data.positionStack.PositionStack
@@ -49,6 +50,21 @@ class DataConverter {
     fun toPositionList(value: String): List<PositionStack> {
         val gson = Gson()
         val type = object : TypeToken<List<PositionStack>>() {}.type
+        return gson.fromJson(value, type)
+    }
+
+
+    @TypeConverter
+    fun fromHistoryListList(value: List<HistoryWeather>): String {
+        val gson = Gson()
+        val type = object : TypeToken<List<HistoryWeather>>() {}.type
+        return gson.toJson(value, type)
+    }
+
+    @TypeConverter
+    fun toHistoryListList(value: String): List<HistoryWeather> {
+        val gson = Gson()
+        val type = object : TypeToken<List<HistoryWeather>>() {}.type
         return gson.fromJson(value, type)
     }
 

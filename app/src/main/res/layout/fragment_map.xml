@@ -5,6 +5,16 @@
     xmlns:tools="http://schemas.android.com/tools"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     tools:context=".ui.map.MapFragment">
+
+    <ProgressBar
+        android:id="@+id/map_progress_bar"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_centerInParent="true"
+        android:indeterminateTint="@color/project_light_red"
+        android:visibility="invisible"
+        tools:visibility="visible" />
+
     <fragment
         class="com.here.android.mpa.mapping.AndroidXMapFragment"
         android:id="@+id/here_map_view"

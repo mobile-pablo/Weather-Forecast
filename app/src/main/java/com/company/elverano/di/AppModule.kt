@@ -1,5 +1,6 @@
 package com.company.elverano.di
 
+import android.app.Application
 import android.content.Context
 import androidx.room.Room
 import com.company.elverano.api.OpenWeatherApi
@@ -10,9 +11,12 @@ import dagger.Provides
 import dagger.hilt.InstallIn
 import dagger.hilt.android.qualifiers.ApplicationContext
 import dagger.hilt.components.SingletonComponent
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.SupervisorJob
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
 import javax.inject.Named
+import javax.inject.Qualifier
 import javax.inject.Singleton
 
 @Module
@@ -49,11 +53,27 @@ object AppModule {
 
     @Provides
     @Singleton
-    fun provideOpenWeatherDatabase(@ApplicationContext appContext: Context): AppDatabase {
-        return Room.databaseBuilder(
-            appContext,
-            AppDatabase::class.java,
-            "app_database"
-        ).build()
-    }
+    fun provideDatabase(
+        app: Application,
+        callback:AppDatabase.Callback
+    ) = Room.databaseBuilder(app, AppDatabase::class.java, "app_database")
+        .fallbackToDestructiveMigration()
+        .addCallback(callback)
+        .build()
+
+
+
+    @ApplicationScope
+    @Provides
+    @Singleton
+    fun provideApplicationScope() = CoroutineScope(SupervisorJob())
+
+
+    @Provides
+    fun provideHistoryDao(db: AppDatabase) = db.historyWeatherDao()
 }
+
+@Retention(AnnotationRetention.RUNTIME)
+@Qualifier
+annotation class ApplicationScope
+

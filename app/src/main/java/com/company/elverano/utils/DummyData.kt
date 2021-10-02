@@ -1,45 +1,35 @@
 package com.company.elverano.utils
 
+import com.company.elverano.data.historyWeather.HistoryWeather
+import com.company.elverano.data.historyWeather.HistoryWeatherResponse
 import com.company.elverano.data.openWeather.OpenWeatherCurrent
 import com.company.elverano.data.openWeather.OpenWeatherResponse
 
 object DummyData {
-    val dummy_current_wroclaw = OpenWeatherCurrent(
-        temp = 16.48, weather = arrayListOf(
-            OpenWeatherCurrent.OpenWeatherResult(
-                id = 801,
-                main = "Clouds",
-                description = "few clouds",
-                icon = "02d"
-            )
-        )
-    )
-
-    val dummy_current_krakow = OpenWeatherCurrent(
-        temp = 12.74, weather = arrayListOf(
-            OpenWeatherCurrent.OpenWeatherResult(
-                id = 500,
-                main = "Rain",
-                description = "light rain",
-                icon = "10d"
-            )
-        )
-    )
 
 
-    val dummy_wroclaw = OpenWeatherResponse(
+    val dummy_wroclaw = HistoryWeather(
         lat = 51.0973,
         lon = 17.024,
         name = "Wrocław",
-        current = dummy_current_wroclaw,
+        temp = 16.48,
+        weather_id = 801,
+        main = "Clouds",
+        description = "few clouds",
+        icon = "02d",
+
 
         )
 
-    val dummy_krakow = OpenWeatherResponse(
+    val dummy_krakow = HistoryWeather(
         lat = 50.0527,
         lon = 19.9873,
         name = "Krakow",
-        current = dummy_current_krakow
+        temp = 12.74,
+        weather_id = 500,
+        main = "Rain",
+        description = "light rain",
+        icon = "10d"
     )
 
 

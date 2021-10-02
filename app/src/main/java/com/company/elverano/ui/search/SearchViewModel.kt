@@ -4,6 +4,9 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.company.elverano.data.historyWeather.HistoryWeather
+import com.company.elverano.data.historyWeather.HistoryWeatherRepository
+import com.company.elverano.data.historyWeather.HistoryWeatherResponse
 import com.company.elverano.data.openWeather.OpenWeatherRepository
 import com.company.elverano.data.openWeather.OpenWeatherResponse
 import com.company.elverano.data.positionStack.PositionStackRepository
@@ -25,12 +28,14 @@ import javax.inject.Inject
 @HiltViewModel
 class SearchViewModel @Inject constructor(
     private val positionStackRepository: PositionStackRepository,
-    private val openWeatherRepository: OpenWeatherRepository
+    private val openWeatherRepository: OpenWeatherRepository,
+    private val historyWeatherRepository: HistoryWeatherRepository
 ) : ViewModel() {
     private var searchJob: Job? = null
     private var couritineJob: Job? = null
     var currentError = MutableLiveData<String>()
-    var weatherList = Array(2) { DummyData.dummy_wroclaw; DummyData.dummy_krakow }
+    private var  _historyResponse = MutableLiveData<HistoryWeatherResponse>()
+    val historyResponse : LiveData<HistoryWeatherResponse>  get() = _historyResponse
 
     private val resultChannel = Channel<ResultEvent>()
     val resultEvent = resultChannel.receiveAsFlow()
@@ -39,11 +44,10 @@ class SearchViewModel @Inject constructor(
     val weatherResponse: LiveData<OpenWeatherResponse> get() = _weatherResponse
 
     init {
-        weatherList[0] = DummyData.dummy_wroclaw
-        weatherList[1] = DummyData.dummy_krakow
-
         viewModelScope.launch {
             _weatherResponse.value = openWeatherRepository.getWeatherFromDB()
+            _historyResponse.value = historyWeatherRepository.getLocationFromDatabase()
+            downloadHistory()
         }
     }
 
@@ -51,14 +55,13 @@ class SearchViewModel @Inject constructor(
         searchJob?.cancel()
         searchJob = viewModelScope.launch {
 
-            //Old weather is added to list. Two item's of search history  (not current weather)  will be displayed in Fragment
-            openWeatherRepository.getWeatherFromDB()?.let {
-                val x = weatherList[0]
-                x.let {
-                    weatherList[1] = x
+           val oldPositionStack =  positionStackRepository.getLocationFromDatabase()
+            oldPositionStack?.let {
+                if(!it.data.isNullOrEmpty()){
+                    updateHistory(weatherResponse.value, it.data[0].name)
                 }
-                weatherList[0] = it
             }
+
 
             val response = positionStackRepository.getLocationFromAPI(query)
             response.request { apiResponse ->
@@ -70,18 +73,19 @@ class SearchViewModel @Inject constructor(
 
                             val data = apiResponse.data.data
 
-                            if(data==null){
+                            if (data == null) {
                                 viewModelScope.launch {
                                     val msg = "No Item's found"
                                     resultChannel.send(ResultEvent.Error(msg))
                                     currentError.value = msg
                                 }
-                            }else{
+                            } else {
                                 if (data.isNotEmpty()) {
                                     val item = data[0]
                                     searchWeather(
                                         lat = item.latitude,
-                                        lon = item.longitude,)
+                                        lon = item.longitude,
+                                    )
                                 } else {
                                     viewModelScope.launch {
                                         val msg = "No Item's found"
@@ -139,6 +143,52 @@ class SearchViewModel @Inject constructor(
                 }
             }
 
+        }
+    }
+
+    private suspend fun updateHistory(value: OpenWeatherResponse?, name: String) {
+        for(history in historyResponse.value?.data!!){
+            println("Names: ${history.name}")
+        }
+        value?.let { response ->
+            val list = historyResponse.value?.data
+            list?.let {
+                println("Update history")
+                val backup =it[0]
+                    it[1] = backup
+                it[0] = HistoryWeather(
+                    lat = response.lat,
+                    lon = response.lon,
+                    name = name,
+                    weather_id = response.id,
+                    temp = response.current.temp,
+                    main = response.current.weather[0].main,
+                    description = response.current.weather[0].description,
+                    icon = response.current.weather[0].icon,
+                )
+
+                historyResponse.value?.let {
+                    historyWeatherRepository.deleteHistoryList()
+                    historyWeatherRepository.insertResponseToDb(it)
+                }
+
+            }
+
+        }
+    }
+
+    private suspend fun downloadHistory() {
+        //Old weather is added to list. Two item's of search history  (not current weather)  will be displayed in Fragment
+        historyWeatherRepository.getLocationFromDatabase().let {
+            val first = it?.data?.get(0)
+            first?.let { weather ->
+                historyResponse.value?.data?.set(0, weather)
+            }
+
+            val second = it?.data?.get(1)
+            second?.let { weather ->
+                historyResponse.value?.data?.set(1, weather)
+            }
         }
     }
 

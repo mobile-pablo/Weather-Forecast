@@ -47,7 +47,7 @@
         android:id="@+id/forecast_item_measure"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="°"
+        android:text="@string/temperature_measure"
         android:textSize="30sp"
         android:layout_toEndOf="@id/forecast_item_temperature"
         android:textColor="@color/moon_yellow"/>
