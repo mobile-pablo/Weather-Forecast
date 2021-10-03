@@ -4,6 +4,7 @@ import androidx.room.Database
 import androidx.room.RoomDatabase
 import androidx.room.TypeConverters
 import androidx.sqlite.db.SupportSQLiteDatabase
+import com.company.elverano.data.error.ErrorDao
 import com.company.elverano.data.historyWeather.HistoryWeather
 import com.company.elverano.data.historyWeather.HistoryWeatherDao
 import com.company.elverano.data.historyWeather.HistoryWeatherResponse
@@ -27,7 +28,7 @@ abstract class AppDatabase: RoomDatabase(){
     abstract fun positionStackDao(): PositionStackDao
     abstract fun openWeatherDao(): OpenWeatherDao
     abstract fun historyWeatherDao(): HistoryWeatherDao
-
+    abstract fun errorDao(): ErrorDao
 
     class Callback @Inject constructor(
         private val database: Provider<AppDatabase>,
