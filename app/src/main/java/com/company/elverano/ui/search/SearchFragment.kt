@@ -11,6 +11,7 @@ import androidx.navigation.fragment.findNavController
 import com.bumptech.glide.Glide
 import com.bumptech.glide.load.resource.drawable.DrawableTransitionOptions
 import com.company.elverano.R
+import com.company.elverano.data.error.CustomError
 import com.company.elverano.data.historyWeather.HistoryWeatherResponse
 import com.company.elverano.data.openWeather.OpenWeatherResponse
 import com.company.elverano.databinding.FragmentSearchBinding
@@ -38,7 +39,7 @@ class SearchFragment : Fragment(R.layout.fragment_search) {
         const val SAMPLING = 8
         const val SMALL_SAMPLING = 2
         const val ANIM_DURATION = 500
-        const val FADE_IN_DURATION: Long =1500
+        const val FADE_IN_DURATION: Long = 1500
     }
 
 
@@ -48,12 +49,12 @@ class SearchFragment : Fragment(R.layout.fragment_search) {
 
 
         viewModel.weatherResponse.observe(viewLifecycleOwner) {
-          it?.let {
-              updateUI(it)
-          }
+            it?.let {
+                updateUI(it)
+            }
         }
 
-        viewModel.historyResponse.observe(viewLifecycleOwner){
+        viewModel.historyResponse.observe(viewLifecycleOwner) {
             it?.let {
                 updateHistoryUI(it)
             }
@@ -90,20 +91,22 @@ class SearchFragment : Fragment(R.layout.fragment_search) {
     private suspend fun collectResults() {
         viewModel.resultEvent.collect { event ->
             when (event) {
-                is ResultEvent.Success -> {
-                    Log.d("ResultEvent", "Success")
-                    val action =
-                        SearchFragmentDirections.actionSearchFragmentToCurrentFragment(event)
-                    findNavController().navigate(action)
-                    binding.searchProgressBar.visibility = View.INVISIBLE
-                }
-                is ResultEvent.Error -> {
-                    binding.apply {
-                        binding.searchProgressBar.visibility = View.INVISIBLE
-                    }
 
-                    val action =
-                        SearchFragmentDirections.actionSearchFragmentToCurrentFragment(event)
+                is ResultEvent.Success -> {
+                    binding.searchProgressBar.visibility = View.INVISIBLE
+                    viewModel.deleteError()
+                    Log.d("ResultEvent", "Success")
+
+                    val action = SearchFragmentDirections.actionSearchFragmentToCurrentFragment()
+                    findNavController().navigate(action)
+
+                }
+
+                is ResultEvent.Error -> {
+                    binding.searchProgressBar.visibility = View.INVISIBLE
+                    viewModel.insertError(CustomError(message = event.message))
+
+                    val action = SearchFragmentDirections.actionSearchFragmentToCurrentFragment()
                     findNavController().navigate(action)
                 }
             }
@@ -174,7 +177,7 @@ class SearchFragment : Fragment(R.layout.fragment_search) {
         }
     }
 
-    private fun updateHistoryUI(historyResponse: HistoryWeatherResponse){
+    private fun updateHistoryUI(historyResponse: HistoryWeatherResponse) {
         val firstItem = historyResponse.data?.get(0)
         val secondItem = historyResponse.data?.get(1)
 
@@ -233,7 +236,7 @@ class SearchFragment : Fragment(R.layout.fragment_search) {
                 historyCityTempTwo.fadeIn()
                 historyCityMainTwo.fadeIn()
             }
-    }
+        }
     }
 
 

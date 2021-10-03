@@ -12,8 +12,8 @@ class ErrorRepository @Inject constructor(
     private val dao = database.errorDao()
 
 
-    suspend fun insertErrorToDatabase(error: Error){
-        dao.insertError(error)
+    suspend fun insertErrorToDatabase(customError: CustomError){
+        dao.insertError(customError)
     }
 
     suspend  fun getErrorFromDB() = dao.getError()

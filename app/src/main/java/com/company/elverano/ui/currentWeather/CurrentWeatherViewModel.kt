@@ -2,9 +2,12 @@ package com.company.elverano.ui.currentWeather
 
 
 import android.util.Log
+import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.company.elverano.data.error.CustomError
+import com.company.elverano.data.error.ErrorRepository
 import com.company.elverano.data.openWeather.OpenWeatherRepository
 import com.company.elverano.data.openWeather.OpenWeatherResponse
 import com.company.elverano.data.positionStack.PositionStackRepository
@@ -23,7 +26,8 @@ import javax.inject.Inject
 @HiltViewModel
 class CurrentWeatherViewModel @Inject constructor(
     private val openWeatherRepository: OpenWeatherRepository,
-    private val positionStackRepository: PositionStackRepository
+    private val positionStackRepository: PositionStackRepository,
+    private val errorRepository: ErrorRepository
 ) : ViewModel() {
 
     var currentWeather = MutableLiveData<OpenWeatherResponse>()
@@ -35,17 +39,20 @@ class CurrentWeatherViewModel @Inject constructor(
     private var searchJob: Job? = null
     private var couritineJob: Job? = null
 
+
+    private var _customError = MutableLiveData<CustomError>()
+    val customError: LiveData<CustomError> get() = _customError
     init {
         searchJob?.cancel()
         searchJob = viewModelScope.launch {
+
             val openWeatherResponse = openWeatherRepository.getWeatherFromDB()
-            if (openWeatherResponse == null) {
+            openWeatherResponse?.let {
+                currentWeather.value = it
+            } ?: kotlin.run {
                 searchLocation("Warsaw")
-            } else {
-                openWeatherResponse?.let {
-                    currentWeather.value = it
-                }
             }
+
 
             positionStackRepository.getLocationFromDatabase()?.data?.let {
                 if (it.isNotEmpty()) {
@@ -54,12 +61,17 @@ class CurrentWeatherViewModel @Inject constructor(
                 }
             }
 
+            errorRepository.getErrorFromDB()?.let {
+                _customError.value = it
+            }
+
 
         }
 
     }
 
     private fun searchLocation(query: String) {
+        println("Current weather search")
         searchJob?.cancel()
         searchJob = viewModelScope.launch {
             val response = positionStackRepository.getLocationFromAPI(query)
@@ -194,5 +206,15 @@ class CurrentWeatherViewModel @Inject constructor(
                 }
             }
         }
+    }
+
+
+    fun insertError(customError: CustomError) = viewModelScope.launch {
+        errorRepository.deleteErrorFromDatabase()
+        errorRepository.insertErrorToDatabase(customError)
+    }
+
+    fun deleteError() = viewModelScope.launch {
+        errorRepository.deleteErrorFromDatabase()
     }
 }

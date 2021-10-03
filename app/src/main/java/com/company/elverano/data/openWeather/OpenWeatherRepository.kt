@@ -20,6 +20,7 @@ class OpenWeatherRepository @Inject constructor(
 
   suspend  fun getWeatherFromDB() = dao.getWeather()
   suspend  fun deleteWeatherFromDatabase() {
+      println("Delete weather")
        dao.deleteWeather()
     }
 }

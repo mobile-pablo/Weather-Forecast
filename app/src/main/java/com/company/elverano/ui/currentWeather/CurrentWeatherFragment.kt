@@ -14,6 +14,7 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import com.bumptech.glide.Glide
 import com.bumptech.glide.load.resource.drawable.DrawableTransitionOptions
 import com.company.elverano.R
+import com.company.elverano.data.error.CustomError
 import com.company.elverano.data.openWeather.OpenWeatherResponse
 import com.company.elverano.databinding.FragmentCurrentBinding
 import com.company.elverano.ui.MainActivity
@@ -22,7 +23,6 @@ import com.company.elverano.utils.fadeIn
 import com.company.elverano.utils.formatDoubleString
 import com.company.elverano.utils.setWeatherIcon
 import com.polyak.iconswitch.IconSwitch
-import com.skydoves.sandwich.ApiResponse
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.flow.collect
 import java.text.SimpleDateFormat
@@ -35,16 +35,10 @@ class CurrentWeatherFragment : Fragment(R.layout.fragment_current) {
     private val viewModel by viewModels<CurrentWeatherViewModel>()
     private var _binding: FragmentCurrentBinding? = null
     private val binding get() = _binding!!
-    var searchResult : ResultEvent? = null
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         _binding = FragmentCurrentBinding.bind(view)
-
-        arguments?.let {
-            searchResult= CurrentWeatherFragmentArgs.fromBundle(it).result
-        }
-
 
         addObservers()
 
@@ -103,7 +97,7 @@ class CurrentWeatherFragment : Fragment(R.layout.fragment_current) {
                 if (it != null) {
                     currentCityCountry.text = ", $it"
                 } else {
-                   currentCityCountry.text = ""
+                    currentCityCountry.text = ""
                 }
                 currentCityCountry.fadeIn()
             }
@@ -120,6 +114,16 @@ class CurrentWeatherFragment : Fragment(R.layout.fragment_current) {
 
             }
         }
+
+        viewModel.customError.observe(viewLifecycleOwner) {
+            it?.let {
+                binding.apply {
+                    currentCityBox.visibility = INVISIBLE
+                    currentQueryError.visibility = VISIBLE
+                    currentQueryError.text = it.message
+                }
+            }
+        }
     }
 
     private suspend fun collectEvents() {
@@ -130,6 +134,7 @@ class CurrentWeatherFragment : Fragment(R.layout.fragment_current) {
                     Log.d("ResultEvent", "Success")
                 }
                 is ResultEvent.Error -> {
+                    viewModel.insertError(CustomError(message = event.message))
                     binding.apply {
                         binding.currentProgressBar.visibility = INVISIBLE
                         currentCityBox.visibility = INVISIBLE
@@ -217,15 +222,9 @@ class CurrentWeatherFragment : Fragment(R.layout.fragment_current) {
                 currentCityName.setCompoundDrawablesWithIntrinsicBounds(0, 0, 0, 0)
                 viewLifecycleOwner.lifecycleScope.launchWhenResumed {
 
-                    searchResult?.let {
-                        if( searchResult is ResultEvent.Error){
-                        currentQueryError.text = (it as ResultEvent.Error).message
-                    }
-                    } ?: kotlin.run {
-                        viewModel.resultEvent.collect {
-                            if (it is ResultEvent.Error) {
-                                currentQueryError.text = it.message
-                            }
+                    viewModel.resultEvent.collect {
+                        if (it is ResultEvent.Error) {
+                            currentQueryError.text = it.message
                         }
                     }
 

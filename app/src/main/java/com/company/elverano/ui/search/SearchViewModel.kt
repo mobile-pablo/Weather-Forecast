@@ -4,13 +4,14 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.company.elverano.data.error.CustomError
+import com.company.elverano.data.error.ErrorRepository
 import com.company.elverano.data.historyWeather.HistoryWeather
 import com.company.elverano.data.historyWeather.HistoryWeatherRepository
 import com.company.elverano.data.historyWeather.HistoryWeatherResponse
 import com.company.elverano.data.openWeather.OpenWeatherRepository
 import com.company.elverano.data.openWeather.OpenWeatherResponse
 import com.company.elverano.data.positionStack.PositionStackRepository
-import com.company.elverano.utils.DummyData
 import com.company.elverano.utils.ResultEvent
 import com.skydoves.sandwich.ApiResponse
 import com.skydoves.sandwich.request
@@ -29,7 +30,8 @@ import javax.inject.Inject
 class SearchViewModel @Inject constructor(
     private val positionStackRepository: PositionStackRepository,
     private val openWeatherRepository: OpenWeatherRepository,
-    private val historyWeatherRepository: HistoryWeatherRepository
+    private val historyWeatherRepository: HistoryWeatherRepository,
+    private val errorRepository: ErrorRepository
 ) : ViewModel() {
     private var searchJob: Job? = null
     private var couritineJob: Job? = null
@@ -52,6 +54,7 @@ class SearchViewModel @Inject constructor(
     }
 
     fun searchLocation(query: String) {
+        println("Search vm  search")
         searchJob?.cancel()
         searchJob = viewModelScope.launch {
 
@@ -245,5 +248,14 @@ class SearchViewModel @Inject constructor(
                 }
             }
         }
+    }
+
+     fun insertError(customError: CustomError) = viewModelScope.launch {
+        errorRepository.deleteErrorFromDatabase()
+        errorRepository.insertErrorToDatabase(customError)
+    }
+
+    fun deleteError() = viewModelScope.launch {
+        errorRepository.deleteErrorFromDatabase()
     }
 }

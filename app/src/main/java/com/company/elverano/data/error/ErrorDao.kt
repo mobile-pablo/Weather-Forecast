@@ -12,13 +12,13 @@ interface ErrorDao {
 
     @NotNull
     @Insert(onConflict = OnConflictStrategy.REPLACE)
-    suspend fun insertError(error: Error)
+    suspend fun insertError(customError: CustomError)
 
     @Query("SELECT * FROM weather_error")
-    suspend fun getError() : Error?
+    suspend fun getError() : CustomError?
 
 
-    @Query("DELETE FROM open_weather_response")
+    @Query("DELETE FROM weather_error")
     suspend fun deleteError()
 
 }
