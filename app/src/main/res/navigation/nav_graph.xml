@@ -10,6 +10,11 @@
         android:name="com.company.elverano.ui.currentWeather.CurrentWeatherFragment"
         android:label="fragment_current"
         tools:layout="@layout/fragment_current">
+        <argument
+            android:name="result"
+            app:argType="com.company.elverano.utils.ResultEvent"
+            app:nullable="true"
+            android:defaultValue="@null" />
     </fragment>
     <fragment
         android:id="@+id/map_Fragment"

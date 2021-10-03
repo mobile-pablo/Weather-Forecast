@@ -32,12 +32,17 @@ class CurrentWeatherFragment : Fragment(R.layout.fragment_current) {
     private val viewModel by viewModels<CurrentWeatherViewModel>()
     private var _binding: FragmentCurrentBinding? = null
     private val binding get() = _binding!!
+    var searchResult : ResultEvent? = null
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
         _binding = FragmentCurrentBinding.bind(view)
         val sharedPref = activity?.getPreferences(Context.MODE_PRIVATE) ?: return
+
+      arguments?.let {
+          searchResult= CurrentWeatherFragmentArgs.fromBundle(it).result
+      }
 
         val mainActivity = activity as MainActivity
         if (mainActivity.mDelegate.localNightMode == AppCompatDelegate.MODE_NIGHT_YES) {
@@ -110,24 +115,37 @@ class CurrentWeatherFragment : Fragment(R.layout.fragment_current) {
     }
 
     private suspend fun collectEvents() {
-        viewModel.resultEvent.collect { event ->
-            when (event) {
-                is ResultEvent.Success -> {
-                    Log.d("ResultEvent", "Success")
-                }
-                is ResultEvent.Error -> {
-                    binding.apply {
-                        binding.currentProgressBar.visibility = INVISIBLE
-                        currentCityBox.visibility = INVISIBLE
-                        currentQueryError.visibility = VISIBLE
-                        currentQueryError.text = event.message
-                        viewModel.currentWeather.value = null
-                        viewModel.currentName.value = null
-                    }
-                    Log.d("ResultEvent", "Error")
-                }
-            }
-        }
+       searchResult?.let {
+           if(searchResult is ResultEvent.Error){
+               binding.apply {
+                   binding.currentProgressBar.visibility = INVISIBLE
+                   currentCityBox.visibility = INVISIBLE
+                   currentQueryError.visibility = VISIBLE
+                   currentQueryError.text = (searchResult as ResultEvent.Error).message
+                   viewModel.currentName.value = null
+               }
+               Log.d("ResultEvent", "Error")
+           }
+       } ?: kotlin.run {
+           viewModel.resultEvent.collect { event ->
+               when (event) {
+                   is ResultEvent.Success -> {
+                       Log.d("ResultEvent", "Success")
+                   }
+                   is ResultEvent.Error -> {
+                       binding.apply {
+                           binding.currentProgressBar.visibility = INVISIBLE
+                           currentCityBox.visibility = INVISIBLE
+                           currentQueryError.visibility = VISIBLE
+                           currentQueryError.text = event.message
+                           viewModel.currentName.value = null
+                       }
+                       Log.d("ResultEvent", "Error")
+                   }
+               }
+           }
+       }
+
     }
 
     private fun updateUI(response: OpenWeatherResponse?) {
@@ -196,7 +214,7 @@ class CurrentWeatherFragment : Fragment(R.layout.fragment_current) {
                     0,
                     0,
                     0
-                );
+                )
                 currentCityMeasure.visibility = VISIBLE
             } else {
                 currentCityName.setCompoundDrawablesWithIntrinsicBounds(0, 0, 0, 0)
@@ -205,11 +223,19 @@ class CurrentWeatherFragment : Fragment(R.layout.fragment_current) {
                 currentCityBox.visibility = INVISIBLE
                 currentQueryError.visibility = VISIBLE
                 viewLifecycleOwner.lifecycleScope.launchWhenResumed {
-                    viewModel.resultEvent.collect {
-                        if (it is ResultEvent.Error) {
-                            currentQueryError.text = it.message
+
+                    searchResult?.let {
+                        if( searchResult is ResultEvent.Error){
+                        currentQueryError.text = (it as ResultEvent.Error).message
+                    }
+                    } ?: kotlin.run {
+                        viewModel.resultEvent.collect {
+                            if (it is ResultEvent.Error) {
+                                currentQueryError.text = it.message
+                            }
                         }
                     }
+
                 }
             }
 

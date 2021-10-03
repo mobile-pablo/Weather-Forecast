@@ -93,7 +93,7 @@ class SearchFragment : Fragment(R.layout.fragment_search) {
                 is ResultEvent.Success -> {
                     Log.d("ResultEvent", "Success")
                     val action =
-                        SearchFragmentDirections.actionSearchFragmentToCurrentFragment()
+                        SearchFragmentDirections.actionSearchFragmentToCurrentFragment(event)
                     findNavController().navigate(action)
                     binding.searchProgressBar.visibility = View.INVISIBLE
                 }
@@ -101,7 +101,10 @@ class SearchFragment : Fragment(R.layout.fragment_search) {
                     binding.apply {
                         binding.searchProgressBar.visibility = View.INVISIBLE
                     }
-                    Log.d("ResultEvent", "Error")
+
+                    val action =
+                        SearchFragmentDirections.actionSearchFragmentToCurrentFragment(event)
+                    findNavController().navigate(action)
                 }
             }
         }

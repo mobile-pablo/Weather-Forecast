@@ -1,8 +1,10 @@
 package com.company.elverano.utils
 
-import com.company.elverano.data.openWeather.OpenWeatherResponse
+import android.os.Parcelable
+import kotlinx.android.parcel.Parcelize
 
-sealed class ResultEvent {
-    object Success : ResultEvent()
-    data class Error(var message: String) : ResultEvent()
+
+sealed class ResultEvent  : Parcelable {
+ @Parcelize   object Success : ResultEvent()
+   @Parcelize data class Error(var message: String) : ResultEvent()
 }
