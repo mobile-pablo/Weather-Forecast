@@ -17,10 +17,13 @@ import com.company.elverano.R
 import com.company.elverano.data.openWeather.OpenWeatherResponse
 import com.company.elverano.databinding.FragmentCurrentBinding
 import com.company.elverano.ui.MainActivity
-import com.company.elverano.utils.*
+import com.company.elverano.utils.ResultEvent
+import com.company.elverano.utils.fadeIn
+import com.company.elverano.utils.formatDoubleString
+import com.company.elverano.utils.setWeatherIcon
 import com.polyak.iconswitch.IconSwitch
+import com.skydoves.sandwich.ApiResponse
 import dagger.hilt.android.AndroidEntryPoint
-import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.collect
 import java.text.SimpleDateFormat
 import java.util.*
@@ -36,22 +39,32 @@ class CurrentWeatherFragment : Fragment(R.layout.fragment_current) {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-
         _binding = FragmentCurrentBinding.bind(view)
+
+        arguments?.let {
+            searchResult= CurrentWeatherFragmentArgs.fromBundle(it).result
+        }
+
+
+        addObservers()
+
+        initializeSwitch()
+
+        viewLifecycleOwner.lifecycleScope.launchWhenStarted {
+            collectEvents()
+        }
+
+        binding.currentProgressBar.visibility = VISIBLE
+    }
+
+    private fun initializeSwitch() {
         val sharedPref = activity?.getPreferences(Context.MODE_PRIVATE) ?: return
-
-      arguments?.let {
-          searchResult= CurrentWeatherFragmentArgs.fromBundle(it).result
-      }
-
         val mainActivity = activity as MainActivity
         if (mainActivity.mDelegate.localNightMode == AppCompatDelegate.MODE_NIGHT_YES) {
             binding.themeSwitch.checked = IconSwitch.Checked.RIGHT
         } else {
             binding.themeSwitch.checked = IconSwitch.Checked.LEFT
         }
-
-        addObservers()
 
         binding.themeSwitch.setCheckedChangeListener { isChecked ->
             var newTheme = -3
@@ -64,17 +77,10 @@ class CurrentWeatherFragment : Fragment(R.layout.fragment_current) {
             }
 
             with(sharedPref.edit()) {
-                putInt(getString(R.string.theme_mode), newTheme)
+                putInt(getString(com.company.elverano.R.string.theme_mode), newTheme)
                 apply()
             }
         }
-
-
-        viewLifecycleOwner.lifecycleScope.launchWhenStarted {
-            collectEvents()
-        }
-
-        binding.currentProgressBar.visibility = VISIBLE
     }
 
     private fun addObservers() {
@@ -106,45 +112,36 @@ class CurrentWeatherFragment : Fragment(R.layout.fragment_current) {
         viewModel.currentError.observe(viewLifecycleOwner) {
             if (it != null && viewModel.currentWeather.value == null) {
                 binding.apply {
+                    currentCityName.setCompoundDrawablesWithIntrinsicBounds(0, 0, 0, 0)
                     currentCityBox.visibility = INVISIBLE
                     currentQueryError.visibility = VISIBLE
                     currentQueryError.text = it
                 }
+
             }
         }
     }
 
     private suspend fun collectEvents() {
-       searchResult?.let {
-           if(searchResult is ResultEvent.Error){
-               binding.apply {
-                   binding.currentProgressBar.visibility = INVISIBLE
-                   currentCityBox.visibility = INVISIBLE
-                   currentQueryError.visibility = VISIBLE
-                   currentQueryError.text = (searchResult as ResultEvent.Error).message
-                   viewModel.currentName.value = null
-               }
-               Log.d("ResultEvent", "Error")
-           }
-       } ?: kotlin.run {
-           viewModel.resultEvent.collect { event ->
-               when (event) {
-                   is ResultEvent.Success -> {
-                       Log.d("ResultEvent", "Success")
-                   }
-                   is ResultEvent.Error -> {
-                       binding.apply {
-                           binding.currentProgressBar.visibility = INVISIBLE
-                           currentCityBox.visibility = INVISIBLE
-                           currentQueryError.visibility = VISIBLE
-                           currentQueryError.text = event.message
-                           viewModel.currentName.value = null
-                       }
-                       Log.d("ResultEvent", "Error")
-                   }
-               }
-           }
-       }
+
+        viewModel.resultEvent.collect { event ->
+            when (event) {
+                is ResultEvent.Success -> {
+                    Log.d("ResultEvent", "Success")
+                }
+                is ResultEvent.Error -> {
+                    binding.apply {
+                        binding.currentProgressBar.visibility = INVISIBLE
+                        currentCityBox.visibility = INVISIBLE
+                        currentQueryError.visibility = VISIBLE
+                        currentQueryError.text = event.message
+                        viewModel.currentName.value = null
+                    }
+                    Log.d("ResultEvent", "Error")
+                }
+            }
+        }
+
 
     }
 
@@ -218,10 +215,6 @@ class CurrentWeatherFragment : Fragment(R.layout.fragment_current) {
                 currentCityMeasure.visibility = VISIBLE
             } else {
                 currentCityName.setCompoundDrawablesWithIntrinsicBounds(0, 0, 0, 0)
-                currentCityInfoBox.visibility = INVISIBLE
-                currentCityMeasure.visibility = INVISIBLE
-                currentCityBox.visibility = INVISIBLE
-                currentQueryError.visibility = VISIBLE
                 viewLifecycleOwner.lifecycleScope.launchWhenResumed {
 
                     searchResult?.let {

@@ -40,9 +40,7 @@ class MainActivity : AppCompatActivity() {
     private fun setUpTheme() {
         val sharedPref = getPreferences(Context.MODE_PRIVATE) ?: return
         val defaultValue = -3
-        val savedTheme = sharedPref.getInt(getString(R.string.theme_mode), defaultValue)
-        println("Theme: $savedTheme")
-        if (savedTheme == 1) {
+        if (sharedPref.getInt(getString(R.string.theme_mode), defaultValue) == 1) {
             setTheme(R.style.darkTheme)
             delegate.localNightMode = AppCompatDelegate.MODE_NIGHT_YES
         } else  {
