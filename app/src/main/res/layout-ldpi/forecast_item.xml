@@ -1,0 +1,60 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:layout_marginTop="20dp"
+    android:layout_marginBottom="20dp"
+    android:layout_marginLeft="10dp"
+    android:layout_marginRight="10dp">
+
+    <ImageView
+        android:id="@+id/forecast_city_image"
+        android:layout_width="50dp"
+        android:layout_height="50dp"
+        android:layout_centerHorizontal="true"
+        tools:src="@mipmap/ic_launcher" />
+
+    <TextView
+        android:id="@+id/forecast_city_day"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/forecast_city_image"
+        android:layout_centerInParent="true"
+        android:textColor="@color/project_main_text"
+        android:textSize="8sp"
+        tools:text="Sunday" />
+
+    <TextView
+        android:id="@+id/forecast_city_hour"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/forecast_city_day"
+        android:layout_centerInParent="true"
+        android:textColor="@color/project_light_red"
+        android:textSize="10sp"
+        tools:text="1 AM" />
+    <RelativeLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/forecast_city_hour"
+        android:layout_centerInParent="true">
+
+        <TextView
+            android:id="@+id/forecast_item_temperature"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textColor="@color/project_main_text"
+            android:textSize="12sp"
+            tools:text="16" />
+
+        <TextView
+            android:id="@+id/forecast_item_measure"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_toEndOf="@id/forecast_item_temperature"
+            android:text="@string/temperature_measure"
+            android:textColor="@color/moon_yellow"
+            android:textSize="12sp" />
+    </RelativeLayout>
+</RelativeLayout>

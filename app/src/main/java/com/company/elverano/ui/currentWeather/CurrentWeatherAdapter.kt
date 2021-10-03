@@ -45,7 +45,7 @@ class CurrentWeatherAdapter(
 
 
                 val date = Date(openWeatherHourly.dt * 1000 + offset * 1000)
-                val dateFormat = SimpleDateFormat("YYYY-MM-dd")
+                val dateFormat = SimpleDateFormat("yyyy-MM-dd")
                 val hourFormat = SimpleDateFormat("hh a")
                 forecastCityHour.text = hourFormat.format(date)
                 forecastCityHour.fadeIn()

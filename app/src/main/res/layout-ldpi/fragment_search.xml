@@ -15,8 +15,8 @@
 
     <ProgressBar
         android:id="@+id/search_progress_bar"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
+        android:layout_width="30dp"
+        android:layout_height="30dp"
         android:layout_centerInParent="true"
         android:indeterminateTint="@color/project_light_red"
         android:visibility="invisible"
@@ -25,18 +25,18 @@
     <androidx.appcompat.widget.SearchView
         android:id="@+id/search_view"
         android:layout_width="match_parent"
-        android:layout_height="50dp"
-        android:layoutDirection="rtl"
+        android:layout_height="40dp"
+        android:layout_marginLeft="40dp"
+        android:layout_marginTop="40dp"
+        android:layout_marginRight="40dp"
         android:background="@drawable/search_view_bg"
         android:backgroundTint="@color/project_background_light"
-        android:layout_marginLeft="40dp"
-        app:queryBackground="@null"
+        android:iconifiedByDefault="false"
+        android:layoutDirection="rtl"
         android:queryHint="hint"
         app:defaultQueryHint="hint"
-        android:iconifiedByDefault="false"
         app:iconifiedByDefault="false"
-        android:layout_marginRight="40dp"
-        android:layout_marginTop="40dp"
+        app:queryBackground="@null"
         app:queryHint="Search city"
         app:theme="@style/AppSearchView" />
 
@@ -49,15 +49,15 @@
         android:layout_marginTop="40dp">
 
         <RelativeLayout
-            android:layout_width="150dp"
-            android:layout_height="150dp"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
             android:layout_marginRight="10dp"
             android:background="@drawable/current_details_bg">
 
             <RelativeLayout
                 android:id="@+id/history_item_one"
-                android:layout_width="150dp"
-                android:layout_height="150dp"
+                android:layout_width="110dp"
+                android:layout_height="110dp"
                 android:paddingLeft="13dp"
                 android:paddingTop="18dp"
                 android:paddingRight="13dp"
@@ -69,75 +69,78 @@
                     android:layout_height="wrap_content"
                     android:layout_alignParentTop="true"
                     android:layout_centerHorizontal="true"
+                    android:ellipsize="end"
                     android:fontFamily="@font/lato"
                     android:gravity="center_vertical"
-                    android:ellipsize="end"
                     android:maxLines="1"
-                    tools:text="Zamość"
                     android:textColor="@color/project_main_text"
-                    android:textStyle="bold" />
+                    android:textSize="10sp"
+                    android:textStyle="bold"
+                    tools:text="Zamość" />
 
                 <ImageView
                     android:id="@+id/history_city_img_one"
-                    android:layout_width="70dp"
-                    android:layout_height="70dp"
+                    android:layout_width="50dp"
+                    android:layout_height="50dp"
                     android:layout_below="@id/history_city_name_one"
                     android:layout_centerHorizontal="true"
                     tools:srcCompat="@drawable/clear_sky" />
 
-<RelativeLayout
-    android:layout_width="wrap_content"
-    android:layout_height="wrap_content"
-    android:layout_below="@id/history_city_img_one"
-    android:layout_centerHorizontal="true">
-    <TextView
-        android:id="@+id/history_city_temp_one"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:gravity="center_vertical"
-        tools:text="16"
-        android:textColor="@color/project_main_text"
-        android:textSize="30sp" />
+                <RelativeLayout
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_below="@id/history_city_img_one"
+                    android:layout_centerHorizontal="true">
 
-    <TextView
-        android:id="@+id/history_city_measure_one"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignTop="@id/history_city_temp_one"
-        android:layout_alignBottom="@id/history_city_temp_one"
-        android:layout_toEndOf="@id/history_city_temp_one"
-        android:gravity="center_vertical"
-        android:text="@string/temperature_measure"
-        android:textColor="@color/project_light_red"
-        android:textSize="30sp" />
+                    <TextView
+                        android:id="@+id/history_city_temp_one"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:gravity="center_vertical"
+                        android:textColor="@color/project_main_text"
+                        android:textSize="10sp"
+                        tools:text="16" />
 
-    <TextView
-        android:id="@+id/history_city_main_one"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignTop="@id/history_city_temp_one"
-        android:layout_alignBottom="@id/history_city_temp_one"
-        android:layout_marginLeft="10dp"
-        android:layout_toEndOf="@id/history_city_measure_one"
-        android:gravity="center_vertical"
-        tools:text="Clear Sky"
-        android:ellipsize="end"
-        android:maxLines="1"
-        android:textColor="@color/project_v3_text" />
-</RelativeLayout>
+                    <TextView
+                        android:id="@+id/history_city_measure_one"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_alignTop="@id/history_city_temp_one"
+                        android:layout_alignBottom="@id/history_city_temp_one"
+                        android:layout_toEndOf="@id/history_city_temp_one"
+                        android:gravity="center_vertical"
+                        android:text="@string/temperature_measure"
+                        android:textColor="@color/project_light_red"
+                        android:textSize="10sp" />
+
+                    <TextView
+                        android:id="@+id/history_city_main_one"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_alignTop="@id/history_city_temp_one"
+                        android:layout_alignBottom="@id/history_city_temp_one"
+                        android:layout_marginLeft="10dp"
+                        android:layout_toEndOf="@id/history_city_measure_one"
+                        android:ellipsize="end"
+                        android:gravity="center_vertical"
+                        android:maxLines="1"
+                        android:textColor="@color/project_v3_text"
+                        android:textSize="10sp"
+                        tools:text="Clear Sky" />
+                </RelativeLayout>
             </RelativeLayout>
         </RelativeLayout>
 
         <RelativeLayout
-            android:layout_width="150dp"
-            android:layout_height="150dp"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
             android:layout_marginLeft="10dp"
             android:background="@drawable/current_details_bg">
 
             <RelativeLayout
                 android:id="@+id/history_item_two"
-                android:layout_width="150dp"
-                android:layout_height="150dp"
+                android:layout_width="110dp"
+                android:layout_height="110dp"
                 android:paddingLeft="13dp"
                 android:paddingTop="18dp"
                 android:paddingRight="13dp"
@@ -149,62 +152,65 @@
                     android:layout_height="wrap_content"
                     android:layout_alignParentTop="true"
                     android:layout_centerHorizontal="true"
+                    android:ellipsize="end"
                     android:fontFamily="@font/lato"
                     android:gravity="center_vertical"
-                    tools:text="Kraków"
-                    android:ellipsize="end"
                     android:maxLines="1"
                     android:textColor="@color/project_main_text"
-                    android:textStyle="bold" />
+                    android:textSize="10sp"
+                    android:textStyle="bold"
+                    tools:text="Kraków" />
 
                 <ImageView
                     android:id="@+id/history_city_img_two"
-                    android:layout_width="70dp"
-                    android:layout_height="70dp"
+                    android:layout_width="50dp"
+                    android:layout_height="50dp"
                     android:layout_below="@id/history_city_name_two"
                     android:layout_centerHorizontal="true"
                     tools:srcCompat="@drawable/clouds_thunder_drizzle" />
 
-<RelativeLayout
-    android:layout_width="wrap_content"
-    android:layout_height="wrap_content"
-    android:layout_centerHorizontal="true"
-    android:layout_below="@id/history_city_img_two">
-    <TextView
-        android:id="@+id/history_city_temp_two"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:gravity="center_vertical"
-        tools:text="-8"
-        android:textColor="@color/project_main_text"
-        android:textSize="30sp" />
+                <RelativeLayout
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_below="@id/history_city_img_two"
+                    android:layout_centerHorizontal="true">
 
-    <TextView
-        android:id="@+id/history_city_measure_two"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignTop="@id/history_city_temp_two"
-        android:layout_alignBottom="@id/history_city_temp_two"
-        android:layout_toEndOf="@id/history_city_temp_two"
-        android:gravity="center_vertical"
-        android:text="@string/temperature_measure"
-        android:textColor="@color/project_light_red"
-        android:textSize="30sp" />
+                    <TextView
+                        android:id="@+id/history_city_temp_two"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:gravity="center_vertical"
+                        android:textColor="@color/project_main_text"
+                        android:textSize="10sp"
+                        tools:text="-8" />
 
-    <TextView
-        android:id="@+id/history_city_main_two"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignTop="@id/history_city_temp_two"
-        android:layout_alignBottom="@id/history_city_temp_two"
-        android:layout_marginLeft="10dp"
-        android:layout_toEndOf="@id/history_city_measure_two"
-        android:gravity="center_vertical"
-        tools:text="Thunder"
-        android:ellipsize="end"
-        android:maxLines="1"
-        android:textColor="@color/project_v3_text" />
-</RelativeLayout>
+                    <TextView
+                        android:id="@+id/history_city_measure_two"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_alignTop="@id/history_city_temp_two"
+                        android:layout_alignBottom="@id/history_city_temp_two"
+                        android:layout_toEndOf="@id/history_city_temp_two"
+                        android:gravity="center_vertical"
+                        android:text="@string/temperature_measure"
+                        android:textColor="@color/project_light_red"
+                        android:textSize="10sp" />
+
+                    <TextView
+                        android:id="@+id/history_city_main_two"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_alignTop="@id/history_city_temp_two"
+                        android:layout_alignBottom="@id/history_city_temp_two"
+                        android:layout_marginLeft="10dp"
+                        android:layout_toEndOf="@id/history_city_measure_two"
+                        android:ellipsize="end"
+                        android:gravity="center_vertical"
+                        android:maxLines="1"
+                        android:textColor="@color/project_v3_text"
+                        android:textSize="10sp"
+                        tools:text="Thunder" />
+                </RelativeLayout>
             </RelativeLayout>
         </RelativeLayout>
     </LinearLayout>
@@ -212,24 +218,24 @@
     <RelativeLayout
         android:id="@+id/search_current_details_box"
         android:layout_width="match_parent"
-        android:layout_height="200dp"
+        android:layout_height="150dp"
         android:layout_alignParentBottom="true"
         android:layout_marginLeft="20dp"
         android:layout_marginRight="20dp"
-        android:layout_marginBottom="50dp"
+        android:layout_marginBottom="5dp"
         android:background="@drawable/current_details_bg">
 
         <ImageView
             android:id="@+id/search_current_img"
             android:layout_width="40dp"
             android:layout_height="40dp"
-            android:layout_marginTop="10dp"
             android:layout_centerHorizontal="true"
+            android:layout_marginTop="10dp"
             tools:src="@drawable/clouds_thunder_drizzle" />
 
         <LinearLayout
             android:layout_width="match_parent"
-            android:layout_height="200dp"
+            android:layout_height="wrap_content"
             android:orientation="horizontal">
 
             <LinearLayout
@@ -253,7 +259,7 @@
                         android:fontFamily="@font/roboto_light"
                         android:text="Wind degrees"
                         android:textColor="@color/project_main_text"
-                        android:textSize="20sp" />
+                        android:textSize="12sp" />
 
                     <TextView
                         android:id="@+id/search_current_wind_degrees"
@@ -263,9 +269,9 @@
                         android:layout_centerHorizontal="true"
                         android:layout_marginTop="10dp"
                         android:fontFamily="@font/lato_bold"
-                        tools:text="30%"
                         android:textColor="@color/project_main_text"
-                        android:textSize="18sp" />
+                        android:textSize="10sp"
+                        tools:text="30%" />
                 </RelativeLayout>
 
                 <RelativeLayout
@@ -283,7 +289,7 @@
                         android:fontFamily="@font/roboto_light"
                         android:text="Humidity"
                         android:textColor="@color/project_main_text"
-                        android:textSize="20sp" />
+                        android:textSize="12sp" />
 
                     <TextView
                         android:id="@+id/search_current_humidity"
@@ -293,9 +299,9 @@
                         android:layout_centerHorizontal="true"
                         android:layout_marginTop="10dp"
                         android:fontFamily="@font/lato_bold"
-                        tools:text="10%"
                         android:textColor="@color/project_main_text"
-                        android:textSize="18sp" />
+                        android:textSize="10sp"
+                        tools:text="10%" />
                 </RelativeLayout>
             </LinearLayout>
 
@@ -327,7 +333,7 @@
                         android:fontFamily="@font/roboto_light"
                         android:text="Wind speed"
                         android:textColor="@color/project_main_text"
-                        android:textSize="20sp" />
+                        android:textSize="12sp" />
 
                     <TextView
                         android:id="@+id/search_current_wind_speed"
@@ -337,9 +343,9 @@
                         android:layout_centerHorizontal="true"
                         android:layout_marginTop="10dp"
                         android:fontFamily="@font/lato_bold"
-                        tools:text="8 km/h"
                         android:textColor="@color/project_main_text"
-                        android:textSize="18sp" />
+                        android:textSize="10sp"
+                        tools:text="8 km/h" />
                 </RelativeLayout>
 
                 <RelativeLayout
@@ -357,7 +363,7 @@
                         android:fontFamily="@font/roboto_light"
                         android:text="Pressure"
                         android:textColor="@color/project_main_text"
-                        android:textSize="20sp" />
+                        android:textSize="12sp" />
 
                     <TextView
                         android:id="@+id/search_current_pressure"
@@ -367,9 +373,9 @@
                         android:layout_centerHorizontal="true"
                         android:layout_marginTop="10dp"
                         android:fontFamily="@font/lato_bold"
-                        tools:text="840hPa"
                         android:textColor="@color/project_main_text"
-                        android:textSize="18sp" />
+                        android:textSize="10sp"
+                        tools:text="840hPa" />
                 </RelativeLayout>
             </LinearLayout>
         </LinearLayout>
