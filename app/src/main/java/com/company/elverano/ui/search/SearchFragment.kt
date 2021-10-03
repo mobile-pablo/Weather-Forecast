@@ -117,7 +117,6 @@ class SearchFragment : Fragment(R.layout.fragment_search) {
                         viewModel.searchLocation(query)
                         searchView.setQuery("", false)
                         searchView.clearFocus()
-                        searchView.onActionViewCollapsed()
                     }
                     return true
                 }

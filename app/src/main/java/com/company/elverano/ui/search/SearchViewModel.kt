@@ -64,7 +64,7 @@ class SearchViewModel @Inject constructor(
 
 
             val response = positionStackRepository.getLocationFromAPI(query)
-            response.request { apiResponse ->
+            response?.request { apiResponse ->
                 when (apiResponse) {
                     is ApiResponse.Success -> {
                         viewModelScope.launch {
@@ -197,7 +197,7 @@ class SearchViewModel @Inject constructor(
     private fun searchWeather(lat: Double, lon: Double) {
         couritineJob?.cancel()
         couritineJob = viewModelScope.launch {
-            openWeatherRepository.getWeatherFromAPI(lon = lon, lat = lat).request {
+            openWeatherRepository.getWeatherFromAPI(lon = lon, lat = lat)?.request {
                 when (it) {
                     is ApiResponse.Success -> {
                         viewModelScope.launch {

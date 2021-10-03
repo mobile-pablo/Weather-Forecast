@@ -26,5 +26,5 @@ interface OpenWeatherApi{
     fun getWeather(
         @Query("lat") latitude: Double,
         @Query("lon") longitude: Double
-    ): Call<OpenWeatherResponse?>
+    ): Call<OpenWeatherResponse?>?
 }
