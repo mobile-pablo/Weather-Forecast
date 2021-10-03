@@ -67,34 +67,38 @@ class CurrentWeatherViewModel @Inject constructor(
                 when (response) {
                     is ApiResponse.Success -> {
                         viewModelScope.launch {
-                            positionStackRepository.deletePositionFromDB()
-                            positionStackRepository.insertPositionToDB(response.data)
 
-                            response.data.data?.let {
-                                if (it.isNotEmpty()) {
-                                    val item = it[0]
 
-                                    item?.let { item ->
-                                        searchWeather(
-                                            lat = item.latitude,
-                                            lon = item.longitude,
-                                            name = item.name,
-                                            country = item.country
-                                        )
-                                    }
+                            response.data?.let {
+                                positionStackRepository.deletePositionFromDB()
+                                positionStackRepository.insertPositionToDB(it)
+                                val list = it.data
+                             list?.let {
+                                 if (it.isNotEmpty()) {
+                                     val item = it[0]
 
-                                    Log.d(
-                                        "CurrentWeather",
-                                        "Item : ${item.latitude} , ${item.longitude} , ${item.name}"
-                                    )
+                                     item?.let { item ->
+                                         searchWeather(
+                                             lat = item.latitude,
+                                             lon = item.longitude,
+                                             name = item.name,
+                                             country = item.country
+                                         )
+                                     }
 
-                                } else {
-                                    viewModelScope.launch {
-                                        val msg = "No Item's found"
-                                        resultChannel.send(ResultEvent.Error(msg))
-                                        currentError.value = msg
-                                    }
-                                }
+                                     Log.d(
+                                         "CurrentWeather",
+                                         "Item : ${item.latitude} , ${item.longitude} , ${item.name}"
+                                     )
+
+                                 } else {
+                                     viewModelScope.launch {
+                                         val msg = "No Item's found"
+                                         resultChannel.send(ResultEvent.Error(msg))
+                                         currentError.value = msg
+                                     }
+                                 }
+                             }
 
                             }
                         }
@@ -144,13 +148,15 @@ class CurrentWeatherViewModel @Inject constructor(
                 when (response) {
                     is ApiResponse.Success -> {
                         viewModelScope.launch {
+                        response?.data?.let {
                             openWeatherRepository.deleteWeatherFromDatabase()
-                            openWeatherRepository.insertWeatherToDatabase(response.data)
+                            openWeatherRepository.insertWeatherToDatabase(it)
 
                             currentWeather.value = response.data
                             currentName.value = name
                             currentCountry.value = country
                             resultChannel.send(ResultEvent.Success)
+                        }
 
 
                         }

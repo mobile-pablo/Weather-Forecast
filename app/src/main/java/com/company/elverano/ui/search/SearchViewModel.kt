@@ -68,32 +68,38 @@ class SearchViewModel @Inject constructor(
                 when (apiResponse) {
                     is ApiResponse.Success -> {
                         viewModelScope.launch {
+
+                        apiResponse.data?.let {
                             positionStackRepository.deletePositionFromDB()
-                            positionStackRepository.insertPositionToDB(apiResponse.data)
+                            positionStackRepository.insertPositionToDB(it)
 
-                            val data = apiResponse.data.data
+                            val data = it.data
 
-                            if (data == null) {
-                                viewModelScope.launch {
-                                    val msg = "No Item's found"
-                                    resultChannel.send(ResultEvent.Error(msg))
-                                    currentError.value = msg
-                                }
-                            } else {
-                                if (data.isNotEmpty()) {
-                                    val item = data[0]
-                                    searchWeather(
-                                        lat = item.latitude,
-                                        lon = item.longitude,
-                                    )
-                                } else {
+                            data?.let {
+                                if (it == null) {
                                     viewModelScope.launch {
                                         val msg = "No Item's found"
                                         resultChannel.send(ResultEvent.Error(msg))
                                         currentError.value = msg
                                     }
+                                } else {
+                                    if (it.isNotEmpty()) {
+                                        val item = it[0]
+                                        searchWeather(
+                                            lat = item.latitude,
+                                            lon = item.longitude,
+                                        )
+                                    } else {
+                                        viewModelScope.launch {
+                                            val msg = "No Item's found"
+                                            resultChannel.send(ResultEvent.Error(msg))
+                                            currentError.value = msg
+                                        }
+                                    }
                                 }
                             }
+                        }
+
 
                         }
 
@@ -147,13 +153,9 @@ class SearchViewModel @Inject constructor(
     }
 
     private suspend fun updateHistory(value: OpenWeatherResponse?, name: String) {
-        for(history in historyResponse.value?.data!!){
-            println("Names: ${history.name}")
-        }
         value?.let { response ->
             val list = historyResponse.value?.data
             list?.let {
-                println("Update history")
                 val backup =it[0]
                     it[1] = backup
                 it[0] = HistoryWeather(
@@ -200,9 +202,14 @@ class SearchViewModel @Inject constructor(
                     is ApiResponse.Success -> {
                         viewModelScope.launch {
                             val item = it.data
-                            openWeatherRepository.deleteWeatherFromDatabase()
-                            openWeatherRepository.insertWeatherToDatabase(item)
-                            resultChannel.send(ResultEvent.Success)
+                           item?.let {
+                               openWeatherRepository.deleteWeatherFromDatabase()
+                               openWeatherRepository.insertWeatherToDatabase(item)
+                               resultChannel.send(ResultEvent.Success)
+                           } ?: run {
+                               val msg = "No Item's found\nError " + it.statusCode.code
+                               resultChannel.send(ResultEvent.Error(msg))
+                           }
                         }
 
                     }

@@ -1,7 +1,6 @@
 package com.company.elverano.ui.map
 
 import android.os.Bundle
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -11,6 +10,7 @@ import androidx.fragment.app.viewModels
 import com.company.elverano.R
 import com.company.elverano.data.openWeather.OpenWeatherResponse
 import com.company.elverano.databinding.FragmentMapBinding
+import com.company.elverano.ui.MainActivity
 import com.company.elverano.utils.DummyData
 import com.here.android.mpa.common.GeoCoordinate
 import com.here.android.mpa.common.OnEngineInitListener
@@ -83,8 +83,8 @@ class MapFragment : Fragment(R.layout.fragment_map) {
                 map.setCenter(GeoCoordinate(place.lat, place.lon), Map.Animation.NONE)
                 map.zoomLevel = ZOOM_LVL
 
-
-                if (AppCompatDelegate.getDefaultNightMode() == AppCompatDelegate.MODE_NIGHT_YES) {
+                val mainActivity = activity as MainActivity
+                if (mainActivity.delegate.localNightMode == AppCompatDelegate.MODE_NIGHT_YES) {
                     val nightScheme =
                         map.createCustomizableScheme("nightScheme", Map.Scheme.NORMAL_NIGHT)
                     nightScheme?.let { map.setMapScheme(it) }
