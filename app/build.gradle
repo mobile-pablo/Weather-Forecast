@@ -51,10 +51,6 @@ android {
         exclude '/lib/x86_64/libChineseFontPkg.so'
     }
 
-    lintOptions {
-        checkReleaseBuilds false
-    }
-
 //I will make multiple apks for saving memory in Google Play downloads
     splits {
         abi {

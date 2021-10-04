@@ -19,7 +19,7 @@
 
         <meta-data android:name="com.here.android.maps.appid" android:value="@string/here_app_id"/>
         <meta-data android:name="com.here.android.maps.apptoken" android:value="@string/here_app_code"/>
-        <meta-data android:name="com.here.android.maps.license.key" android:value="@string/here_license_key"/>"/>
+        <meta-data android:name="com.here.android.maps.license.key" android:value="@string/here_license_key"/>
 
 
         <!-- for http support-->

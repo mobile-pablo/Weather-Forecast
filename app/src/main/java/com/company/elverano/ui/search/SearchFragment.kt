@@ -2,7 +2,9 @@ package com.company.elverano.ui.search
 
 import android.os.Bundle
 import android.util.Log
+import android.view.LayoutInflater
 import android.view.View
+import android.view.ViewGroup
 import androidx.appcompat.widget.SearchView
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
@@ -76,10 +78,12 @@ class SearchFragment : Fragment(R.layout.fragment_search) {
         Blurry.with(context)
             .radius(RADIUS)
             .sampling(SAMPLING)
-            .async().animate(ANIM_DURATION).apply {
-                this.onto(binding.historyItemOne)
-                this.onto(binding.historyItemTwo)
-            }
+            .async().animate(ANIM_DURATION).onto(binding.historyItemOne)
+
+        Blurry.with(context)
+            .radius(RADIUS)
+            .sampling(SAMPLING)
+            .async().animate(ANIM_DURATION).onto(binding.historyItemTwo)
 
         Blurry.with(context)
             .radius(SMALL_RADIUS)
