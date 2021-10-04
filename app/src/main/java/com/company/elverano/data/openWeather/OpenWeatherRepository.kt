@@ -1,5 +1,6 @@
 package com.company.elverano.data.openWeather
 
+import android.util.Log
 import com.company.elverano.api.OpenWeatherApi
 import com.company.elverano.data.AppDatabase
 import javax.inject.Inject
@@ -20,7 +21,6 @@ class OpenWeatherRepository @Inject constructor(
 
   suspend  fun getWeatherFromDB() = dao.getWeather()
   suspend  fun deleteWeatherFromDatabase() {
-      println("Delete weather")
        dao.deleteWeather()
     }
 }

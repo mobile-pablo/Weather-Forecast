@@ -54,7 +54,6 @@ class SearchViewModel @Inject constructor(
     }
 
     fun searchLocation(query: String) {
-        println("Search vm  search")
         searchJob?.cancel()
         searchJob = viewModelScope.launch {
 

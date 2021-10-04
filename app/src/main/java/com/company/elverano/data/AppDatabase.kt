@@ -1,5 +1,6 @@
 package com.company.elverano.data
 
+import android.util.Log
 import androidx.room.Database
 import androidx.room.RoomDatabase
 import androidx.room.TypeConverters
@@ -35,7 +36,7 @@ abstract class AppDatabase: RoomDatabase(){
     ): RoomDatabase.Callback(){
         override fun onCreate(db: SupportSQLiteDatabase) {
             super.onCreate(db)
-            println("Database created")
+            Log.d("Room","Database created")
             applicationScope.launch {
                 val list = MutableList(2) { DummyData.dummy_krakow }
                 list[0] = DummyData.dummy_krakow

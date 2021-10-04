@@ -75,7 +75,6 @@ class CurrentWeatherViewModel @Inject constructor(
     }
 
     private fun searchLocation(query: String) {
-        println("Current weather search")
         searchJob?.cancel()
         searchJob = viewModelScope.launch {
             val response = positionStackRepository.getLocationFromAPI(query)
