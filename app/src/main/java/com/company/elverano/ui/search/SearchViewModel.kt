@@ -36,8 +36,8 @@ class SearchViewModel @Inject constructor(
     private var searchJob: Job? = null
     private var couritineJob: Job? = null
     var currentError = MutableLiveData<String>()
-    private var  _historyResponse = MutableLiveData<HistoryWeatherResponse>()
-    val historyResponse : LiveData<HistoryWeatherResponse>  get() = _historyResponse
+    private var _historyResponse = MutableLiveData<HistoryWeatherResponse>()
+    val historyResponse: LiveData<HistoryWeatherResponse> get() = _historyResponse
 
     private val resultChannel = Channel<ResultEvent>()
     val resultEvent = resultChannel.receiveAsFlow()
@@ -58,9 +58,9 @@ class SearchViewModel @Inject constructor(
         searchJob?.cancel()
         searchJob = viewModelScope.launch {
 
-           val oldPositionStack =  positionStackRepository.getLocationFromDatabase()
+            val oldPositionStack = positionStackRepository.getLocationFromDatabase()
             oldPositionStack?.let {
-                if(!it.data.isNullOrEmpty()){
+                if (!it.data.isNullOrEmpty()) {
                     updateHistory(weatherResponse.value, it.data[0].name)
                 }
             }
@@ -72,36 +72,36 @@ class SearchViewModel @Inject constructor(
                     is ApiResponse.Success -> {
                         viewModelScope.launch {
 
-                        apiResponse.data?.let {
-                            positionStackRepository.deletePositionFromDB()
-                            positionStackRepository.insertPositionToDB(it)
+                            apiResponse.data?.let {
+                                positionStackRepository.deletePositionFromDB()
+                                positionStackRepository.insertPositionToDB(it)
 
-                            val data = it.data
+                                val data = it.data
 
-                            data?.let {
-                                if (it == null) {
-                                    viewModelScope.launch {
-                                        val msg = "No Item's found"
-                                        resultChannel.send(ResultEvent.Error(msg))
-                                        currentError.value = msg
-                                    }
-                                } else {
-                                    if (it.isNotEmpty()) {
-                                        val item = it[0]
-                                        searchWeather(
-                                            lat = item.latitude,
-                                            lon = item.longitude,
-                                        )
-                                    } else {
+                                data?.let {
+                                    if (it == null) {
                                         viewModelScope.launch {
                                             val msg = "No Item's found"
                                             resultChannel.send(ResultEvent.Error(msg))
                                             currentError.value = msg
                                         }
+                                    } else {
+                                        if (it.isNotEmpty()) {
+                                            val item = it[0]
+                                            searchWeather(
+                                                lat = item.latitude,
+                                                lon = item.longitude,
+                                            )
+                                        } else {
+                                            viewModelScope.launch {
+                                                val msg = "No Item's found"
+                                                resultChannel.send(ResultEvent.Error(msg))
+                                                currentError.value = msg
+                                            }
+                                        }
                                     }
                                 }
                             }
-                        }
 
 
                         }
@@ -159,8 +159,8 @@ class SearchViewModel @Inject constructor(
         value?.let { response ->
             val list = historyResponse.value?.data
             list?.let {
-                val backup =it[0]
-                    it[1] = backup
+                val backup = it[0]
+                it[1] = backup
                 it[0] = HistoryWeather(
                     lat = response.lat,
                     lon = response.lon,
@@ -205,14 +205,14 @@ class SearchViewModel @Inject constructor(
                     is ApiResponse.Success -> {
                         viewModelScope.launch {
                             val item = it.data
-                           item?.let {
-                               openWeatherRepository.deleteWeatherFromDatabase()
-                               openWeatherRepository.insertWeatherToDatabase(item)
-                               resultChannel.send(ResultEvent.Success)
-                           } ?: run {
-                               val msg = "No Item's found\nError " + it.statusCode.code
-                               resultChannel.send(ResultEvent.Error(msg))
-                           }
+                            item?.let {
+                                openWeatherRepository.deleteWeatherFromDatabase()
+                                openWeatherRepository.insertWeatherToDatabase(item)
+                                resultChannel.send(ResultEvent.Success)
+                            } ?: run {
+                                val msg = "No Item's found\nError " + it.statusCode.code
+                                resultChannel.send(ResultEvent.Error(msg))
+                            }
                         }
 
                     }
@@ -250,7 +250,7 @@ class SearchViewModel @Inject constructor(
         }
     }
 
-     fun insertError(customError: CustomError) = viewModelScope.launch {
+    fun insertError(customError: CustomError) = viewModelScope.launch {
         errorRepository.deleteErrorFromDatabase()
         errorRepository.insertErrorToDatabase(customError)
     }

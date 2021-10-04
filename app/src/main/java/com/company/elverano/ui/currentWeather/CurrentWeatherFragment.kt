@@ -42,7 +42,7 @@ class CurrentWeatherFragment : Fragment(R.layout.fragment_current) {
 
         addObservers()
 
-        initializeSwitch()
+        initializeSwitchAndGetTheme()
 
         viewLifecycleOwner.lifecycleScope.launchWhenStarted {
             collectEvents()
@@ -51,7 +51,7 @@ class CurrentWeatherFragment : Fragment(R.layout.fragment_current) {
         binding.currentProgressBar.visibility = VISIBLE
     }
 
-    private fun initializeSwitch() {
+    private fun initializeSwitchAndGetTheme() {
         val sharedPref = activity?.getPreferences(Context.MODE_PRIVATE) ?: return
         val mainActivity = activity as MainActivity
         if (mainActivity.mDelegate.localNightMode == AppCompatDelegate.MODE_NIGHT_YES) {
@@ -105,24 +105,24 @@ class CurrentWeatherFragment : Fragment(R.layout.fragment_current) {
 
         viewModel.currentError.observe(viewLifecycleOwner) {
             if (it != null && viewModel.currentWeather.value == null) {
-                binding.apply {
-                    currentCityName.setCompoundDrawablesWithIntrinsicBounds(0, 0, 0, 0)
-                    currentCityBox.visibility = INVISIBLE
-                    currentQueryError.visibility = VISIBLE
-                    currentQueryError.text = it
-                }
-
+                    displayError(it)
             }
         }
 
         viewModel.customError.observe(viewLifecycleOwner) {
             it?.let {
-                binding.apply {
-                    currentCityBox.visibility = INVISIBLE
-                    currentQueryError.visibility = VISIBLE
-                    currentQueryError.text = it.message
-                }
+                   displayError(it.message)
             }
+        }
+    }
+
+    private fun displayError(errorMsg: String) {
+        binding.apply {
+            currentCityName.setCompoundDrawablesWithIntrinsicBounds(0, 0, 0, 0)
+            currentCityBox.visibility = INVISIBLE
+            currentQueryError.visibility = VISIBLE
+            currentQueryError.text = errorMsg
+            currentQueryError.fadeIn()
         }
     }
 

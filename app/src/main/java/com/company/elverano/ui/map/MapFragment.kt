@@ -1,6 +1,7 @@
 package com.company.elverano.ui.map
 
 import android.os.Bundle
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -41,8 +42,8 @@ class MapFragment : Fragment(R.layout.fragment_map) {
         savedInstanceState: Bundle?
     ): View? {
         _binding = FragmentMapBinding.inflate(inflater, container, false)
-
         binding.mapProgressBar.visibility = View.VISIBLE
+
         return binding.root
 
     }
@@ -54,15 +55,11 @@ class MapFragment : Fragment(R.layout.fragment_map) {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-
         mapView = childFragmentManager.findFragmentById(R.id.here_map_view) as AndroidXMapFragment
-
-
-
 
         viewModel.weatherResponse.observe(viewLifecycleOwner) {
             place = it
-            handleAndroidPermissions()
+            loadMapScene()
         }
     }
 
@@ -70,36 +67,36 @@ class MapFragment : Fragment(R.layout.fragment_map) {
         const val ZOOM_LVL = 11.0
     }
 
-    private fun handleAndroidPermissions() {
-        loadMapScene()
-    }
+
 
 
     private fun loadMapScene() {
-        // Load a scene from the SDK to render the map with a map style.
         mapView!!.init { error ->
             if (error == OnEngineInitListener.Error.NONE) {
                 map = mapView?.map!!
                 map.setCenter(GeoCoordinate(place.lat, place.lon), Map.Animation.NONE)
                 map.zoomLevel = ZOOM_LVL
 
-                val mainActivity = activity as MainActivity
-                if (mainActivity.delegate.localNightMode == AppCompatDelegate.MODE_NIGHT_YES) {
-                    val nightScheme =
-                        map.createCustomizableScheme("nightScheme", Map.Scheme.NORMAL_NIGHT)
-                    nightScheme?.let { map.setMapScheme(it) }
-                } else {
-                    val dayScheme =
-                        map.createCustomizableScheme("dayScheme", Map.Scheme.NORMAL_DAY)
-                    dayScheme?.let { map.setMapScheme(it) }
-                }
-
+                setUpTheme(map)
                 binding.mapProgressBar.visibility = View.INVISIBLE
             } else {
-                System.out.println("ERROR: Cannot initialize Map Fragment");
+                Log.d("HERE-Maps","Cannot initialize Map Fragment!")
             }
         }
 
+    }
+
+    private fun setUpTheme(map: Map) {
+        val mainActivity = activity as MainActivity
+        if (mainActivity.delegate.localNightMode == AppCompatDelegate.MODE_NIGHT_YES) {
+            val nightScheme =
+                map.createCustomizableScheme("nightScheme", Map.Scheme.NORMAL_NIGHT)
+            nightScheme?.let { map.setMapScheme(it) }
+        } else {
+            val dayScheme =
+                map.createCustomizableScheme("dayScheme", Map.Scheme.NORMAL_DAY)
+            dayScheme?.let { map.setMapScheme(it) }
+        }
     }
 
     override fun onPause() {

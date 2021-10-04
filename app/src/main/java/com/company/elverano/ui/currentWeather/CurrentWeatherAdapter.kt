@@ -31,7 +31,6 @@ class CurrentWeatherAdapter(
     override fun onBindViewHolder(holder: LocalViewHolder, position: Int) {
         val item = lists[position]
         holder.onBind(item)
-
     }
 
     inner class LocalViewHolder(private val binding: ForecastItemBinding) : RecyclerView.ViewHolder(
@@ -40,17 +39,13 @@ class CurrentWeatherAdapter(
         fun onBind(openWeatherHourly: OpenWeatherHourly) {
             binding.apply {
                 forecastItemTemperature.text = formatDoubleString(openWeatherHourly.temp, 1)
-                forecastItemTemperature.fadeIn()
-                forecastItemMeasure.fadeIn()
-
 
                 val date = Date(openWeatherHourly.dt * 1000 + offset * 1000)
                 val dateFormat = SimpleDateFormat("yyyy-MM-dd")
                 val hourFormat = SimpleDateFormat("hh a")
+
                 forecastCityHour.text = hourFormat.format(date)
-                forecastCityHour.fadeIn()
                 forecastCityDay.text = getWeekDayName(dateFormat.format(date))
-                forecastCityDay.fadeIn()
 
                 val isNight = openWeatherHourly.getNight()
                 isNight?.let { isNight ->
@@ -62,10 +57,18 @@ class CurrentWeatherAdapter(
                         .into(forecastCityImage)
                 }
 
+                animateText(this)
             }
         }
     }
-
+    private fun animateText(binding: ForecastItemBinding){
+        binding.apply {
+            forecastItemTemperature.fadeIn()
+            forecastItemMeasure.fadeIn()
+            forecastCityDay.fadeIn()
+            forecastCityHour.fadeIn()
+        }
+    }
 
     fun getWeekDayName(s: String?): String? {
         if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.O) {
@@ -80,6 +83,4 @@ class CurrentWeatherAdapter(
     override fun getItemCount(): Int {
         return lists.size
     }
-
-
 }

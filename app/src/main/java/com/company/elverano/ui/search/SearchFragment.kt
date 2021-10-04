@@ -48,6 +48,17 @@ class SearchFragment : Fragment(R.layout.fragment_search) {
         _binding = FragmentSearchBinding.bind(view)
 
 
+        initializeObservers()
+
+        addSearchViewListener()
+
+
+        viewLifecycleOwner.lifecycleScope.launchWhenStarted {
+            collectResults()
+        }
+    }
+
+    private fun initializeObservers() {
         viewModel.weatherResponse.observe(viewLifecycleOwner) {
             it?.let {
                 updateUI(it)
@@ -59,27 +70,16 @@ class SearchFragment : Fragment(R.layout.fragment_search) {
                 updateHistoryUI(it)
             }
         }
-
-        addSearchViewListener()
-
-
-        viewLifecycleOwner.lifecycleScope.launchWhenStarted {
-            collectResults()
-        }
     }
 
     private fun initializeBlur() {
         Blurry.with(context)
             .radius(RADIUS)
             .sampling(SAMPLING)
-            .async().animate(ANIM_DURATION)
-            .onto(binding.historyItemOne)
-
-        Blurry.with(context)
-            .radius(RADIUS)
-            .sampling(SAMPLING)
-            .async().animate(ANIM_DURATION)
-            .onto(binding.historyItemTwo)
+            .async().animate(ANIM_DURATION).apply {
+                this.onto(binding.historyItemOne)
+                this.onto(binding.historyItemTwo)
+            }
 
         Blurry.with(context)
             .radius(SMALL_RADIUS)
@@ -91,26 +91,26 @@ class SearchFragment : Fragment(R.layout.fragment_search) {
     private suspend fun collectResults() {
         viewModel.resultEvent.collect { event ->
             when (event) {
-
                 is ResultEvent.Success -> {
                     binding.searchProgressBar.visibility = View.INVISIBLE
                     viewModel.deleteError()
                     Log.d("ResultEvent", "Success")
-
-                    val action = SearchFragmentDirections.actionSearchFragmentToCurrentFragment()
-                    findNavController().navigate(action)
-
                 }
 
                 is ResultEvent.Error -> {
                     binding.searchProgressBar.visibility = View.INVISIBLE
                     viewModel.insertError(CustomError(message = event.message))
-
-                    val action = SearchFragmentDirections.actionSearchFragmentToCurrentFragment()
-                    findNavController().navigate(action)
                 }
+
             }
+
+            navigateToCurrent()
         }
+    }
+
+    private fun navigateToCurrent() {
+        val action = SearchFragmentDirections.actionSearchFragmentToCurrentFragment()
+        findNavController().navigate(action)
     }
 
     private fun addSearchViewListener() {

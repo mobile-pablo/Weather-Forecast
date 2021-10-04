@@ -1,7 +1,6 @@
 package com.company.elverano.ui
 
 import android.content.Context
-import android.graphics.Color
 import android.os.Bundle
 import android.view.WindowManager
 import androidx.appcompat.app.AppCompatActivity
@@ -26,6 +25,11 @@ class MainActivity : AppCompatActivity() {
         _binding = ActivityMainBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
+        initializeActivitySettings()
+
+    }
+
+    private fun initializeActivitySettings() {
         supportActionBar?.hide()
         binding.apply {
 
@@ -34,7 +38,6 @@ class MainActivity : AppCompatActivity() {
             bottomNav.setupWithNavController(navController)
 
         }
-
     }
 
     private fun setUpTheme() {
