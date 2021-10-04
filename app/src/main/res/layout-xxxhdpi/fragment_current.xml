@@ -72,14 +72,14 @@
                 <RelativeLayout
                     android:id="@+id/current_city_fullname_box"
                     android:layout_width="match_parent"
-                    android:layout_height="30dp"
+                    android:layout_height="wrap_content"
                     android:layout_below="@id/current_city_date"
                     android:layout_marginRight="90dp">
 
                     <TextView
                         android:id="@+id/current_city_name"
                         android:layout_width="wrap_content"
-                        android:layout_height="30dp"
+                        android:layout_height="wrap_content"
                         android:layout_alignParentLeft="true"
                         android:drawableTint="@color/project_main_text"
                         android:ellipsize="end"
@@ -96,7 +96,7 @@
                     <TextView
                         android:id="@+id/current_city_country"
                         android:layout_width="wrap_content"
-                        android:layout_height="match_parent"
+                        android:layout_height="wrap_content"
                         android:layout_toEndOf="@id/current_city_name"
                         android:ellipsize="end"
                         android:fontFamily="@font/lato"

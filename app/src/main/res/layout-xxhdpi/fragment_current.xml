@@ -91,25 +91,32 @@
                         android:paddingLeft="4dp"
                         android:paddingTop="4dp"
                         android:paddingBottom="4dp"
+                        android:layout_alignParentTop="true"
                         android:textAllCaps="true"
+                        android:layout_alignParentBottom="true"
                         android:textColor="@color/project_main_text"
-                        android:textSize="18sp"
+                        android:textSize="15sp"
                         tools:text="Rzeszów" />
 
                     <TextView
                         android:id="@+id/current_city_country"
                         android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
+                        android:layout_height="match_parent"
+                        android:layout_marginStart="0dp"
+                        android:layout_marginBottom="0dp"
                         android:layout_toEndOf="@id/current_city_name"
                         android:ellipsize="end"
                         android:fontFamily="@font/lato"
                         android:gravity="center_vertical"
                         android:maxLines="1"
                         android:paddingTop="4dp"
+                        android:layout_alignParentTop="true"
+                        android:textAllCaps="true"
+                        android:layout_alignParentBottom="true"
                         android:paddingRight="4dp"
                         android:paddingBottom="4dp"
                         android:textColor="@color/project_v2_text"
-                        android:textSize="18sp"
+                        android:textSize="15sp"
                         tools:text=", PL" />
                 </RelativeLayout>
 
@@ -123,7 +130,7 @@
                     android:paddingTop="1dp"
                     android:paddingRight="4dp"
                     android:textColor="@color/project_main_text"
-                    android:textSize="14sp"
+                    android:textSize="13sp"
                     tools:text="50.4342" />
 
                 <TextView
@@ -137,7 +144,7 @@
                     android:paddingTop="1dp"
                     android:paddingRight="4dp"
                     android:textColor="@color/project_main_text"
-                    android:textSize="14sp"
+                    android:textSize="13sp"
                     tools:text="-3.8434" />
 
                 <com.polyak.iconswitch.IconSwitch
