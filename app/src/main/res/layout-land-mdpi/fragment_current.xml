@@ -1,0 +1,229 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ScrollView
+    xmlns:android="http://schemas.android.com/apk/res/android"       xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".ui.currentWeather.CurrentWeatherFragment"
+    tools:background="@color/project_background">
+    <?xml version="1.0" encoding="utf-8"?>
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:gravity="center">
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="60dp"
+            android:gravity="center">
+
+            <ImageView
+                android:layout_width="wrap_content"
+                android:layout_height="200dp"
+                android:src="@drawable/world_map" />
+        </RelativeLayout>
+
+        <ProgressBar
+            android:id="@+id/current_progress_bar"
+            android:layout_width="30dp"
+            android:layout_height="30dp"
+            android:layout_centerInParent="true"
+            android:indeterminateTint="@color/project_light_red"
+            android:visibility="invisible"
+            tools:visibility="visible" />
+
+        <RelativeLayout
+            android:id="@+id/current_city_box"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_alignParentStart="true"
+            android:layout_alignParentTop="true"
+            android:gravity="center_horizontal"
+            android:orientation="vertical">
+
+
+            <RelativeLayout
+                android:id="@+id/current_city_small_box"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
+
+
+                <ImageView
+                    android:id="@+id/current_city_image"
+                    android:layout_width="80dp"
+                    android:layout_height="80dp"
+                    android:layout_centerHorizontal="true"
+                    android:layout_marginTop="80dp" />
+
+                <RelativeLayout
+                    android:id="@+id/current_city_info_box"
+                    android:layout_width="match_parent"
+                    android:layout_height="70dp">
+
+                    <TextView
+                        android:id="@+id/current_city_date"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:fontFamily="@font/roboto_light"
+                        android:paddingLeft="8dp"
+                        android:paddingTop="4dp"
+                        android:paddingRight="4dp"
+                        android:paddingBottom="4dp"
+                        android:textColor="@color/project_v3_text"
+                        android:textSize="8sp"
+                        tools:text="22, Feb 2021" />
+
+                    <RelativeLayout
+                        android:id="@+id/current_city_fullname_box"
+                        android:layout_width="match_parent"
+                        android:layout_height="30dp"
+                        android:layout_below="@id/current_city_date"
+                        android:layout_marginRight="90dp">
+
+                        <TextView
+                            android:id="@+id/current_city_name"
+                            android:layout_width="wrap_content"
+                            android:layout_height="30dp"
+                            android:layout_alignParentLeft="true"
+                            android:drawableTint="@color/project_main_text"
+                            android:ellipsize="end"
+                            android:fontFamily="@font/lato_bold"
+                            android:gravity="center_vertical"
+                            android:maxLines="1"
+                            android:paddingLeft="4dp"
+                            android:paddingTop="4dp"
+                            android:paddingBottom="4dp"
+                            android:textAllCaps="true"
+                            android:textColor="@color/project_main_text"
+                            android:textSize="10sp"
+                            tools:text="Rzeszów" />
+
+                        <TextView
+                            android:id="@+id/current_city_country"
+                            android:layout_width="wrap_content"
+                            android:layout_height="match_parent"
+                            android:layout_toEndOf="@id/current_city_name"
+                            android:ellipsize="end"
+                            android:fontFamily="@font/lato"
+                            android:gravity="center_vertical"
+                            android:maxLines="1"
+                            android:paddingTop="4dp"
+                            android:paddingRight="4dp"
+                            android:paddingBottom="4dp"
+                            android:textColor="@color/project_v2_text"
+                            android:textSize="10sp"
+                            tools:text=", PL" />
+                    </RelativeLayout>
+
+                    <TextView
+                        android:id="@+id/current_city_lat"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_below="@id/current_city_fullname_box"
+                        android:gravity="center"
+                        android:paddingLeft="8dp"
+                        android:paddingTop="1dp"
+                        android:paddingRight="4dp"
+                        android:textColor="@color/project_main_text"
+                        android:textSize="8sp"
+                        tools:text="50.4342" />
+
+                    <TextView
+                        android:id="@+id/current_city_long"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_below="@id/current_city_fullname_box"
+                        android:layout_toEndOf="@id/current_city_lat"
+                        android:gravity="center"
+                        android:paddingLeft="4dp"
+                        android:paddingTop="1dp"
+                        android:paddingRight="4dp"
+                        android:textColor="@color/project_main_text"
+                        android:textSize="8sp"
+                        tools:text="-3.8434" />
+
+                    <com.polyak.iconswitch.IconSwitch
+                        android:id="@+id/theme_switch"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_alignParentRight="true"
+                        android:layout_centerVertical="true"
+                        android:scaleX="0.8"
+                        android:scaleY="0.8"
+                        app:isw_active_tint_icon_left="@android:color/transparent"
+                        app:isw_active_tint_icon_right="@color/moon_yellow"
+                        app:isw_background_color="@color/project_background_light"
+                        app:isw_default_selection="right"
+                        app:isw_icon_left="@drawable/ic_day_mode_icon"
+                        app:isw_icon_right="@drawable/ic_night_mode_icon"
+                        app:isw_inactive_tint_icon_left="@android:color/transparent"
+                        app:isw_inactive_tint_icon_right="@color/moon_yellow"
+                        app:isw_thumb_color_left="@color/sky_blue"
+                        app:isw_thumb_color_right="@color/project_classic_gray" />
+                </RelativeLayout>
+
+                <RelativeLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_below="@id/current_city_image"
+                    android:layout_alignParentEnd="true"
+                    android:layout_marginTop="-1dp"
+                    android:layout_marginEnd="0dp"
+                    android:gravity="center">
+
+                    <TextView
+                        android:id="@+id/current_city_temperature"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="10dp"
+                        android:gravity="center"
+                        android:maxLines="1"
+                        android:textColor="@color/project_main_text"
+                        android:textSize="30sp"
+                        android:visibility="visible"
+                        tools:text="16"
+                        tools:visibility="visible" />
+
+                    <TextView
+                        android:id="@+id/current_city_measure"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_alignTop="@id/current_city_temperature"
+                        android:layout_toEndOf="@id/current_city_temperature"
+                        android:text="@string/temperature_measure"
+                        android:textColor="@color/project_light_red"
+                        android:textSize="30sp"
+                        android:visibility="invisible"
+                        tools:visibility="visible" />
+                </RelativeLayout>
+            </RelativeLayout>
+
+            <androidx.recyclerview.widget.RecyclerView
+                android:id="@+id/current_city_forecast_recycler_view"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_below="@id/current_city_small_box"
+                android:layout_marginBottom="0dp"
+                android:clipToPadding="false"
+                android:orientation="horizontal"
+                app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
+                tools:listitem="@layout/forecast_item" />
+        </RelativeLayout>
+
+        <TextView
+            android:id="@+id/current_query_error"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerInParent="true"
+            android:fontFamily="@font/lato"
+            android:textAlignment="center"
+            android:textColor="@color/project_main_text"
+            android:textSize="15sp"
+            android:textStyle="bold"
+            android:visibility="invisible"
+            tools:text="Weather not found!"
+            tools:visibility="visible" />
+    </RelativeLayout>
+</ScrollView>
