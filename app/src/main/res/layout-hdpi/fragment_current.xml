@@ -84,7 +84,7 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_alignParentLeft="true"
-                        app:drawableTint="@color/project_main_text"
+                        android:drawableTint ="@color/project_main_text"
                         android:ellipsize="end"
                         android:fontFamily="@font/lato_bold"
                         android:gravity="center_vertical"
