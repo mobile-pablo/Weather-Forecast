@@ -44,3 +44,4 @@ Which should be done in this week.
 # <img  src="readme_media/law_icon.png" width="30" /> License
 
 [![license](https://img.shields.io/github/license/DAVFoundation/captain-n3m0.svg?style=flat-square)](https://github.com/polonez-byte-112/Weather-Forecast/blob/master/LICENSE)
+ <img  src="readme_media/api_info.png" width="70" /> License
