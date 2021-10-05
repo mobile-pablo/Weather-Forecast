@@ -33,10 +33,12 @@ Author
  <h3>Dark Mode</h3>
 <img src="readme_media/dark_mode.png"/>
 </div>      
-
+<br/><br/><br/>
 Last thing left is adding app to Google Play.
+<br/>
 Which should be done in this week.
 
+<hr/>
 
 
 # <img  src="readme_media/law_icon.png" width="30" /> License
