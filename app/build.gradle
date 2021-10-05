@@ -106,10 +106,9 @@ dependencies {
     implementation "androidx.navigation:navigation-ui-ktx:2.3.5"
 
     //Koin
-   def koin_version= "3.1.2"
-    implementation "io.insert-koin:koin-android:$koin_version"
-    // Koin Java Compatibility
-    implementation "io.insert-koin:koin-android-compat:$koin_version"
+    implementation "org.koin:koin-android:2.0.1"
+    implementation 'org.koin:koin-androidx-viewmodel:2.0.1'
+    implementation 'org.koin:koin-androidx-scope:2.0.1'
 
 
     // Retrofit + GSON
