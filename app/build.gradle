@@ -29,7 +29,7 @@ android {
         renderscriptSupportModeEnabled true
     }
 
-        //Delete unncessary fonts
+    //Delete unncessary fonts
     packagingOptions {
         exclude '/lib/armeabi-v7a/libNanumGothicFontPkg.so'
         exclude '/lib/armeabi-v7a/libLohitIndicFontPkg.so'
@@ -105,11 +105,12 @@ dependencies {
     implementation "androidx.navigation:navigation-fragment-ktx:2.3.5"
     implementation "androidx.navigation:navigation-ui-ktx:2.3.5"
 
-    // Dagger Hilt
-    implementation "com.google.dagger:hilt-android:2.38.1"
-    kapt "com.google.dagger:hilt-compiler:2.38.1"
-    compileOnly 'com.squareup.inject:assisted-inject-annotations-dagger2:0.4.0'
-    kapt 'com.squareup.inject:assisted-inject-processor-dagger2:0.4.0'
+    //Koin
+   def koin_version= "3.1.2"
+    implementation "io.insert-koin:koin-android:$koin_version"
+    // Koin Java Compatibility
+    implementation "io.insert-koin:koin-android-compat:$koin_version"
+
 
     // Retrofit + GSON
     implementation "com.squareup.retrofit2:retrofit:2.9.0"
