@@ -1,18 +1,18 @@
 # ☁️ Weather Forecast
  My basic app to demonstrate newly learned technologies.
  
+ 
  # Tech Stack
  
  * Kotlin
  * MVVM 
  * ViewBinding
  * Dagger + Hilt
- * Retrofit + Gson + Callback library
+ * Retrofit ( 3 API's ) + Gson + Callback library
  * Room
+ * Flows
 
 Icons: https://figmaelements.com/3d-weather-icons-pack/ 
-
-
 
 
 Desired UI:
@@ -24,8 +24,21 @@ Author
 
 
 ## Preview
-
-Work is in progress and I should finish this project till end of this month.
 <div align="center">
-<img src="readme_media/preview_beta.png"/>
-</div>                                                                                     
+  <h3>Light Mode</h3>
+<img src="readme_media/light_mode.png"/>
+</div>      
+
+<div align="center">
+ <h3>Dark Mode</h3>
+<img src="readme_media/dark_mode.png"/>
+</div>      
+
+Last thing left is adding app to Google Play.
+Which should be done in this week.
+
+
+
+# <img  src="readme_media/law_icon.png" width="30" /> License
+
+[![license](https://img.shields.io/github/license/DAVFoundation/captain-n3m0.svg?style=flat-square)](https://github.com/polonez-byte-112/Weather-Forecast/blob/master/LICENSE)
