@@ -9,7 +9,8 @@
  * MVVM 
  * ViewBinding
  * Dagger + Hilt
- * Retrofit ( 3 API's ) + Gson + Callback library
+ * Retrofit ( 2 API's ) + Gson + Callback library
+ * HERE maps SDK
  * Room
  * Flows
 
