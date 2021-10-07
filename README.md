@@ -1,6 +1,9 @@
 # ☁️ Weather Forecast  <img  src="readme_media/api_info.png" width="70" />  <a href="https://github.com/polonez-byte-112/Weather-Forecast/blob/master/LICENSE"><img src="https://img.shields.io/github/license/DAVFoundation/captain-n3m0.svg?style=flat-square"/></a>
 
- My basic app to demonstrate newly learned technologies.
+<div align="center">
+
+<img src="readme_media/google_play_background.png"/>
+</div>      
  
  
  # Tech Stack
