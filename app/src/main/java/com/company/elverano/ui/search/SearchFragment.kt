@@ -2,9 +2,7 @@ package com.company.elverano.ui.search
 
 import android.os.Bundle
 import android.util.Log
-import android.view.LayoutInflater
 import android.view.View
-import android.view.ViewGroup
 import androidx.appcompat.widget.SearchView
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
@@ -23,6 +21,7 @@ import com.company.elverano.utils.formatDoubleString
 import com.company.elverano.utils.setWeatherIcon
 import dagger.hilt.android.AndroidEntryPoint
 import jp.wasabeef.blurry.Blurry
+import kotlinx.coroutines.DelicateCoroutinesApi
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.collect
@@ -139,6 +138,7 @@ class SearchFragment : Fragment(R.layout.fragment_search) {
         }
     }
 
+    @DelicateCoroutinesApi
     private fun updateUI(weather: OpenWeatherResponse) {
         binding.apply {
 
@@ -187,16 +187,15 @@ class SearchFragment : Fragment(R.layout.fragment_search) {
 
         binding.apply {
 
-            firstItem?.let {
-                historyCityNameOne.text = firstItem.name
+            firstItem?.let { item->
+                historyCityNameOne.text = item.name
                 historyCityTempOne.text = formatDoubleString(firstItem.temp, 0)
-                historyCityMainOne.text = firstItem.main
-                val isNight_first = firstItem.getNight()
-                isNight_first?.let {
+                historyCityMainOne.text = item.main
+                    item.getNight()?.let { night->
                     val drawable =
                         setWeatherIcon(
-                            firstItem.weather_id,
-                            it,
+                            item.weather_id,
+                            night,
                             resources
                         )
 
@@ -214,16 +213,15 @@ class SearchFragment : Fragment(R.layout.fragment_search) {
                 historyCityMainOne.fadeIn()
             }
 
-            secondItem?.let {
-                historyCityNameTwo.text = secondItem.name
+            secondItem?.let { item ->
+                historyCityNameTwo.text = item.name
                 historyCityTempTwo.text = formatDoubleString(secondItem.temp, 0)
-                historyCityMainTwo.text = secondItem.main
-                val isNight_second = secondItem.getNight()
-                isNight_second?.let {
+                historyCityMainTwo.text = item.main
+                item.getNight()?.let {  night ->
                     val drawable =
                         setWeatherIcon(
-                            secondItem.weather_id,
-                            it,
+                            item.weather_id,
+                            night,
                             resources
                         )
 
