@@ -17,11 +17,10 @@
  * HERE maps SDK
  * Room
  * Flows
-
-Icons: https://figmaelements.com/3d-weather-icons-pack/ 
-
-
+<br/>
 <div align="center">
+  <a href="https://figmaelements.com/3d-weather-icons-pack/">Click Here for Icons</a>
+ <br/>
  <h3>Desired UI</h3>
 <a href="https://dribbble.com/shots/15162632-Weather-app">
 <img src="https://cdn.dribbble.com/users/4870223/screenshots/15162632/media/6698e4b05964edc6a0a842d8898cca84.png" width="100%"/>
