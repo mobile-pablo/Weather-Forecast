@@ -1,10 +1,11 @@
-# ☁️ Weather Forecast  <img  src="readme_media/api_info.png" width="70" />  <a href="https://github.com/polonez-byte-112/Weather-Forecast/blob/master/LICENSE"><img src="https://img.shields.io/github/license/DAVFoundation/captain-n3m0.svg?style=flat-square"/></a>
+ # ☁️ Weather Forecast  <img  src="readme_media/api_info.png" width="70" />  <a href="https://github.com/polonez-byte-112/Weather-Forecast/blob/master/LICENSE"><img src="https://img.shields.io/github/license/DAVFoundation/captain-n3m0.svg?style=flat-square"/></a>
 
 <div align="center">
 
 <img src="readme_media/google_play_background.png"/>
 </div>      
  
+
  
  # Tech Stack
  
@@ -41,8 +42,8 @@ Author
 <img src="readme_media/dark_mode.png"/>
 </div>      
 <br/><br/><br/>
-Last thing left is adding app to Google Play.
-<br/>
-Which should be done in this week.
 
+<div align="center">
+  <a href="https://play.google.com/store/apps/details?id=com.company.elverano"><img src="https://camo.githubusercontent.com/68b69c9e16ee529bdd2540b7f7033afc8de0535966d2c36ee3878410f799f270/68747470733a2f2f706c61792e676f6f676c652e636f6d2f696e746c2f656e5f75732f6261646765732f696d616765732f67656e657269632f656e2d706c61792d62616467652e706e67"  width="300"/></a>
+ </div>
 <hr/>
