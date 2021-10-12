@@ -58,17 +58,16 @@ class MapFragment : Fragment(R.layout.fragment_map) {
         mapView = childFragmentManager.findFragmentById(R.id.here_map_view) as AndroidXMapFragment
 
         viewModel.weatherResponse.observe(viewLifecycleOwner) {
-            place = it
-            loadMapScene()
+         it?.let {
+             place = it
+             loadMapScene()
+         }
         }
     }
 
     companion object {
         const val ZOOM_LVL = 11.0
     }
-
-
-
 
     private fun loadMapScene() {
         mapView!!.init { error ->
