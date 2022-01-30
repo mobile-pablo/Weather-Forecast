@@ -1,9 +1,6 @@
 package com.company.elverano.utils
 
 import com.company.elverano.data.historyWeather.HistoryWeather
-import com.company.elverano.data.historyWeather.HistoryWeatherResponse
-import com.company.elverano.data.openWeather.OpenWeatherCurrent
-import com.company.elverano.data.openWeather.OpenWeatherResponse
 
 object DummyData {
 

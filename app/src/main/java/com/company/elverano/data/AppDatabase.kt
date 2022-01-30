@@ -22,8 +22,17 @@ import javax.inject.Inject
 import javax.inject.Provider
 
 @TypeConverters(DataConverter::class)
-@Database(entities = [ PositionStackResponse::class, OpenWeatherResponse::class, HistoryWeatherResponse::class, CustomError::class], version = 1, exportSchema = false)
-abstract class AppDatabase: RoomDatabase(){
+@Database(
+    entities = [
+        PositionStackResponse::class,
+        OpenWeatherResponse::class,
+        HistoryWeatherResponse::class,
+        CustomError::class
+    ],
+    version = 1,
+    exportSchema = false
+)
+abstract class AppDatabase : RoomDatabase() {
 
     abstract fun positionStackDao(): PositionStackDao
     abstract fun openWeatherDao(): OpenWeatherDao
@@ -33,18 +42,25 @@ abstract class AppDatabase: RoomDatabase(){
     class Callback @Inject constructor(
         private val database: Provider<AppDatabase>,
         @ApplicationScope private val applicationScope: CoroutineScope
-    ): RoomDatabase.Callback(){
+    ) : RoomDatabase.Callback() {
         override fun onCreate(db: SupportSQLiteDatabase) {
             super.onCreate(db)
-            Log.d("Room","Database created")
+
+            Log.d("Room", "Database created")
+
             applicationScope.launch {
                 val list = MutableList(2) { DummyData.dummy_krakow }
                 list[0] = DummyData.dummy_krakow
                 list[1] = DummyData.dummy_wroclaw
-                val response = HistoryWeatherResponse(
-                    data = list
-                )
-             database.get().historyWeatherDao().insertHistoryList(response)
+
+                database
+                    .get()
+                    .historyWeatherDao()
+                    .insertHistoryList(
+                        HistoryWeatherResponse(
+                            data = list
+                        )
+                    )
             }
         }
     }

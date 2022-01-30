@@ -25,16 +25,16 @@ class DataConverter {
     }
 
     @TypeConverter
-    fun fromOpenWeatherHourlyList(value: ArrayList<OpenWeatherHourly>): String {
+    fun fromOpenWeatherHourlyList(value: List<OpenWeatherHourly>): String {
         val gson = Gson()
-        val type = object : TypeToken<ArrayList<OpenWeatherHourly>>() {}.type
+        val type = object : TypeToken<List<OpenWeatherHourly>>() {}.type
         return gson.toJson(value, type)
     }
 
     @TypeConverter
-    fun toOpenWeatherHourlyList(value: String): ArrayList<OpenWeatherHourly> {
+    fun toOpenWeatherHourlyList(value: String): List<OpenWeatherHourly> {
         val gson = Gson()
-        val type = object : TypeToken<ArrayList<OpenWeatherHourly>>() {}.type
+        val type = object : TypeToken<List<OpenWeatherHourly>>() {}.type
         return gson.fromJson(value, type)
     }
 

@@ -1,7 +1,6 @@
 package com.company.elverano.di
 
 import android.app.Application
-import android.content.Context
 import androidx.room.Room
 import com.company.elverano.api.OpenWeatherApi
 import com.company.elverano.api.PositionStackApi
@@ -9,7 +8,6 @@ import com.company.elverano.data.AppDatabase
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
-import dagger.hilt.android.qualifiers.ApplicationContext
 import dagger.hilt.components.SingletonComponent
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.SupervisorJob
@@ -31,8 +29,6 @@ object AppModule {
         .addConverterFactory(GsonConverterFactory.create())
         .build()
 
-
-
     @Provides
     @Singleton
     @Named("openWeatherRetrofit")
@@ -41,33 +37,34 @@ object AppModule {
         .addConverterFactory(GsonConverterFactory.create())
         .build()
 
+    @Provides
+    @Singleton
+    fun provideOpenWeatherApi(
+        @Named("openWeatherRetrofit") openWeatherRetrofit: Retrofit
+    ): OpenWeatherApi =
+        openWeatherRetrofit.create(OpenWeatherApi::class.java)
 
     @Provides
     @Singleton
-    fun provideOpenWeatherApi  ( @Named("openWeatherRetrofit") openWeatherRetrofit: Retrofit): OpenWeatherApi = openWeatherRetrofit.create(OpenWeatherApi::class.java)
-
-
-    @Provides
-    @Singleton
-    fun providePositionStackApi( @Named("positionStackRetrofit") positionStackRetrofit: Retrofit): PositionStackApi = positionStackRetrofit.create(PositionStackApi::class.java)
+    fun providePositionStackApi(
+        @Named("positionStackRetrofit") positionStackRetrofit: Retrofit
+    ): PositionStackApi =
+        positionStackRetrofit.create(PositionStackApi::class.java)
 
     @Provides
     @Singleton
     fun provideDatabase(
         app: Application,
-        callback:AppDatabase.Callback
+        callback: AppDatabase.Callback
     ) = Room.databaseBuilder(app, AppDatabase::class.java, "app_database")
         .fallbackToDestructiveMigration()
         .addCallback(callback)
         .build()
 
-
-
     @ApplicationScope
     @Provides
     @Singleton
     fun provideApplicationScope() = CoroutineScope(SupervisorJob())
-
 
     @Provides
     fun provideHistoryDao(db: AppDatabase) = db.historyWeatherDao()

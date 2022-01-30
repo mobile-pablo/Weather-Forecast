@@ -31,8 +31,8 @@ import java.util.*
 
 @AndroidEntryPoint
 class CurrentWeatherFragment : Fragment(R.layout.fragment_current) {
-
     private val viewModel by viewModels<CurrentWeatherViewModel>()
+
     private var _binding: FragmentCurrentBinding? = null
     private val binding get() = _binding!!
 
@@ -54,6 +54,7 @@ class CurrentWeatherFragment : Fragment(R.layout.fragment_current) {
     private fun initializeSwitchAndGetTheme() {
         val sharedPref = activity?.getPreferences(Context.MODE_PRIVATE) ?: return
         val mainActivity = activity as MainActivity
+
         if (mainActivity.mDelegate.localNightMode == AppCompatDelegate.MODE_NIGHT_YES) {
             binding.themeSwitch.checked = IconSwitch.Checked.RIGHT
         } else {
@@ -61,7 +62,7 @@ class CurrentWeatherFragment : Fragment(R.layout.fragment_current) {
         }
 
         binding.themeSwitch.setCheckedChangeListener { isChecked ->
-            var newTheme = -3
+            var newTheme: Int
             if (isChecked == IconSwitch.Checked.RIGHT) {
                 newTheme = 1
                 mainActivity.mDelegate.localNightMode = AppCompatDelegate.MODE_NIGHT_YES
@@ -105,13 +106,13 @@ class CurrentWeatherFragment : Fragment(R.layout.fragment_current) {
 
         viewModel.currentError.observe(viewLifecycleOwner) {
             if (it != null && viewModel.currentWeather.value == null) {
-                    displayError(it)
+                displayError(it)
             }
         }
 
         viewModel.customError.observe(viewLifecycleOwner) {
             it?.let {
-                   displayError(it.message)
+                displayError(it.message!!)
             }
         }
     }
@@ -127,7 +128,6 @@ class CurrentWeatherFragment : Fragment(R.layout.fragment_current) {
     }
 
     private suspend fun collectEvents() {
-
         viewModel.resultEvent.collect { event ->
             when (event) {
                 is ResultEvent.Success -> {
@@ -146,12 +146,9 @@ class CurrentWeatherFragment : Fragment(R.layout.fragment_current) {
                 }
             }
         }
-
-
     }
 
     private fun updateUI(response: OpenWeatherResponse?) {
-
         binding.apply {
             if (response != null) {
                 binding.currentProgressBar.visibility = INVISIBLE
@@ -164,33 +161,34 @@ class CurrentWeatherFragment : Fragment(R.layout.fragment_current) {
                 //For unknown reasons GMT time is having 2 hour delay for every country.
                 val delay = 2 * 3600 * 1000
                 val currentDate =
-                    Date(response.current.dt * 1000 + response.timezone_offset * 1000 - delay)
-                val sdf = SimpleDateFormat("dd, MMM yyyy HH:mm:ss")
+                    Date(response.current!!.dt!! * 1000 + response.timezone_offset!! * 1000 - delay)
+                val sdf = SimpleDateFormat("dd, MMM yyyy HH:mm:ss", Locale.getDefault())
                 currentCityDate.text = sdf.format(currentDate)
                 currentCityDate.fadeIn()
                 currentCityForecastRecyclerView.visibility = VISIBLE
                 currentCityForecastRecyclerView.adapter = CurrentWeatherAdapter(
-                    response.hourly,
-                    response.timezone_offset,
+                    response.hourly!!,
+                    response.timezone_offset!!,
                     resources
                 )
+
                 currentCityForecastRecyclerView.setHasFixedSize(true)
                 currentCityForecastRecyclerView.layoutManager = LinearLayoutManager(context).apply {
                     isAutoMeasureEnabled = false
                     orientation = LinearLayoutManager.HORIZONTAL
                 }
 
-                currentCityTemperature.text = formatDoubleString(response.current.temp, 1)
+                currentCityTemperature.text = formatDoubleString(response.current.temp!!, 1)
                 currentCityTemperature.fadeIn()
                 currentCityMeasure.fadeIn()
-                val isNight = response.current.getNight()
+                val isNight = response.current!!.getNight()
 
 
 
                 isNight?.let { isNight ->
                     val drawable =
                         setWeatherIcon(
-                            response.current.weather[0].id,
+                            response.current.weather!![0].id!!,
                             isNight,
                             resources
                         )

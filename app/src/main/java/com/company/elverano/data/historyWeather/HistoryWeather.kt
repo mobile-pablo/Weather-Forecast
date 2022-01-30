@@ -2,30 +2,26 @@ package com.company.elverano.data.historyWeather
 
 import androidx.room.Entity
 import androidx.room.PrimaryKey
-import com.company.elverano.data.openWeather.OpenWeatherCurrent
-import com.company.elverano.data.openWeather.OpenWeatherResponse
-import com.company.elverano.utils.DummyData
+import com.google.gson.annotations.SerializedName
 
 @Entity(tableName = "history_weather")
 data class HistoryWeather(
-    @PrimaryKey(autoGenerate = true)   val db_id: Int =0,
-    val temp: Double =0.0,
-    val lat: Double =0.0,
-    val lon: Double=0.0,
-    val name: String ="",
-    val weather_id: Int=0,
-    val main: String ="",
-    val description: String = "",
-    val icon: String =""
-
-){
+    @SerializedName("db_id") @PrimaryKey(autoGenerate = true) val db_id: Int? = null,
+    @SerializedName("temp") val temp: Double? = null,
+    @SerializedName("lat") val lat: Double? = null,
+    @SerializedName("lon") val lon: Double? = null,
+    @SerializedName("name") val name: String? = null,
+    @SerializedName("weather_id") val weather_id: Int? = null,
+    @SerializedName("main") val main: String? = null,
+    @SerializedName("description") val description: String? = null,
+    @SerializedName("icon") val icon: String? = null
+) {
     fun getNight(): Boolean? {
-        if (icon.contains("n", true)) {
+        if (icon!!.contains("n", true)) {
             return true
         } else if (icon.contains("d", true)) {
             return false
         }
-
         return null
     }
 }

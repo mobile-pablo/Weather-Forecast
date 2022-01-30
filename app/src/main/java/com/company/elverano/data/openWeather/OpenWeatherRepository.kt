@@ -1,6 +1,5 @@
 package com.company.elverano.data.openWeather
 
-import android.util.Log
 import com.company.elverano.api.OpenWeatherApi
 import com.company.elverano.data.AppDatabase
 import javax.inject.Inject
@@ -9,18 +8,19 @@ import javax.inject.Singleton
 @Singleton
 class OpenWeatherRepository @Inject constructor(
     private val api: OpenWeatherApi,
-    private val database: AppDatabase,
+    database: AppDatabase,
 ) {
     private val dao = database.openWeatherDao()
 
-  fun getWeatherFromAPI(lat: Double, lon: Double)= api.getWeather(latitude = lat, longitude = lon)
+    fun getWeatherFromAPI(lat: Double, lon: Double) =
+        api.getWeather(latitude = lat, longitude = lon)
 
-   suspend fun insertWeatherToDatabase(data: OpenWeatherResponse){
+    suspend fun insertWeatherToDatabase(data: OpenWeatherResponse) =
         dao.insertWeather(data)
-    }
 
-  suspend  fun getWeatherFromDB() = dao.getWeather()
-  suspend  fun deleteWeatherFromDatabase() {
-       dao.deleteWeather()
-    }
+    suspend fun getWeatherFromDB() =
+        dao.getWeather()
+
+    suspend fun deleteWeatherFromDatabase() =
+        dao.deleteWeather()
 }

@@ -9,16 +9,13 @@ import org.jetbrains.annotations.NotNull
 
 @Dao
 interface HistoryWeatherDao {
-
     @NotNull
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     suspend fun insertHistoryList(response: HistoryWeatherResponse)
 
-
     @NotNull
     @Query("SELECT * FROM history_weather_response")
-    suspend fun getHistory() : HistoryWeatherResponse?
-
+    suspend fun getHistory(): HistoryWeatherResponse?
 
     @Query("DELETE FROM history_weather_response")
     suspend fun deleteHistoryList()

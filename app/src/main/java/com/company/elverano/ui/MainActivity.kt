@@ -46,7 +46,7 @@ class MainActivity : AppCompatActivity() {
         if (sharedPref.getInt(getString(R.string.theme_mode), defaultValue) == 1) {
             setTheme(R.style.darkTheme)
             delegate.localNightMode = AppCompatDelegate.MODE_NIGHT_YES
-        } else  {
+        } else {
             setTheme(R.style.Theme_WeatherForecast)
             delegate.localNightMode = AppCompatDelegate.MODE_NIGHT_NO
         }

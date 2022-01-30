@@ -45,7 +45,6 @@ class MapFragment : Fragment(R.layout.fragment_map) {
         binding.mapProgressBar.visibility = View.VISIBLE
 
         return binding.root
-
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -58,10 +57,10 @@ class MapFragment : Fragment(R.layout.fragment_map) {
         mapView = childFragmentManager.findFragmentById(R.id.here_map_view) as AndroidXMapFragment
 
         viewModel.weatherResponse.observe(viewLifecycleOwner) {
-         it?.let {
-             place = it
-             loadMapScene()
-         }
+            it?.let {
+                place = it
+                loadMapScene()
+            }
         }
     }
 
@@ -73,16 +72,15 @@ class MapFragment : Fragment(R.layout.fragment_map) {
         mapView!!.init { error ->
             if (error == OnEngineInitListener.Error.NONE) {
                 map = mapView?.map!!
-                map.setCenter(GeoCoordinate(place.lat, place.lon), Map.Animation.NONE)
+                map.setCenter(GeoCoordinate(place.lat!!, place.lon!!), Map.Animation.NONE)
                 map.zoomLevel = ZOOM_LVL
 
                 setUpTheme(map)
                 binding.mapProgressBar.visibility = View.INVISIBLE
             } else {
-                Log.d("HERE-Maps","Cannot initialize Map Fragment!")
+                Log.d("HERE-Maps", "Cannot initialize Map Fragment!")
             }
         }
-
     }
 
     private fun setUpTheme(map: Map) {

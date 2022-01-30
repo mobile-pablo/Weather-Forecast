@@ -34,11 +34,13 @@ class CurrentWeatherViewModel @Inject constructor(
     var currentName = MutableLiveData<String>()
     var currentCountry = MutableLiveData<String>()
     var currentError = MutableLiveData<String>()
+
     private val resultChannel = Channel<ResultEvent>()
     val resultEvent = resultChannel.receiveAsFlow()
+
     private var searchJob: Job? = null
     private var couritineJob: Job? = null
-
+    private var messageJob: Job? = null
 
     private var _customError = MutableLiveData<CustomError>()
     val customError: LiveData<CustomError> get() = _customError
@@ -50,7 +52,6 @@ class CurrentWeatherViewModel @Inject constructor(
     private fun initializeVm() {
         searchJob?.cancel()
         searchJob = viewModelScope.launch {
-
             val openWeatherResponse = openWeatherRepository.getWeatherFromDB()
             openWeatherResponse?.let {
                 currentWeather.value = it
@@ -58,95 +59,75 @@ class CurrentWeatherViewModel @Inject constructor(
                 searchLocation("Warsaw")
             }
 
-
             positionStackRepository.getLocationFromDatabase()?.data?.let {
                 if (it.isNotEmpty()) {
-                    currentName.value = it[0].name
-                    currentCountry.value = it[0].country_code
+                    currentName.value = it[0].name!!
+                    currentCountry.value = it[0].country_code!!
                 }
             }
 
             errorRepository.getErrorFromDB()?.let {
                 _customError.value = it
             }
-
-
         }
     }
 
     private fun searchLocation(query: String) {
         searchJob?.cancel()
         searchJob = viewModelScope.launch {
-            val response = positionStackRepository.getLocationFromAPI(query)
-            response?.request { response ->
+            positionStackRepository.getLocationFromAPI(query)?.request { response ->
                 when (response) {
                     is ApiResponse.Success -> {
-                        viewModelScope.launch {
-
-
-                            response.data?.let {
-                                positionStackRepository.deletePositionFromDB()
-                                positionStackRepository.insertPositionToDB(it)
-                                val list = it.data
-                                list?.let {
-                                    if (it.isNotEmpty()) {
-                                        val item = it[0]
-
-                                        item?.let { item ->
-                                            searchWeather(
-                                                lat = item.latitude,
-                                                lon = item.longitude,
-                                                name = item.name,
-                                                country = item.country
-                                            )
-                                        }
+                        messageJob?.cancel()
+                        messageJob = viewModelScope.launch {
+                            positionStackRepository.deletePositionFromDB()
+                            positionStackRepository.insertPositionToDB(response.data)
+                            response.data.data.let { data ->
+                                if (data!!.isNotEmpty()) {
+                                    data[0].let { item ->
+                                        searchWeather(
+                                            lat = item.latitude!!,
+                                            lon = item.longitude!!,
+                                            name = item.name!!,
+                                            country = item.country!!
+                                        )
 
                                         Log.d(
                                             "CurrentWeather",
                                             "Item : ${item.latitude} , ${item.longitude} , ${item.name}"
                                         )
-
-                                    } else {
-                                        viewModelScope.launch {
-                                            val msg = "No Item's found"
-                                            resultChannel.send(ResultEvent.Error(msg))
-                                            currentError.value = msg
-                                        }
                                     }
+                                } else {
+                                    val msg = "No Item's found"
+                                    resultChannel.send(ResultEvent.Error(msg))
+                                    currentError.value = msg
                                 }
-
                             }
                         }
-
-
                     }
                     is ApiResponse.Failure.Error -> {
-                        viewModelScope.launch {
+                        messageJob?.cancel()
+                        messageJob = viewModelScope.launch {
                             val msg = "No Item's found\nError " + response.statusCode.code
                             resultChannel.send(ResultEvent.Error(msg))
                         }
-
-
                     }
                     is ApiResponse.Failure.Exception -> {
-                        when (response.exception) {
-                            is UnknownHostException -> {
-                                viewModelScope.launch {
+                        messageJob?.cancel()
+                        messageJob = viewModelScope.launch {
+                            when (response.exception) {
+                                is UnknownHostException -> {
                                     val msg = "No Item's found\nNo Internet Connection!"
                                     resultChannel.send(ResultEvent.Error(msg))
                                 }
-                            }
-                            else -> {
-                                viewModelScope.launch {
+                                else -> {
                                     val msg =
                                         "No Item's found\nException: ${response.exception.message}"
                                     resultChannel.send(ResultEvent.Error(msg))
+                                    throw response.exception
                                 }
-                                throw response.exception
                             }
                         }
-
-
                     }
                 }
             }
@@ -157,65 +138,65 @@ class CurrentWeatherViewModel @Inject constructor(
     private fun searchWeather(lat: Double, lon: Double, name: String, country: String) {
         couritineJob?.cancel()
         couritineJob = viewModelScope.launch {
-            val response = openWeatherRepository.getWeatherFromAPI(lon = lon, lat = lat)
-            response?.request { response ->
+            openWeatherRepository.getWeatherFromAPI(lon = lon, lat = lat)?.request { response ->
                 when (response) {
                     is ApiResponse.Success -> {
-                        viewModelScope.launch {
-                            response?.data?.let {
+                        messageJob?.cancel()
+                        messageJob = viewModelScope.launch {
+                            response.data.let {
                                 openWeatherRepository.deleteWeatherFromDatabase()
                                 openWeatherRepository.insertWeatherToDatabase(it)
 
-                                currentWeather.value = response.data
+                                currentWeather.value = it
                                 currentName.value = name
                                 currentCountry.value = country
                                 resultChannel.send(ResultEvent.Success)
                             }
-
-
                         }
-
                     }
 
                     is ApiResponse.Failure.Error -> {
-                        viewModelScope.launch {
+                        messageJob?.cancel()
+                        messageJob = viewModelScope.launch {
                             val msg = "No Item's found\nError " + response.statusCode.code
                             resultChannel.send(ResultEvent.Error(msg))
                         }
-
                     }
 
                     is ApiResponse.Failure.Exception -> {
-                        when (response.exception) {
-                            is UnknownHostException -> {
-                                viewModelScope.launch {
+                        messageJob?.cancel()
+                        messageJob = viewModelScope.launch {
+                            when (response.exception) {
+                                is UnknownHostException -> {
                                     val msg = "No Item's found\nNo Internet Connection!"
                                     resultChannel.send(ResultEvent.Error(msg))
                                 }
-                            }
-                            else -> {
-                                viewModelScope.launch {
+                                else -> {
                                     val msg =
                                         "No Item's found\nException: ${response.exception.message}"
                                     resultChannel.send(ResultEvent.Error(msg))
+                                    throw response.exception
                                 }
-                                throw response.exception
                             }
                         }
-
                     }
-
                 }
             }
         }
     }
 
-    fun insertError(customError: CustomError) = viewModelScope.launch {
-        errorRepository.deleteErrorFromDatabase()
-        errorRepository.insertErrorToDatabase(customError)
+    fun insertError(customError: CustomError) {
+        messageJob?.cancel()
+        messageJob = viewModelScope.launch {
+            errorRepository.deleteErrorFromDatabase()
+            errorRepository.insertErrorToDatabase(customError)
+        }
     }
 
-    fun deleteError() = viewModelScope.launch {
-        errorRepository.deleteErrorFromDatabase()
+    fun deleteError() {
+        messageJob?.cancel()
+        messageJob = viewModelScope.launch {
+            errorRepository.deleteErrorFromDatabase()
+        }
     }
 }

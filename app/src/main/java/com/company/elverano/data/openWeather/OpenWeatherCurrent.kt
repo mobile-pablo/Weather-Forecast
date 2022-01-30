@@ -1,42 +1,39 @@
 package com.company.elverano.data.openWeather
 
 import androidx.room.Entity
+import com.google.gson.annotations.SerializedName
 
 @Entity(tableName = "open_weather_current")
-
 data class OpenWeatherCurrent(
-    val dt: Long = 0,
-    val lon: Long =0,
-    val lat: Long =0,
-    val sunrise: Long = 0,
-    val sunset: Long = 0,
-    val temp: Double = 0.0,
-    val pressure: Int = 0,
-    val humidity: Int = 0,
-    val clouds: Int = 0,
-    val visibility: Int = 0,
-    val wind_speed: Double = 0.0,
-    val wind_deg: Int = 0,
-    val wind_gust: Double = 0.0,
-    val weather: List<OpenWeatherResult> = arrayListOf()
+    @SerializedName("dt") val dt: Long? = null,
+    @SerializedName("lon") val lon: Long? = null,
+    @SerializedName("lat") val lat: Long? = null,
+    @SerializedName("sunrise") val sunrise: Long? = null,
+    @SerializedName("sunset") val sunset: Long? = null,
+    @SerializedName("temp") val temp: Double? = null,
+    @SerializedName("pressure") val pressure: Int? = null,
+    @SerializedName("humidity") val humidity: Int? = null,
+    @SerializedName("clouds") val clouds: Int? = null,
+    @SerializedName("visibility") val visibility: Int? = null,
+    @SerializedName("wind_speed") val wind_speed: Double? = null,
+    @SerializedName("wind_deg") val wind_deg: Int? = null,
+    @SerializedName("wind_gust") val wind_gust: Double? = null,
+    @SerializedName("weather") val weather: List<OpenWeatherResult>? = null
 ) {
-
     fun getNight(): Boolean? {
-        var icon = weather[0].icon
+        val icon = weather?.get(0)!!.icon!!
         if (icon.contains("n", true)) {
             return true
         } else if (icon.contains("d", true)) {
             return false
         }
-
         return null
     }
 
-
     data class OpenWeatherResult(
-        val id: Int,
-        val main: String,
-        val description: String,
-        val icon: String
+        @SerializedName("id") val id: Int? = null,
+        @SerializedName("main") val main: String? = null,
+        @SerializedName("description") val description: String? = null,
+        @SerializedName("icon") val icon: String? = null
     )
 }

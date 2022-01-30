@@ -32,6 +32,7 @@ import kotlinx.coroutines.launch
 class SearchFragment : Fragment(R.layout.fragment_search) {
     private var _binding: FragmentSearchBinding? = null
     private val binding get() = _binding!!
+
     private val viewModel by viewModels<SearchViewModel>()
 
     companion object {
@@ -43,16 +44,12 @@ class SearchFragment : Fragment(R.layout.fragment_search) {
         const val FADE_IN_DURATION: Long = 1500
     }
 
-
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         _binding = FragmentSearchBinding.bind(view)
 
-
         initializeObservers()
-
         addSearchViewListener()
-
 
         viewLifecycleOwner.lifecycleScope.launchWhenStarted {
             collectResults()
@@ -77,17 +74,22 @@ class SearchFragment : Fragment(R.layout.fragment_search) {
         Blurry.with(context)
             .radius(RADIUS)
             .sampling(SAMPLING)
-            .async().animate(ANIM_DURATION).onto(binding.historyItemOne)
+            .async()
+            .animate(ANIM_DURATION)
+            .onto(binding.historyItemOne)
 
         Blurry.with(context)
             .radius(RADIUS)
             .sampling(SAMPLING)
-            .async().animate(ANIM_DURATION).onto(binding.historyItemTwo)
+            .async()
+            .animate(ANIM_DURATION)
+            .onto(binding.historyItemTwo)
 
         Blurry.with(context)
             .radius(SMALL_RADIUS)
             .sampling(SMALL_SAMPLING)
-            .async().animate(ANIM_DURATION)
+            .async()
+            .animate(ANIM_DURATION)
             .onto(binding.searchCurrentDetailsBox)
     }
 
@@ -104,7 +106,6 @@ class SearchFragment : Fragment(R.layout.fragment_search) {
                     binding.searchProgressBar.visibility = View.INVISIBLE
                     viewModel.insertError(CustomError(message = event.message))
                 }
-
             }
 
             navigateToCurrent()
@@ -120,7 +121,6 @@ class SearchFragment : Fragment(R.layout.fragment_search) {
         binding.apply {
             searchView.setOnQueryTextListener(object : SearchView.OnQueryTextListener {
                 override fun onQueryTextSubmit(query: String?): Boolean {
-
                     if (query != null) {
                         searchProgressBar.visibility = View.VISIBLE
                         viewModel.searchLocation(query)
@@ -133,7 +133,6 @@ class SearchFragment : Fragment(R.layout.fragment_search) {
                 override fun onQueryTextChange(newText: String?): Boolean {
                     return true
                 }
-
             })
         }
     }
@@ -142,7 +141,7 @@ class SearchFragment : Fragment(R.layout.fragment_search) {
     private fun updateUI(weather: OpenWeatherResponse) {
         binding.apply {
 
-            searchCurrentHumidity.text = "${weather.current.humidity} %"
+            searchCurrentHumidity.text = "${weather.current!!.humidity} %"
             searchCurrentPressure.text = "${weather.current.pressure}hPa"
             searchCurrentWindSpeed.text = "${weather.current.wind_speed} km/h"
             searchCurrentWindDegrees.text = "${weather.current.wind_deg} ∡"
@@ -152,12 +151,11 @@ class SearchFragment : Fragment(R.layout.fragment_search) {
             searchCurrentWindSpeed.fadeIn(FADE_IN_DURATION)
             searchCurrentWindDegrees.fadeIn(FADE_IN_DURATION)
 
-
             val isNight = weather.current.getNight()
             isNight?.let {
                 val drawable =
                     setWeatherIcon(
-                        weather.current.weather[0].id,
+                        weather.current.weather!![0].id!!,
                         isNight,
                         resources
                     )
@@ -168,8 +166,6 @@ class SearchFragment : Fragment(R.layout.fragment_search) {
                         .transition(DrawableTransitionOptions.withCrossFade())
                         .into(searchCurrentImg)
                 }
-
-
             }
 
             GlobalScope.launch {
@@ -186,15 +182,14 @@ class SearchFragment : Fragment(R.layout.fragment_search) {
         val secondItem = historyResponse.data?.get(1)
 
         binding.apply {
-
-            firstItem?.let { item->
+            firstItem?.let { item ->
                 historyCityNameOne.text = item.name
-                historyCityTempOne.text = formatDoubleString(firstItem.temp, 0)
+                historyCityTempOne.text = formatDoubleString(firstItem.temp!!, 0)
                 historyCityMainOne.text = item.main
-                    item.getNight()?.let { night->
+                item.getNight()?.let { night ->
                     val drawable =
                         setWeatherIcon(
-                            item.weather_id,
+                            item.weather_id!!,
                             night,
                             resources
                         )
@@ -215,12 +210,12 @@ class SearchFragment : Fragment(R.layout.fragment_search) {
 
             secondItem?.let { item ->
                 historyCityNameTwo.text = item.name
-                historyCityTempTwo.text = formatDoubleString(secondItem.temp, 0)
+                historyCityTempTwo.text = formatDoubleString(secondItem.temp!!, 0)
                 historyCityMainTwo.text = item.main
-                item.getNight()?.let {  night ->
+                item.getNight()?.let { night ->
                     val drawable =
                         setWeatherIcon(
-                            item.weather_id,
+                            item.weather_id!!,
                             night,
                             resources
                         )
@@ -231,7 +226,6 @@ class SearchFragment : Fragment(R.layout.fragment_search) {
                             .transition(DrawableTransitionOptions.withCrossFade())
                             .into(historyCityImgTwo)
                     }
-
                 }
 
                 historyCityNameTwo.fadeIn()
@@ -240,7 +234,6 @@ class SearchFragment : Fragment(R.layout.fragment_search) {
             }
         }
     }
-
 
     override fun onDestroyView() {
         super.onDestroyView()
