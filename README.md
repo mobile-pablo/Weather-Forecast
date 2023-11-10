@@ -3,10 +3,25 @@
 <div align="center">
 
 <img src="readme_media/google_play_background.png"/>
-</div>      
- 
+</div>     
 
- 
+## Status
+Completed in 14 days <br/>
+Recently updated API version for Google Play compliance <br/>
+
+# How to run it 
+1. Clone the repository
+2. Recreate gradle.properties
+3. Add following lines to gradle.properties 
+  ``` 
+android.useAndroidX=true
+android.enableJetifier=true  
+ ```
+4. Add [Open Weather](https://openweathermap.org) API key <br/> and [Position Stack](https://positionstack.com/) API key to gradle.properties
+  ```
+ open_weather_access_key = ""
+ position_stack_access_key = ""
+```
  # Tech Stack
  
  * Kotlin
